@@ -7,17 +7,17 @@ using System.Threading.Tasks;
 
 namespace LibraryManagement.Domain.Common.Interface
 {
-	public interface IBaseRepository<T, TId, TIdType>
-		where TId : AggregateRootId<TIdType>
-		where T : AggregateRoot<TId, TIdType>
+	public interface IBaseRepository<TEntity>
+		where TEntity : Entity
 	{
-		void Find(TId id);
-		Task FindAsync(TId id);
-		void Add(T entity);
-		void Update(T entity);
+		TEntity? Find(Guid id);
+		Task<TEntity>? FindAsync(Guid id);
+		void Add(TEntity entity);
+		void Update(TEntity entity);
+		void Delete(TEntity entity);
 
-		void List();
-		Task ListAsync();
+		List<TEntity> List();
+		Task<List<TEntity>> ListAsync();
 		int SaveChange();
 		Task<int> SaveChangeAsync();
 	}

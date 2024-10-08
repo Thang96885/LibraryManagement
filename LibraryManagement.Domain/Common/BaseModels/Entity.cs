@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace LibraryManagement.Domain.Common.BaseModels
 {
-	public abstract class Entity<TId> : IEquatable<Entity<TId>>, IHasDomainEvent
-		where TId : notnull
+	public abstract class Entity : IEquatable<Entity>, IHasDomainEvent
 	{
 
 		private readonly List<IDomainEvent> _domainEvents = new();
@@ -17,7 +16,7 @@ namespace LibraryManagement.Domain.Common.BaseModels
 
 		}
 
-		public TId Id { get; protected set; } = default!;
+		public Guid Id { get; protected set; } = default!;
 
 		public IReadOnlyList<IDomainEvent> DomainEvents => _domainEvents.AsReadOnly();
 
@@ -27,12 +26,12 @@ namespace LibraryManagement.Domain.Common.BaseModels
 			if (obj is null || obj.GetType() != GetType())
 				return false;
 
-			var entity = (Entity<TId>)obj;
+			var entity = (Entity)obj;
 
 			return entity.Id.Equals(Id);
 		}
 
-		public bool Equals(Entity<TId>? other)
+		public bool Equals(Entity? other)
 		{
 			if (other == null)
 				return false;
@@ -45,7 +44,7 @@ namespace LibraryManagement.Domain.Common.BaseModels
 			return Id.GetHashCode();
 		}
 
-		public static bool operator ==(Entity<TId> a, Entity<TId> b)
+		public static bool operator ==(Entity a, Entity b)
 		{
 			if (a is null && b is null)
 				return true;
@@ -56,7 +55,7 @@ namespace LibraryManagement.Domain.Common.BaseModels
 			return a.Equals(b);
 		}
 
-		public static bool operator !=(Entity<TId> a, Entity<TId> b)
+		public static bool operator !=(Entity a, Entity b)
 		{
 			return !(a == b);
 		}

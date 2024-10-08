@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace LibraryManagement.Domain.BookAggregate.ValueObjects
 {
-	public class BookGenreId : ValueObject
+	public class BookReturnRecordId : ValueObject
 	{
 		public Guid Value { get; private set; }
 		protected override IEnumerable<object> GetEqualityComponents()
 		{
 			yield return Value;
 		}
-		public BookGenreId(Guid value)
+		public BookReturnRecordId(Guid value)
 		{
 			Value = value;
 		}

@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LibraryManagement.Domain.Common.BaseModels
+namespace LibraryManagement.Domain.Common.Interface
 {
-	public abstract class AggregateRoot : Entity
+	public interface IDateTimeProvider
 	{
-
+		DateTime Now { get; }
 	}
 }
