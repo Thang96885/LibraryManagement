@@ -21,7 +21,7 @@ namespace LibraryManagement.Infastructure.Data.Configurations
 				.HasMaxLength(200)
 				.IsRequired();
 
-			builder.Property(b => b.AuthorId)
+			builder.Property(b => b.AuthorName)
 				.IsRequired(false);
 
 			builder.Property(b => b.PublisherName)
@@ -33,6 +33,22 @@ namespace LibraryManagement.Infastructure.Data.Configurations
 			ConfigReservation(builder);
 			ConfigBorrowRecord(builder);
 			ConfigReturnRecord(builder);
+
+			builder.OwnsMany(b => b.BookCopies, bookCopyBuilder =>
+			{
+				bookCopyBuilder.ToTable("BookCopy");
+				bookCopyBuilder.WithOwner().HasForeignKey("BookId");
+				bookCopyBuilder.HasKey(b => b.Id);
+
+				bookCopyBuilder.Property(b => b.Id)
+				.HasMaxLength(13);
+
+				bookCopyBuilder.Property(b => b.PhysicalCondition)
+				.HasConversion<string>();
+
+				bookCopyBuilder.Property(b => b.Status)
+				.HasConversion<string>();
+			});
 		}
 
 		private static void ConfigBorrowRecord(EntityTypeBuilder<Book> builder)
@@ -40,9 +56,9 @@ namespace LibraryManagement.Infastructure.Data.Configurations
 			builder.OwnsMany(b => b.BorrowRecordIds, borrowRecordBuilder =>
 			{
 				borrowRecordBuilder.WithOwner().HasForeignKey("BookId");
-				borrowRecordBuilder.Property<Guid>("Id");
-				borrowRecordBuilder.HasKey("Id");
-				borrowRecordBuilder.ToTable("BorrowRecords");
+				borrowRecordBuilder.Property(x => x.Value).HasColumnName("BorrowRecordId");
+				borrowRecordBuilder.HasKey("Value", "BookId");
+				borrowRecordBuilder.ToTable("BookBorrowRecords");
 			});
 
 			builder.Metadata.FindNavigation(nameof(Book.BorrowRecordIds)).SetPropertyAccessMode(PropertyAccessMode.Field);
@@ -53,8 +69,8 @@ namespace LibraryManagement.Infastructure.Data.Configurations
 			builder.OwnsMany(b => b.BookReservationId, bookReservationBuilder =>
 			{
 				bookReservationBuilder.WithOwner().HasForeignKey("BookId");
-				bookReservationBuilder.Property<Guid>("Id");
-				bookReservationBuilder.HasKey("Id");
+				bookReservationBuilder.Property(x => x.Value).HasColumnName("BookReservationId");
+				bookReservationBuilder.HasKey("Value", "BookId");
 				bookReservationBuilder.ToTable("BookReservations");
 			});
 
@@ -66,9 +82,9 @@ namespace LibraryManagement.Infastructure.Data.Configurations
 			builder.OwnsMany(b => b.ReturnRecordIds, returnRecordBuilder =>
 			{
 				returnRecordBuilder.WithOwner().HasForeignKey("BookId");
-				returnRecordBuilder.Property<Guid>("Id");
-				returnRecordBuilder.HasKey("Id");
-				returnRecordBuilder.ToTable("ReturnRecords");
+				returnRecordBuilder.Property(x => x.Value).HasColumnName("BookReturnRecordId");
+				returnRecordBuilder.HasKey("Value", "BookId");
+				returnRecordBuilder.ToTable("BookReturnRecords");
 			});
 
 			builder.Metadata.FindNavigation(nameof(Book.ReturnRecordIds)).SetPropertyAccessMode(PropertyAccessMode.Field);
@@ -80,8 +96,8 @@ namespace LibraryManagement.Infastructure.Data.Configurations
 			{
 				genreBuilder.ToTable("BookGenres");
 				genreBuilder.WithOwner().HasForeignKey("BookId");
-				genreBuilder.Property<Guid>("Id");
-				genreBuilder.HasKey("Id");
+				genreBuilder.Property(x => x.Value).HasColumnName("BookGenreId");
+				genreBuilder.HasKey("Value", "BookId");
 				
 			});
 

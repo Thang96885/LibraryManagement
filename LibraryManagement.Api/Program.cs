@@ -31,7 +31,6 @@ namespace LibraryManagement.Api
 
 			app.UseAuthorization();
 
-
 			app.MapControllers();
 
 			app.Run();

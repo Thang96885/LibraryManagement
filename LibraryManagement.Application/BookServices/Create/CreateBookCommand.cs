@@ -10,7 +10,7 @@ namespace LibraryManagement.Application.BookServices.Create
 {
 	public record CreateBookCommand(
 		string Title,
-		string AuthorId,
+		string AuthorName,
 		string PublisherName,
 		int PublicationYear,
 		int PageCount,

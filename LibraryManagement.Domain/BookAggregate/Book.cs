@@ -1,4 +1,5 @@
 ﻿
+using LibraryManagement.Domain.BookAggregate.Entities;
 using LibraryManagement.Domain.BookAggregate.ValueObjects;
 using LibraryManagement.Domain.Common.BaseModels;
 using System;
@@ -16,8 +17,9 @@ namespace LibraryManagement.Domain.BookAggregate
         private readonly List<BookBorrowRecordId> _borrowRecordIds = new();
         private readonly List<BookReturnRecordId> _returnRecordIds = new();
         private readonly List<BookReservationId> _bookReservationId = new();
+		private readonly List<BookCopy> _bookCopies = new();
         public string Title { get; private set; }
-        public Guid? AuthorId { get;private set; }
+        public string AuthorName { get;private set; }
         public string PublisherName { get;private set; }
         public int PublicationYear { get; private set; }
         public int PageCount { get; private set; }
@@ -28,13 +30,14 @@ namespace LibraryManagement.Domain.BookAggregate
         public IReadOnlyList<BookBorrowRecordId> BorrowRecordIds { get => _borrowRecordIds.AsReadOnly(); }
         public IReadOnlyList<BookReturnRecordId> ReturnRecordIds { get => _returnRecordIds.AsReadOnly(); }
         public IReadOnlyList<BookReservationId> BookReservationId { get => _bookReservationId.AsReadOnly(); }
+        public IReadOnlyList<BookCopy> BookCopies => _bookCopies.AsReadOnly();
 
-        private Book(Guid Id, string title, Guid authorId, string publisherName, 
+        private Book(Guid Id, string title, string authorName, string publisherName, 
 			int publicationYear, int pageCount, int numberOfCopy, int numberAvailable)
 		{
 			this.Id = Id;
 			Title = title;
-			AuthorId = authorId;
+			AuthorName = authorName;
 			PublisherName = publisherName;
 			PublicationYear = publicationYear;
 			PageCount = pageCount;
@@ -46,10 +49,15 @@ namespace LibraryManagement.Domain.BookAggregate
 
 		}
 
-        public static Book Create(string title, Guid authorId, string publisherName, 
+        public static Book Create(string title, string authorName, string publisherName, 
 			int publicationYear, int pageCount, int numberOfCopy, int numberAvailable)
 		{
-			return new Book(Guid.NewGuid(), title, authorId, publisherName, publicationYear, pageCount, numberOfCopy, numberAvailable);
+			return new Book(Guid.NewGuid(), title, authorName, publisherName, publicationYear, pageCount, numberOfCopy, numberAvailable);
 		}
+
+        public void Delete()
+        {
+            
+        }
     }
 }

@@ -23,7 +23,7 @@ namespace LibraryManagement.Application.BookServices.Create
 		{
 			try
 			{
-				var book = Book.Create(request.Title, Guid.Parse(request.AuthorId),
+				var book = Book.Create(request.Title, request.AuthorName,
 				request.PublisherName, request.PublicationYear, request.PageCount,
 				request.NumberOfCopy, request.NumberOfCopy);
 

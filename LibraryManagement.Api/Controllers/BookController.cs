@@ -1,4 +1,5 @@
 ﻿using LibraryManagement.Application.BookServices.Create;
+using LibraryManagement.Application.BookServices.Delete;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -19,8 +20,8 @@ namespace LibraryManagement.Api.Controllers
 		}
 
 		// POST: api/Book
-		[HttpPost]
-		public async Task<IActionResult> Post([FromBody] CreateBookCommand command)
+		[HttpPost("add")]
+		public async Task<IActionResult> Add([FromBody] CreateBookCommand command)
 		{
 			var result = await _sender.Send(command);
 
@@ -28,7 +29,31 @@ namespace LibraryManagement.Api.Controllers
 			{
 				return Problem(result.Errors);
 			}
-			return Ok(result);
+			return Ok(result.Value);
 		}
+
+		/*[HttpPost("Get")]
+		public async Task<IActionResult> Get([FromBody] GetBookQuery query)
+		{
+			var result = await _sender.Send(query);
+
+			if (result.IsError)
+			{
+				return Problem(result.Errors);
+			}
+			return Ok(result.Value);
+		}*/
+
+		[HttpPost("Delete")]
+		public async Task<IActionResult> Delete([FromBody] DeleteBookCommand command)
+		{
+			var result = await _sender.Send(command);
+
+            if (result.IsError)
+            {
+				return Problem(result.Errors);
+            }
+			return Ok(result.Value);
+        }
 	}
 }
