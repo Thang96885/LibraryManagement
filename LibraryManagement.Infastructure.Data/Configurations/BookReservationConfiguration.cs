@@ -1,5 +1,4 @@
 ﻿using LibraryManagement.Domain.BookReservationAggregate;
-using LibraryManagement.Domain.BookReservationAggregate.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
@@ -24,8 +23,10 @@ namespace LibraryManagement.Infastructure.Data.Configurations
 			builder.Property(br => br.IsReserved)
 				.IsRequired();
 
-			builder.Property(br => br.PatronId)
-				.HasConversion(id => id.Value, value => BookReservationPatronId.Create(value));
+			builder.OwnsOne(br => br.PatronId, patronBuilder =>
+			{
+				patronBuilder.WithOwner();
+			});
 
 			builder.OwnsMany(br => br.BookId, bookBuilder =>
 			{
@@ -33,6 +34,8 @@ namespace LibraryManagement.Infastructure.Data.Configurations
 				bookBuilder.Property(b => b.Value).HasColumnName("BookId");
 				bookBuilder.HasKey("Value", "BookReservationId");
 			});
+			builder.Metadata.FindNavigation(nameof(BookReservation.BookId))!
+				.SetPropertyAccessMode(PropertyAccessMode.Field);
 		}
 	}
 }

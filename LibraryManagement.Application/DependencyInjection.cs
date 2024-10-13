@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Mapster;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,8 @@ namespace LibraryManagement.Application
 			service.AddMediatR(configuration => configuration.RegisterServicesFromAssemblies(typeof(DependencyInjection).Assembly));
 
 			service.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly);
+
+			service.AddMapster();
 
 			return service;
 		}

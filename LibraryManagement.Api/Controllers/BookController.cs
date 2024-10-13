@@ -1,5 +1,5 @@
-﻿using LibraryManagement.Application.BookServices.Create;
-using LibraryManagement.Application.BookServices.Delete;
+﻿using LibraryManagement.Application.Books.Create;
+using LibraryManagement.Application.Books.Delete;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryManagement.Api.Controllers
 {
-	[Route("api/[controller]")]
+    [Route("api/[controller]")]
 	[ApiController]
 	[AllowAnonymous]
 	public class BookController : ApiController

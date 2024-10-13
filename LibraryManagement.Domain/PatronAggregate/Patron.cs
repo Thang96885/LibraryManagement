@@ -36,5 +36,10 @@ namespace LibraryManagement.Domain.PatronAggregate
 		{
 			return new(Guid.NewGuid(), name, email, phoneNumber, address, DateTime.UtcNow);
 		}
+
+		private Patron()
+		{
+
+		}
     }
 }

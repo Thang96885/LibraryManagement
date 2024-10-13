@@ -27,5 +27,10 @@ namespace LibraryManagement.Domain.GenreAggregate
 		{
 			return new Genre(Id, Name);
 		}
+
+		private Genre()
+		{
+
+		}
 	}
 }
