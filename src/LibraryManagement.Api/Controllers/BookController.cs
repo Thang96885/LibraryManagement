@@ -1,6 +1,8 @@
 ﻿using LibraryManagement.Application.Books.Create;
 using LibraryManagement.Application.Books.Delete;
 using LibraryManagement.Application.Books.Get;
+using LibraryManagement.Application.Books.List;
+using LibraryManagement.Domain.Common.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -18,9 +20,9 @@ namespace LibraryManagement.Api.Controllers
 		{
 			_sender = sender;
 		}
-
 		// POST: api/Book
 		[HttpPost("add")]
+		[Authorize(Roles = $"{nameof(RoleEnum.Admin)}, {nameof(RoleEnum.Librarian)}")]
 		public async Task<IActionResult> Add([FromBody] CreateBookCommand command)
 		{
 			var result = await _sender.Send(command);
@@ -31,8 +33,18 @@ namespace LibraryManagement.Api.Controllers
 			}
 			return Ok(result.Value);
 		}
+		[HttpGet("list")]
+		[AllowAnonymous]
+		public async Task<IActionResult> List()
+		{
+			var query = new ListBookQuery(0, 0);
+			var result = await _sender.Send(query);
+			if(result.IsError)
+				return Problem(result.Errors);
+			return Ok(result.Value);
+		}
 
-		[HttpGet("{id}")]
+		[HttpGet("get/{id}")]
 		public async Task<IActionResult> Get(string id)
 		{
 			var query = new GetBookQuery(id);
@@ -45,7 +57,9 @@ namespace LibraryManagement.Api.Controllers
 			return Ok(result.Value);
 		}
 
+
 		[HttpPost("Delete")]
+		[Authorize(Roles = $"{nameof(RoleEnum.Admin)}, {nameof(RoleEnum.Librarian)}")]
 		public async Task<IActionResult> Delete([FromBody] DeleteBookCommand command)
 		{
 			var result = await _sender.Send(command);

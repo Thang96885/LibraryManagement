@@ -44,6 +44,7 @@ namespace LibraryManagement.Api.Controllers
 		}
 
 		[HttpPost("add-role")]
+		[AllowAnonymous]
 		public async Task<IActionResult> AddRole([FromBody] AddRoleCommand request)
 		{
 			var result = await _sender.Send(request);

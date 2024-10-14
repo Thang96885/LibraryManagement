@@ -9,6 +9,7 @@ namespace LibraryManagement.Domain.Common.Enums
 	public enum RoleEnum
 	{
 		User,
+		Librarian,
 		Admin
 	}
 }
