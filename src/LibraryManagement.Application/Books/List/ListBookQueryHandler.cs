@@ -25,7 +25,7 @@ namespace LibraryManagement.Application.Books.List
 
 		public async Task<ErrorOr<List<BookDto>>> Handle(ListBookQuery request, CancellationToken cancellationToken)
 		{
-			var books = await _bookRepository.ListAsync();
+			var books = await _bookRepository.ListAsync(request.page, request.pageSize);
 
 			var bookDtos = new List<BookDto>();
 

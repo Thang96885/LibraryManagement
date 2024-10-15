@@ -1,4 +1,5 @@
-﻿using LibraryManagement.Domain.Common.BaseModels;
+﻿using LibraryManagement.Domain.BookAggregate.Services;
+using LibraryManagement.Domain.Common.BaseModels;
 using LibraryManagement.Domain.Common.Enums;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ namespace LibraryManagement.Domain.BookAggregate.Entities
 	// Id of BookCopy is IBNS code
 	public class BookCopy : Entity<string>
 	{
+		private static readonly BookCopyService _bookCopyService = new BookCopyService();
 		public DateTime AcquisitionDate { get; private set; }
 		public BookStatus Status { get; private set; } = BookStatus.Available;
 
@@ -22,9 +24,13 @@ namespace LibraryManagement.Domain.BookAggregate.Entities
 			this.AcquisitionDate = AcquisitionDate;
 		}
 		
-		public BookCopy Create(string Id, DateTime accquisitionDate)
+		public static BookCopy Create(string Id, DateTime accquisitionDate)
 		{
-			return new(Id, AcquisitionDate);
+			if (!_bookCopyService.CheckIBNS(Id))
+			{
+				throw new ArgumentException("Invalid IBNS");
+			}
+			return new(Id, accquisitionDate);
 		}
 	}
 }

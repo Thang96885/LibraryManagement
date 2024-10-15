@@ -15,7 +15,6 @@ namespace LibraryManagement.Application.Books.Create
             RuleFor(x => x.PublisherName).NotEmpty();
             RuleFor(x => x.PublicationYear).NotEmpty();
             RuleFor(x => x.PageCount).NotEmpty().GreaterThan(0);
-            RuleFor(x => x.NumberOfCopy).NotEmpty().GreaterThanOrEqualTo(0);
         }
     }
 }

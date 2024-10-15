@@ -1,4 +1,5 @@
-﻿using LibraryManagement.Application.Books.Create;
+﻿using LibraryManagement.Application.Books.AddBookCopy;
+using LibraryManagement.Application.Books.Create;
 using LibraryManagement.Application.Books.Delete;
 using LibraryManagement.Application.Books.Get;
 using LibraryManagement.Application.Books.List;
@@ -37,8 +38,7 @@ namespace LibraryManagement.Api.Controllers
 		[AllowAnonymous]
 		public async Task<IActionResult> List([FromQuery] ListBookQuery request)
 		{
-			var query = new ListBookQuery(0, 0);
-			var result = await _sender.Send(query);
+			var result = await _sender.Send(request);
 			if(result.IsError)
 				return Problem(result.Errors);
 			return Ok(result.Value);
@@ -54,6 +54,17 @@ namespace LibraryManagement.Api.Controllers
 			{
 				return Problem(result.Errors);
 			}
+			return Ok(result.Value);
+		}
+
+		[HttpPost("add-book-copy")]
+		[AllowAnonymous]
+		public async Task<IActionResult> AddBookCopy(AddBookCopyCommand request)
+		{
+			var result = await _sender.Send(request);
+
+			if (result.IsError)
+				return Problem(result.Errors);
 			return Ok(result.Value);
 		}
 

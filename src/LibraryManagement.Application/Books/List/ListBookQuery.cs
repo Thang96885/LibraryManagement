@@ -9,5 +9,5 @@ using System.Threading.Tasks;
 
 namespace LibraryManagement.Application.Books.List
 {
-	public record ListBookQuery(int page, int numberBook) : IRequest<ErrorOr<List<BookDto>>>;
+	public record ListBookQuery(int page, int pageSize) : IRequest<ErrorOr<List<BookDto>>>;
 }

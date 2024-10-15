@@ -13,6 +13,5 @@ namespace LibraryManagement.Application.Books.Create
         string AuthorName,
         string PublisherName,
         int PublicationYear,
-        int PageCount,
-        int NumberOfCopy) : IRequest<ErrorOr<string>>;
+        int PageCount): IRequest<ErrorOr<string>>;
 }

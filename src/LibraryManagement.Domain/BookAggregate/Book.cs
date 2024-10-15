@@ -55,6 +55,11 @@ namespace LibraryManagement.Domain.BookAggregate
 			return new Book(Guid.NewGuid(), title, authorName, publisherName, publicationYear, pageCount, numberOfCopy, numberAvailable);
 		}
 
+		public void AddBookCopy(BookCopy bookCopy)
+		{
+			this._bookCopies.Add(bookCopy);
+		}
+
         public void Delete()
         {
             

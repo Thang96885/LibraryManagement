@@ -24,8 +24,7 @@ namespace LibraryManagement.Application.Books.Create
             try
             {
                 var book = Book.Create(request.Title, request.AuthorName,
-                request.PublisherName, request.PublicationYear, request.PageCount,
-                request.NumberOfCopy, request.NumberOfCopy);
+                request.PublisherName, request.PublicationYear, request.PageCount, 0, 0);
 
                 _bookRepository.Add(book);
 
