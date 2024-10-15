@@ -44,9 +44,19 @@ namespace LibraryManagement.Infastructure.Data.Data.Repositories
             return _context.Books.ToList();
         }
 
+        public List<Book> List(int page, int pageSize)
+        {
+            return _context.Books.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+        }
+
         public async Task<List<Book>> ListAsync()
         {
             return await _context.Books.AsNoTracking().ToListAsync();
+        }
+
+        public async Task<List<Book>> ListAsync(int page, int pageSize)
+        {
+            return await _context.Books.AsNoTracking().Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
         }
 
         public int SaveChange()

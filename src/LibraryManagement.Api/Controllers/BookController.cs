@@ -35,7 +35,7 @@ namespace LibraryManagement.Api.Controllers
 		}
 		[HttpGet("list")]
 		[AllowAnonymous]
-		public async Task<IActionResult> List()
+		public async Task<IActionResult> List([FromQuery] ListBookQuery request)
 		{
 			var query = new ListBookQuery(0, 0);
 			var result = await _sender.Send(query);

@@ -17,7 +17,9 @@ namespace LibraryManagement.Domain.Common.Interface
 		void Delete(TEntity entity);
 
 		List<TEntity> List();
+		List<TEntity> List(int page, int pageSize);
 		Task<List<TEntity>> ListAsync();
+		Task<List<TEntity>> ListAsync(int page, int pageSize);
 		int SaveChange();
 		Task<int> SaveChangeAsync();
 	}

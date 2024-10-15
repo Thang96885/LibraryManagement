@@ -43,12 +43,22 @@ namespace LibraryManagement.Infastructure.Data.Repositories
 			return _context.Reservations.ToList();
 		}
 
-		public async Task<List<BookReservation>> ListAsync()
+        public List<BookReservation> List(int page, int pageSize)
+        {
+            return _context.Reservations.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+        }
+
+        public async Task<List<BookReservation>> ListAsync()
 		{
 			return await _context.Reservations.ToListAsync();
 		}
 
-		public int SaveChange()
+        public async Task<List<BookReservation>> ListAsync(int page, int pageSize)
+        {
+            return await _context.Reservations.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+        }
+
+        public int SaveChange()
 		{
 			return _context.SaveChanges();
 		}

@@ -44,12 +44,22 @@ namespace LibraryManagement.Infastructure.Data.Repositories
 			return _context.BorrowRecords.ToList();
 		}
 
-		public async Task<List<BorrowRecord>> ListAsync()
+        public List<BorrowRecord> List(int page, int pageSize)
+        {
+            return _context.BorrowRecords.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+        }
+
+        public async Task<List<BorrowRecord>> ListAsync()
 		{
 			return await _context.BorrowRecords.ToListAsync();
 		}
 
-		public int SaveChange()
+        public async Task<List<BorrowRecord>> ListAsync(int page, int pageSize)
+        {
+            return await _context.BorrowRecords.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+        }
+
+        public int SaveChange()
 		{
 			return _context.SaveChanges();
 		}
