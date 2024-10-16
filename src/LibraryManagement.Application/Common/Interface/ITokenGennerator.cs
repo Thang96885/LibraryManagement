@@ -10,6 +10,7 @@ namespace LibraryManagement.Application.Common.Interface
 	{
 		public string GenerateJwt(UserInfo userInfo);
 		public string GenerateRefreshToken();
+		public UserInfo? DecodeJwt(string token);
 	}
 
 	public record UserInfo(string UserName, List<string> Roles);

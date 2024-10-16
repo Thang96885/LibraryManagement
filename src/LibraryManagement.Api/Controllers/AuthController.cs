@@ -1,5 +1,6 @@
 ﻿using LibraryManagement.Application.Auth.AddRole;
 using LibraryManagement.Application.Auth.Login;
+using LibraryManagement.Application.Auth.Refresh;
 using LibraryManagement.Application.Auth.Register;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -30,6 +31,16 @@ namespace LibraryManagement.Api.Controllers
 			{
 				return Problem(result.Errors);
 			}
+			return Ok(result.Value);
+		}
+
+		[HttpPost("refresh")]
+		[AllowAnonymous]
+		public async Task<IActionResult> Refresh(RefreshCommand request)
+		{
+			var result = await _sender.Send(request);
+			if (result.IsError)
+				return Problem(result.Errors);
 			return Ok(result.Value);
 		}
 

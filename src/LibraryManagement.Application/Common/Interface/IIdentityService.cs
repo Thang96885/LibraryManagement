@@ -1,4 +1,5 @@
 ﻿using ErrorOr;
+using LibraryManagement.Application.Auth.Common;
 using LibraryManagement.Domain.PatronAggregate;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,7 @@ namespace LibraryManagement.Application.Common.Interface
 		Task<ErrorOr<bool>> AddRole(string roleName);
 		Task<UserInfo?> FindUserByNameAsync(string userName);
 		Task<UserInfo?> FindUserByPatronIdAsync(string patronId);
+		Task<ErrorOr<AuthResult>> Refresh(string userName, string refreshToken);
 
 		Task<ErrorOr<UserInfo>> Login(string userNameOrEmail, string password);
 	}

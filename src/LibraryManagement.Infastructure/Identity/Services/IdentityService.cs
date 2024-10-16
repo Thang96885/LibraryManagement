@@ -1,4 +1,5 @@
 ﻿using ErrorOr;
+using LibraryManagement.Application.Auth.Common;
 using LibraryManagement.Application.Common.Interface;
 using LibraryManagement.Domain.Common.Enums;
 using LibraryManagement.Domain.Common.Interface;
@@ -23,14 +24,16 @@ namespace LibraryManagement.Infastructure.Data.Identity.Services
 		private readonly IAuthorizationService _authorizationService;
 		private readonly RoleManager<IdentityRole> _roleManager;
 		private readonly IDateTimeProvider _datetimeProvider;
+		private readonly ITokenGennerator _tokenGennerator;
 
-		public IdentityService(UserManager<User> userManager, IUserClaimsPrincipalFactory<User> userClaimsPrincipalFactory, IAuthorizationService authorizationService, RoleManager<IdentityRole> roleManager, IDateTimeProvider datetimeProvider)
+		public IdentityService(UserManager<User> userManager, IUserClaimsPrincipalFactory<User> userClaimsPrincipalFactory, IAuthorizationService authorizationService, RoleManager<IdentityRole> roleManager, IDateTimeProvider datetimeProvider, ITokenGennerator tokenGennerator)
 		{
 			_userManager = userManager;
 			_userClaimsPrincipalFactory = userClaimsPrincipalFactory;
 			_authorizationService = authorizationService;
 			_roleManager = roleManager;
 			_datetimeProvider = datetimeProvider;
+			this._tokenGennerator = tokenGennerator;
 		}
 
 		public async Task AddRefreshToken(string userName, string token)
@@ -39,7 +42,7 @@ namespace LibraryManagement.Infastructure.Data.Identity.Services
 			if(user != null)
 			{
 				user.RefreshToken = token;
-				user.RefreshTokenExpiryTime = _datetimeProvider.Now;
+				user.RefreshTokenExpiryTime = _datetimeProvider.Now.AddMinutes(10);
 				await _userManager.UpdateAsync(user);
 			}
 		}
@@ -88,6 +91,25 @@ namespace LibraryManagement.Infastructure.Data.Identity.Services
 			}
 			var roles = await _userManager.GetRolesAsync(user);
 			return new UserInfo(user.UserName, roles.ToList());
+		}
+
+		public async Task<ErrorOr<AuthResult>> Refresh(string userName, string refreshToken)
+		{
+			var user = await _userManager.FindByNameAsync(userName);
+			if (user == null)
+				return Error.Failure("Token is invalid");
+
+			if(user.UserName == userName && user.RefreshTokenExpiryTime > _datetimeProvider.Now)
+			{
+				user.RefreshToken = _tokenGennerator.GenerateRefreshToken();
+				user.RefreshTokenExpiryTime = _datetimeProvider.Now.AddMinutes(10);
+				await _userManager.UpdateAsync(user);
+
+				var roles = await _userManager.GetRolesAsync(user);
+				return new AuthResult(_tokenGennerator.GenerateJwt(new UserInfo(user.UserName, roles.ToList())), user.RefreshToken);
+			}
+
+			return Error.Failure();
 		}
 
 		public async Task<ErrorOr<UserInfo>> SignInAsync(RegisterInfo info)
