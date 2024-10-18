@@ -1,9 +1,11 @@
 ﻿using FluentValidation;
 using Mapster;
+using MapsterMapper;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,10 +18,19 @@ namespace LibraryManagement.Application
 			service.AddMediatR(configuration => configuration.RegisterServicesFromAssemblies(typeof(DependencyInjection).Assembly));
 
 			service.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly);
-
-			service.AddMapster();
+			AddMappingConfig(service);
 
 			return service;
+		}
+
+		private static void AddMappingConfig(IServiceCollection service)
+		{
+			var config = TypeAdapterConfig.GlobalSettings;
+			config.Scan(Assembly.GetExecutingAssembly());
+
+			service.AddSingleton(config);
+
+			service.AddScoped<IMapper, ServiceMapper>();
 		}
 	}
 }

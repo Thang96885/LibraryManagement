@@ -1,4 +1,5 @@
 ﻿using Bogus;
+using LibraryManagement.Application.Books.AddBookCopy;
 using LibraryManagement.Application.Books.Create;
 using LibraryManagement.Domain.BookAggregate;
 using LibraryManagement.Infastructure.Data.Data;
@@ -19,7 +20,7 @@ namespace LibraryManagement.Api.Controllers
 			_sender = sender;
 		}
 
-		[HttpGet]
+		[HttpGet("book")]
 		public async Task<IActionResult> FetchBooks()
 		{
 			var faker = new Faker<CreateBookCommand>()
@@ -39,6 +40,24 @@ namespace LibraryManagement.Api.Controllers
 			}
 
 			return Ok(books);
+		}
+
+		[HttpGet("book-copy")]
+		public async Task<IActionResult> FetchBookCopys([FromQuery] Guid bookId)
+		{
+			var ibnsFaker = new Faker<string>()
+				.CustomInstantiator(f => f.Random.Replace("##########"));
+
+			var fakerBookCopyCommand = new Faker<AddBookCopyCommand>()
+				.CustomInstantiator(f => new AddBookCopyCommand
+				(
+					bookId,
+					ibnsFaker.Generate(50)
+				));
+
+			var bookCopys = fakerBookCopyCommand.Generate(1);
+
+			return Ok(await _sender.Send(bookCopys));
 		}
 	}
 }

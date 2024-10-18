@@ -1,4 +1,5 @@
 ﻿using LibraryManagement.Application.Patrons.Create;
+using LibraryManagement.Application.Patrons.List;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -29,6 +30,19 @@ namespace LibraryManagement.Api.Controllers
 				return Problem(result.Errors);
 			}
 			return Ok(result);
+		}
+
+		[HttpGet("list-patron")]
+		[AllowAnonymous]
+		public async Task<IActionResult> List([FromQuery]ListPatronQuery request)
+		{
+			var result = await _sender.Send(request);
+
+			if(result.IsError)
+			{
+				return Problem(result.Errors);
+			}
+			return Ok(result.Value);
 		}
 	}
 }
