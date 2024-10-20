@@ -6,6 +6,7 @@ using LibraryManagement.Domain.GenreAggregate;
 using LibraryManagement.Domain.PatronAggregate;
 using LibraryManagement.Domain.ReturnRecordAggregate;
 using LibraryManagement.Infastructure.Data.Identity.Models;
+using LibraryManagement.Infastructure.Data.Interceptor;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -18,9 +19,13 @@ namespace LibraryManagement.Infastructure.Data.Data
 {
 	public class LibraryManagementContext : IdentityDbContext<User>
 	{
-		public LibraryManagementContext(DbContextOptions<LibraryManagementContext> options) : base(options)
-		{
+		private readonly PublishDomainEventInterceptor _publishDomainEventInterceptor;
 
+
+		public LibraryManagementContext(DbContextOptions<LibraryManagementContext> options, 
+			PublishDomainEventInterceptor publishDomainEventInterceptor) : base(options)
+		{
+			_publishDomainEventInterceptor = publishDomainEventInterceptor;
 		}
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -29,6 +34,12 @@ namespace LibraryManagement.Infastructure.Data.Data
 			modelBuilder.ApplyConfigurationsFromAssembly(typeof(LibraryManagementContext).Assembly);
 			modelBuilder.Entity<User>().HasIndex(user => user.PatronId).IsUnique();
 			base.OnModelCreating(modelBuilder);
+		}
+
+		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+		{
+			optionsBuilder.AddInterceptors(_publishDomainEventInterceptor);
+			base.OnConfiguring(optionsBuilder);
 		}
 
 		public DbSet<Book> Books { get; set; }

@@ -1,4 +1,5 @@
 ﻿using LibraryManagement.Domain.Common.BaseModels;
+using LibraryManagement.Domain.PatronAggregate.Events;
 using LibraryManagement.Domain.PatronAggregate.ValueObjects;
 using System;
 using System.Collections.Generic;
@@ -34,7 +35,9 @@ namespace LibraryManagement.Domain.PatronAggregate
 
 		public static Patron Create(string name, string email, string phoneNumber, PatronAddress address)
 		{
-			return new(Guid.NewGuid(), name, email, phoneNumber, address, DateTime.UtcNow);
+			var patron = new Patron(Guid.NewGuid(), name, email, phoneNumber, address, DateTime.UtcNow);
+			patron.AddDomainEvent(new CreatedPatron(patron));
+			return patron;
 		}
 
 		private Patron()

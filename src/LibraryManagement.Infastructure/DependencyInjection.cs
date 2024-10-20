@@ -11,8 +11,10 @@ using LibraryManagement.Infastructure.Data.Data;
 using LibraryManagement.Infastructure.Data.Data.Repositories;
 using LibraryManagement.Infastructure.Data.Identity.Models;
 using LibraryManagement.Infastructure.Data.Identity.Services;
+using LibraryManagement.Infastructure.Data.Interceptor;
 using LibraryManagement.Infastructure.Data.Repositories;
 using LibraryManagement.Infastructure.Identity.Services;
+using LibraryManagement.Infastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -31,7 +33,16 @@ namespace LibraryManagement.Infastructure.Data
 			AddPersistence(service, _config);
 			AddIdentity(service);
 			AddAuth(service, _config);
+			AddEmailService(service, _config);
+
 			return service;
+		}
+
+		private static void AddEmailService(IServiceCollection service, IConfiguration _config)
+		{
+			var emailConfig = _config.GetSection("EmailConfiguration").Get<EmailConfiguration>();
+			service.AddSingleton(emailConfig);
+			service.AddScoped<IEmailService, EmailService>();
 		}
 
 		private static void AddAuth(IServiceCollection service, IConfiguration _config)
@@ -77,6 +88,8 @@ namespace LibraryManagement.Infastructure.Data
 			service.AddScoped<IBaseRepository<BorrowRecord>, BorrowRecordRepository>();
 			service.AddScoped<IBaseRepository<ReturnRecord>, ReturnRecordRepository>();
 			service.AddScoped<IBaseRepository<Genre>, GenreRepository>();
+
+			service.AddScoped<PublishDomainEventInterceptor>();
 		}
 	}
 }
