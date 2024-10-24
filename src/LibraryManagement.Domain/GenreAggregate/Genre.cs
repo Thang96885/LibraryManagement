@@ -23,9 +23,10 @@ namespace LibraryManagement.Domain.GenreAggregate
 			this.Name = Name;
 		}
 
-		public static Genre Create(Guid Id, string Name)
+		public static Genre Create(string Name)
 		{
-			return new Genre(Id, Name);
+
+			return new Genre(Guid.NewGuid(), Name);
 		}
 
 		private Genre()

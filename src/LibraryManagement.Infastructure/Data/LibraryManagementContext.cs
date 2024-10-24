@@ -2,12 +2,14 @@
 using LibraryManagement.Domain.BookAggregate.Entities;
 using LibraryManagement.Domain.BookReservationAggregate;
 using LibraryManagement.Domain.BorrowRecordAggregate;
+using LibraryManagement.Domain.Common.Error;
 using LibraryManagement.Domain.GenreAggregate;
 using LibraryManagement.Domain.PatronAggregate;
 using LibraryManagement.Domain.ReturnRecordAggregate;
 using LibraryManagement.Infastructure.Data.Identity.Models;
 using LibraryManagement.Infastructure.Data.Interceptor;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -40,6 +42,19 @@ namespace LibraryManagement.Infastructure.Data.Data
 		{
 			optionsBuilder.AddInterceptors(_publishDomainEventInterceptor);
 			base.OnConfiguring(optionsBuilder);
+		}
+
+		public override int SaveChanges()
+		{
+			try
+			{
+				return base.SaveChanges();
+			}
+			catch(DbUpdateException ex)
+			{
+				return 0;
+			}
+
 		}
 
 		public DbSet<Book> Books { get; set; }
