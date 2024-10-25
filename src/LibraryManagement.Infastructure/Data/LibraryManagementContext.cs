@@ -44,19 +44,6 @@ namespace LibraryManagement.Infastructure.Data.Data
 			base.OnConfiguring(optionsBuilder);
 		}
 
-		public override int SaveChanges()
-		{
-			try
-			{
-				return base.SaveChanges();
-			}
-			catch(DbUpdateException ex)
-			{
-				return 0;
-			}
-
-		}
-
 		public DbSet<Book> Books { get; set; }
 		public DbSet<Patron> Patrons { get; set; }
 		public DbSet<BookReservation> Reservations { get; set; }

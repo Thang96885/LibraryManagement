@@ -21,6 +21,7 @@ namespace LibraryManagement.Api.Controllers
 			}
 
 			var error = errors.First();
+			
 			return Problem(error);
 		}
 
@@ -40,11 +41,11 @@ namespace LibraryManagement.Api.Controllers
 			switch (error.Type)
 			{
 				case ErrorType.NotFound:
-					return NotFound(error.Description);
+					return NotFound(error.Code);
 				case ErrorType.Conflict:
-					return Conflict(error.Description);
+					return Conflict(error.Code);
 				default:
-					return Problem(error.Description);
+					return Problem(error.Code);
 			}
 		}
 	}

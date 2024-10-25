@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -56,6 +57,18 @@ namespace LibraryManagement.Infastructure.Data.Repositories
         public async Task<List<ReturnRecord>> ListAsync(int page, int pageSize)
         {
             return await _context.ReturnRecords.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+        }
+
+        public IEnumerable<ReturnRecord> Find(Expression<Func<ReturnRecord, bool>> predicate)
+        {
+	        var result = _context.ReturnRecords.Where(predicate).ToList();
+	        return result;
+        }
+
+        public async Task<IEnumerable<ReturnRecord>> FindAsync(Expression<Func<ReturnRecord, bool>> predicate)
+        {
+	        var result = await _context.ReturnRecords.Where(predicate).ToListAsync();
+	        return result;
         }
 
         public int SaveChange()

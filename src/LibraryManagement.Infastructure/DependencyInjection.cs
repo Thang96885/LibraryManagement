@@ -1,9 +1,11 @@
-﻿using LibraryManagement.Application.Common.Interface;
+﻿using System.Text;
+using LibraryManagement.Application.Common.Interface;
 using LibraryManagement.Application.Common.Services;
 using LibraryManagement.Domain.BookAggregate;
 using LibraryManagement.Domain.BookReservationAggregate;
 using LibraryManagement.Domain.BorrowRecordAggregate;
 using LibraryManagement.Domain.Common.Interface;
+using LibraryManagement.Domain.Common.Interface.DomainServices;
 using LibraryManagement.Domain.GenreAggregate;
 using LibraryManagement.Domain.PatronAggregate;
 using LibraryManagement.Domain.ReturnRecordAggregate;
@@ -21,31 +23,36 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
 
-namespace LibraryManagement.Infastructure.Data
+namespace LibraryManagement.Infastructure
 {
     public static class DependencyInjection 
 	{
-		public static IServiceCollection AddInfastructure(this IServiceCollection service, IConfiguration _config)
+		public static IServiceCollection AddInfastructure(this IServiceCollection service, IConfiguration config)
 		{
 			service.AddSingleton<IDateTimeProvider, DateTimeProvider>();
-			AddPersistence(service, _config);
+			AddPersistence(service, config);
 			AddIdentity(service);
-			AddAuth(service, _config);
-			AddEmailService(service, _config);
+			AddAuth(service, config);
+			AddEmailService(service, config);
+			AddDomainServices(service);
 
 			return service;
 		}
 
-		private static void AddEmailService(IServiceCollection service, IConfiguration _config)
+		private static void AddDomainServices(IServiceCollection service)
 		{
-			var emailConfig = _config.GetSection("EmailConfiguration").Get<EmailConfiguration>();
+			service.AddScoped<IGenreService, GenreService>();
+		}
+
+		private static void AddEmailService(IServiceCollection service, IConfiguration config)
+		{
+			var emailConfig = config.GetSection("EmailConfiguration").Get<EmailConfiguration>();
 			service.AddSingleton(emailConfig);
 			service.AddScoped<IEmailService, EmailService>();
 		}
 
-		private static void AddAuth(IServiceCollection service, IConfiguration _config)
+		private static void AddAuth(IServiceCollection service, IConfiguration config)
 		{
 			service.AddSingleton<ITokenGennerator, TokenGennerator>();
 			service.AddScoped<IIdentityService, IdentityService>();
@@ -61,9 +68,9 @@ namespace LibraryManagement.Infastructure.Data
 					ValidateAudience = true,
 					ValidateIssuer = true,
 					ValidateLifetime = true,
-					ValidAudience = _config.GetSection("Jwt:Audience").Value,
-					ValidIssuer = _config.GetSection("Jwt:Issuer").Value,
-					IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.GetSection("Jwt:Key").Value))
+					ValidAudience = config.GetSection("Jwt:Audience").Value,
+					ValidIssuer = config.GetSection("Jwt:Issuer").Value,
+					IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config.GetSection("Jwt:Key").Value))
 				};
 			});
 		}
@@ -75,11 +82,11 @@ namespace LibraryManagement.Infastructure.Data
 						.AddEntityFrameworkStores<LibraryManagementContext>();
 		}
 
-		private static void AddPersistence(IServiceCollection service, IConfiguration _config)
+		private static void AddPersistence(IServiceCollection service, IConfiguration config)
 		{
 			service.AddDbContext<LibraryManagementContext>(options =>
 			{
-				options.UseSqlServer(_config.GetConnectionString("Default"));
+				options.UseSqlServer(config.GetConnectionString("Default"));
 			});
 
 			service.AddScoped<IBaseRepository<Book>, BookRepository>();

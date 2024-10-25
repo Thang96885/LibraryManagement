@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Formats.Asn1;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -57,6 +58,18 @@ namespace LibraryManagement.Infastructure.Data.Repositories
         public async Task<List<BorrowRecord>> ListAsync(int page, int pageSize)
         {
             return await _context.BorrowRecords.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+        }
+
+        public IEnumerable<BorrowRecord> Find(Expression<Func<BorrowRecord, bool>> predicate)
+        {
+	        var result = _context.BorrowRecords.Where(predicate).ToList();
+	        return result;
+        }
+
+        public async Task<IEnumerable<BorrowRecord>> FindAsync(Expression<Func<BorrowRecord, bool>> predicate)
+        {
+	        var result = await _context.BorrowRecords.Where(predicate).ToListAsync();
+	        return result;
         }
 
         public int SaveChange()

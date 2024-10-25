@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -56,6 +57,18 @@ namespace LibraryManagement.Infastructure.Data.Repositories
         public async Task<List<Patron>> ListAsync(int page, int pageSize)
         {
             return await _context.Patrons.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+        }
+
+        public IEnumerable<Patron> Find(Expression<Func<Patron, bool>> predicate)
+        {
+	        var result = _context.Patrons.Where(predicate).ToList();
+	        return result;
+        }
+
+        public async Task<IEnumerable<Patron>> FindAsync(Expression<Func<Patron, bool>> predicate)
+        {
+	        var result = await _context.Patrons.Where(predicate).ToListAsync();
+	        return result;
         }
 
         public int SaveChange()

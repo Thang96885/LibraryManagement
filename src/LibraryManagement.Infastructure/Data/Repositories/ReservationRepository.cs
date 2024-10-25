@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -56,6 +57,17 @@ namespace LibraryManagement.Infastructure.Data.Repositories
         public async Task<List<BookReservation>> ListAsync(int page, int pageSize)
         {
             return await _context.Reservations.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+        }
+        public IEnumerable<BookReservation> Find(Expression<Func<BookReservation, bool>> predicate)
+        {
+	        var result = _context.Reservations.Where(predicate).ToList();
+	        return result;
+        }
+
+        public async Task<IEnumerable<BookReservation>> FindAsync(Expression<Func<BookReservation, bool>> predicate)
+        {
+	        var result = await _context.Reservations.Where(predicate).ToListAsync();
+	        return result;
         }
 
         public int SaveChange()
