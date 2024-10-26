@@ -1,4 +1,6 @@
 ﻿using LibraryManagement.Application.Genres.Create;
+using LibraryManagement.Application.Genres.Delete;
+using LibraryManagement.Application.Genres.Get;
 using LibraryManagement.Application.Genres.List;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -36,6 +38,26 @@ namespace LibraryManagement.Api.Controllers
 			var result = await _sender.Send(request);
 
 			if (result.IsError)
+				return Problem(result.Errors);
+			return Ok(result.Value);
+		}
+
+		[HttpGet("get")]
+		[AllowAnonymous]
+		public async Task<IActionResult> Get([FromQuery] GetGenreQuery request)
+		{
+			var result = await _sender.Send(request);
+			if (result.IsError)
+				return Problem(result.Errors);
+			return Ok(result.Value);
+		}
+
+		[HttpPost("delete")]
+		[AllowAnonymous]
+		public async Task<IActionResult> Delete([FromBody] DeleteGenreCommand request)
+		{
+			var result = await _sender.Send(request);
+			if(result.IsError)
 				return Problem(result.Errors);
 			return Ok(result.Value);
 		}
