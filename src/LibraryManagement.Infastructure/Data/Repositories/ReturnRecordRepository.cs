@@ -8,6 +8,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using ErrorOr;
 
 namespace LibraryManagement.Infastructure.Data.Repositories
 {
@@ -65,9 +66,21 @@ namespace LibraryManagement.Infastructure.Data.Repositories
 	        return result;
         }
 
+        public IEnumerable<ReturnRecord> Find(Expression<Func<ReturnRecord, bool>> predicate, int page, int pageSize)
+        {
+	        var result = _context.ReturnRecords.Where(predicate).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+	        return result;
+        }
+
         public async Task<IEnumerable<ReturnRecord>> FindAsync(Expression<Func<ReturnRecord, bool>> predicate)
         {
 	        var result = await _context.ReturnRecords.Where(predicate).ToListAsync();
+	        return result;
+        }
+
+        public async Task<IEnumerable<ReturnRecord>> FindAsync(Expression<Func<ReturnRecord, bool>> predicate, int page, int pageSize)
+        {
+	        var result = await _context.ReturnRecords.Where(predicate).Skip((page - 1) * pageSize).Take(pageSize).ToListAsync()
 	        return result;
         }
 

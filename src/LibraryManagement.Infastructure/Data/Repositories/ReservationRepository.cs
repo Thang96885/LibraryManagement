@@ -64,9 +64,21 @@ namespace LibraryManagement.Infastructure.Data.Repositories
 	        return result;
         }
 
+        public IEnumerable<BookReservation> Find(Expression<Func<BookReservation, bool>> predicate, int page, int pageSize)
+        {
+	        var result = _context.Reservations.Where(predicate).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+	        return result;
+        }
+
         public async Task<IEnumerable<BookReservation>> FindAsync(Expression<Func<BookReservation, bool>> predicate)
         {
 	        var result = await _context.Reservations.Where(predicate).ToListAsync();
+	        return result;
+        }
+
+        public async Task<IEnumerable<BookReservation>> FindAsync(Expression<Func<BookReservation, bool>> predicate, int page, int pageSize)
+        {
+	        var result = await _context.Reservations.Where(predicate).Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
 	        return result;
         }
 

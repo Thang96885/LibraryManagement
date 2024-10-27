@@ -65,9 +65,21 @@ namespace LibraryManagement.Infastructure.Data.Repositories
 	        return result;
         }
 
+        public IEnumerable<Patron> Find(Expression<Func<Patron, bool>> predicate, int page, int pageSize)
+        {
+	        var result = _context.Patrons.Where(predicate).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+	        return result;
+        }
+
         public async Task<IEnumerable<Patron>> FindAsync(Expression<Func<Patron, bool>> predicate)
         {
 	        var result = await _context.Patrons.Where(predicate).ToListAsync();
+	        return result;
+        }
+
+        public async Task<IEnumerable<Patron>> FindAsync(Expression<Func<Patron, bool>> predicate, int page, int pageSize)
+        {
+	        var result = await _context.Patrons.Where(predicate).Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
 	        return result;
         }
 

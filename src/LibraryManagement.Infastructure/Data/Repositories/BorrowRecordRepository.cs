@@ -66,9 +66,21 @@ namespace LibraryManagement.Infastructure.Data.Repositories
 	        return result;
         }
 
+        public IEnumerable<BorrowRecord> Find(Expression<Func<BorrowRecord, bool>> predicate, int page, int pageSize)
+        {
+	        var result = _context.BorrowRecords.Where(predicate).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+	        return result;
+        }
+
         public async Task<IEnumerable<BorrowRecord>> FindAsync(Expression<Func<BorrowRecord, bool>> predicate)
         {
 	        var result = await _context.BorrowRecords.Where(predicate).ToListAsync();
+	        return result;
+        }
+
+        public async Task<IEnumerable<BorrowRecord>> FindAsync(Expression<Func<BorrowRecord, bool>> predicate, int page, int pageSize)
+        {
+	        var result = await _context.BorrowRecords.Where(predicate).Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
 	        return result;
         }
 

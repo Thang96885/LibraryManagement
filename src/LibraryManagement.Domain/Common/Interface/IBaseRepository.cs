@@ -1,5 +1,6 @@
 ﻿using LibraryManagement.Domain.Common.BaseModels;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -23,7 +24,9 @@ namespace LibraryManagement.Domain.Common.Interface
 		Task<List<TEntity>> ListAsync(int page, int pageSize);
 		
 		IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate);
+		IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate, int page, int pageSize);
 		Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate);
+		Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate, int page, int pageSize);
 		int SaveChange();
 		Task<int> SaveChangeAsync();
 	}

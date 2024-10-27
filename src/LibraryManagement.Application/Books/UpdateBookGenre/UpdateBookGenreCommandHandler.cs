@@ -29,9 +29,11 @@ public class UpdateBookGenreCommandHandler : IRequestHandler<UpdateBookGenreComm
         
         if(book == null)
             return Error.NotFound("Book with given id does not exist");
+
+        var addGenreIds = request.AddGenreIds.Select(id => new BookGenreId(id)).ToList();
+        var removeGenreIds = request.RemoveGenreIds.Select(id => new BookGenreId(id)).ToList();
         
-        book.AddGenres(request.AddGenreIds.Select(id => new BookGenreId(id)).ToList());
-        book.RemoveGenres(request.RemoveGenreIds.Select(id => new BookGenreId(id)).ToList());
+        book.UpdateGenre(addGenreIds, removeGenreIds);
         
         _bookRepository.Update(book);
         
