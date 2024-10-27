@@ -22,7 +22,7 @@ namespace LibraryManagement.Application.Patrons.Create.Events
 		public async Task Handle(CreatedPatron notification, CancellationToken cancellationToken)
 		{
 			var message = new Message(
-				new List<MailboxAddress> { new(notification.patron.Name, notification.patron.Email) },
+				new List<MailboxAddress> { new(notification.Patron.Name, notification.Patron.Email) },
 				"Welcome to the Library",
 				"Welcome to the Library, we are glad to have you as our patron"
 			);

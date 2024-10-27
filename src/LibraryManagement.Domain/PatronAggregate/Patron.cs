@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LibraryManagement.Domain.BookAggregate.Events;
 
 namespace LibraryManagement.Domain.PatronAggregate
 {
@@ -38,6 +39,11 @@ namespace LibraryManagement.Domain.PatronAggregate
 			var patron = new Patron(Guid.NewGuid(), name, email, phoneNumber, address, DateTime.UtcNow);
 			patron.AddDomainEvent(new CreatedPatron(patron));
 			return patron;
+		}
+
+		public void Delete()
+		{
+			this.AddDomainEvent(new DeletedPatron(this));
 		}
 
 		private Patron()

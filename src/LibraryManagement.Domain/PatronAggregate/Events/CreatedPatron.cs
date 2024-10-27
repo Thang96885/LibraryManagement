@@ -7,5 +7,5 @@ using System.Threading.Tasks;
 
 namespace LibraryManagement.Domain.PatronAggregate.Events
 {
-	public record CreatedPatron(Patron patron) : IDomainEvent;
+	public record CreatedPatron(Patron Patron) : IDomainEvent;
 }

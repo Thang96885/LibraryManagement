@@ -112,6 +112,16 @@ namespace LibraryManagement.Infastructure.Data.Identity.Services
 			return Error.Failure();
 		}
 
+		public async Task DeleteAccountAsync(Guid patronId)
+		{
+			var account = await _userManager.Users.Where(user => user.PatronId == patronId).FirstOrDefaultAsync();
+
+			if (account == null)
+				return;
+			
+			await _userManager.DeleteAsync(account);
+		}
+
 		public async Task<ErrorOr<UserInfo>> SignInAsync(RegisterInfo info)
 		{
 			var user = new User { UserName = info.userName, Email = info.patron.Email , PatronId = info.patron.Id, PhoneNumber = info.patron.PhoneNumber };
