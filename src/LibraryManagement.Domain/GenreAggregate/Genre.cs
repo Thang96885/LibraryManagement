@@ -36,6 +36,36 @@ namespace LibraryManagement.Domain.GenreAggregate
 			return new Genre(Guid.NewGuid(), Name);
 		}
 
+		public void UpdateBookId(List<GenreBookId> addBookIds, List<GenreBookId> removeBookIds)
+		{
+			addBookIds = addBookIds.Except(_bookIds).ToList();
+			removeBookIds = removeBookIds.Except(_bookIds).ToList();
+			
+			_bookIds.AddRange(addBookIds);
+			
+			_bookIds.RemoveAll(bookId => removeBookIds.Contains(bookId));
+		}
+
+		public void AddBookId(List<GenreBookId> addBookIds)
+		{
+			this._bookIds.AddRange(addBookIds);
+		}
+
+		public void AddBookId(GenreBookId addBookId)
+		{
+			this._bookIds.Add(addBookId);
+		}
+
+		public void RemoveBookId(List<GenreBookId> removeBookIds)
+		{
+			this._bookIds.RemoveAll(bookId => removeBookIds.Contains(bookId));
+		}
+
+		public void RemoveBookId(GenreBookId bookId)
+		{
+			this._bookIds.Remove(bookId);
+		}
+
 		private Genre()
 		{
 

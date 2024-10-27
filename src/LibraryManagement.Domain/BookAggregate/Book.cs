@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LibraryManagement.Domain.BookAggregate.Events;
 
 namespace LibraryManagement.Domain.BookAggregate
 {
@@ -58,6 +59,17 @@ namespace LibraryManagement.Domain.BookAggregate
 		public void AddBookCopy(BookCopy bookCopy)
 		{
 			this._bookCopies.Add(bookCopy);
+		}
+
+		public void UpdateGenre(List<BookGenreId> addBookGenreIds, List<BookGenreId> removeBookGenreIds)
+		{
+			var updatedBookGenre = new UpdatedBookGenres(this.Id, addBookGenreIds.Except(this._genreIds).ToList(),
+				removeBookGenreIds.Except(this._genreIds).ToList());
+			
+			_genreIds.AddRange(updatedBookGenre.addedBookGenreIds);
+			_genreIds.AddRange(updatedBookGenre.removedGenreIds);
+			
+			this.AddDomainEvent(updatedBookGenre);
 		}
 
         public void Delete()

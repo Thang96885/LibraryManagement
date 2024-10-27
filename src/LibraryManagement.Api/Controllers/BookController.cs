@@ -3,6 +3,7 @@ using LibraryManagement.Application.Books.Create;
 using LibraryManagement.Application.Books.Delete;
 using LibraryManagement.Application.Books.Get;
 using LibraryManagement.Application.Books.List;
+using LibraryManagement.Application.Books.UpdateBookGenre;
 using LibraryManagement.Domain.Common.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -80,6 +81,16 @@ namespace LibraryManagement.Api.Controllers
 				return Problem(result.Errors);
 			}
 			return Ok(result.Value);
+		}
+
+		[HttpPost("update-book-genre")]
+		[AllowAnonymous]
+		public async Task<IActionResult> UpdateBookGenre(UpdateBookGenreCommand command)
+		{
+			var result = await _sender.Send(command);
+			if(result.IsError)
+				return Problem(result.Errors);
+			return Ok(result.Value);s
 		}
 	}
 }
