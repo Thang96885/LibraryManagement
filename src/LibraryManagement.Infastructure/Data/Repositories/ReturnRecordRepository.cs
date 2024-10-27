@@ -80,7 +80,8 @@ namespace LibraryManagement.Infastructure.Data.Repositories
 
         public async Task<IEnumerable<ReturnRecord>> FindAsync(Expression<Func<ReturnRecord, bool>> predicate, int page, int pageSize)
         {
-	        var result = await _context.ReturnRecords.Where(predicate).Skip((page - 1) * pageSize).Take(pageSize).ToListAsync()
+	        var result = await _context.ReturnRecords.Where(predicate).Skip((page - 1) * pageSize).Take(pageSize)
+		        .ToListAsync();
 	        return result;
         }
 

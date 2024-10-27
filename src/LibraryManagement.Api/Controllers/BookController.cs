@@ -90,7 +90,7 @@ namespace LibraryManagement.Api.Controllers
 			var result = await _sender.Send(command);
 			if(result.IsError)
 				return Problem(result.Errors);
-			return Ok(result.Value);s
+			return Ok(result.Value);
 		}
 	}
 }

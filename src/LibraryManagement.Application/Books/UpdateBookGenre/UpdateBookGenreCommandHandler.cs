@@ -1,6 +1,7 @@
 using ErrorOr;
 using LibraryManagement.Application.Books.Common;
 using LibraryManagement.Domain.BookAggregate;
+using LibraryManagement.Domain.BookAggregate.Events;
 using LibraryManagement.Domain.BookAggregate.ValueObjects;
 using LibraryManagement.Domain.Common.Interface;
 using LibraryManagement.Domain.GenreAggregate;
@@ -36,7 +37,27 @@ public class UpdateBookGenreCommandHandler : IRequestHandler<UpdateBookGenreComm
         book.UpdateGenre(addGenreIds, removeGenreIds);
         
         _bookRepository.Update(book);
-        
-        return _mapper.Map<BookDto>(book);
+        await _bookRepository.SaveChangeAsync();
+
+        var bookGenres = new List<Genre>();
+
+        foreach (var genreId in book.GenreIds)
+        {
+            var genre = await _genreRepository.FindAsync(genreId.Value);
+            bookGenres.Add(genre);
+        }
+
+        return new BookDto()
+        {
+            Id = book.Id,
+            Title = book.Title,
+            AuthorName = book.AuthorName,
+            PublisherName = book.PublisherName,
+            PublicationYear = book.PublicationYear,
+            PageCount = book.PageCount,
+            NumberOfCopy = book.NumberOfCopy,
+            NumberAvailable = book.NumberAvailable,
+            Genres = bookGenres.Select(genre => new GenreDto() { Id = genre.Id, Name = genre.Name }).ToList()
+        };
     }
 }

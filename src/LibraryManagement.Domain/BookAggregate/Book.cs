@@ -63,11 +63,16 @@ namespace LibraryManagement.Domain.BookAggregate
 
 		public void UpdateGenre(List<BookGenreId> addBookGenreIds, List<BookGenreId> removeBookGenreIds)
 		{
+			
 			var updatedBookGenre = new UpdatedBookGenres(this.Id, addBookGenreIds.Except(this._genreIds).ToList(),
-				removeBookGenreIds.Except(this._genreIds).ToList());
+				removeBookGenreIds.Intersect(_genreIds).ToList());
 			
 			_genreIds.AddRange(updatedBookGenre.addedBookGenreIds);
-			_genreIds.AddRange(updatedBookGenre.removedGenreIds);
+
+			foreach (var genreId in updatedBookGenre.removedGenreIds)
+			{
+				_genreIds.Remove(genreId);
+			}
 			
 			this.AddDomainEvent(updatedBookGenre);
 		}

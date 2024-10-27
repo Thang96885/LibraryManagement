@@ -18,11 +18,21 @@ public class UpdatedBookGenreHandler : INotificationHandler<UpdatedBookGenres>
 
     public async Task Handle(UpdatedBookGenres notification, CancellationToken cancellationToken)
     {
-        var addGenres = await _genreRepository.FindAsync((genre) => 
-            notification.addedBookGenreIds.Contains(new BookGenreId(genre.Id))
-        );
-        
-        var removeGenres = await _genreRepository.FindAsync((genre) => notification.removedGenreIds.Contains(new BookGenreId(genre.Id)));
+        var addGenres = new List<Genre>();
+
+        foreach (var genreId in notification.addedBookGenreIds)
+        {
+            var genre = await _genreRepository.FindAsync(genreId.Value);
+            addGenres.Add(genre);
+        }
+
+        var removeGenres = new List<Genre>();
+
+        foreach (var genreId in notification.removedGenreIds)
+        {
+            var genre =await _genreRepository.FindAsync(genreId.Value);
+            removeGenres.Add(genre);
+        }
 
         foreach (var genre in addGenres)
         {

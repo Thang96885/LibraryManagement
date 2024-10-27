@@ -70,7 +70,7 @@ namespace LibraryManagement.Infastructure.Data.Repositories
 
         public IEnumerable<Genre> Find(Expression<Func<Genre, bool>> predicate, int page, int pageSize)
         {
-	        var result = _context.Genres.Where(predicate).Skip((page - 1) * pageSize).Take(pageSize).ToList()
+	        var result = _context.Genres.Where(predicate).Skip((page - 1) * pageSize).Take(pageSize).ToList();
 	        return result;
         }
 
