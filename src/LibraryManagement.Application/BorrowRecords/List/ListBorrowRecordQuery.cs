@@ -4,6 +4,7 @@ using MediatR;
 namespace LibraryManagement.Application.BorrowRecords.List;
 
 public record ListBorrowRecordDto(
+    Guid Id,
     DateTime BorrowDate,
     DateTime DueDate,
     bool IsReturned,

@@ -48,6 +48,7 @@ public class ListBorrowRecordQueryHandler : IRequestHandler<ListBorrowRecordQuer
         BorrowRecord borrowRecord)
     {
         return new ListBorrowRecordDto(
+            borrowRecord.Id,
             borrowRecord.BorrowDate,
             borrowRecord.DueDate,
             borrowRecord.IsReturned,
