@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LibraryManagement.Domain.BookAggregate.Events;
+using LibraryManagement.Domain.BorrowRecordAggregate;
 
 namespace LibraryManagement.Domain.PatronAggregate
 {
@@ -39,6 +40,11 @@ namespace LibraryManagement.Domain.PatronAggregate
 			var patron = new Patron(Guid.NewGuid(), name, email, phoneNumber, address, DateTime.UtcNow);
 			patron.AddDomainEvent(new CreatedPatron(patron));
 			return patron;
+		}
+
+		public void AddBorrowRecordId(Guid borrowRecordId)
+		{
+			_borrowRecordIds.Add(PatronBorrowRecordId.Create(borrowRecordId));
 		}
 
 		public void Delete()

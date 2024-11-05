@@ -5,9 +5,11 @@ using LibraryManagement.Domain.Common.BaseModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 using LibraryManagement.Domain.BookAggregate.Events;
+using LibraryManagement.Domain.Common.Enums;
 
 namespace LibraryManagement.Domain.BookAggregate
 {
@@ -59,6 +61,21 @@ namespace LibraryManagement.Domain.BookAggregate
 		public void AddBookCopy(BookCopy bookCopy)
 		{
 			this._bookCopies.Add(bookCopy);
+		}
+
+		public void BorrowBook(List<string> bookCopyIds)
+		{
+			var bookCopies = _bookCopies.Where(bc => bookCopyIds.Contains(bc.Id)).ToList();
+
+			if (bookCopies.Count == 0)
+				return;
+
+			foreach (var bookCopy in bookCopies)
+			{
+				bookCopy.ChangeStatus(BookStatus.Borrowed);
+			}
+
+			this.NumberAvailable -= bookCopies.Count;
 		}
 
 		public void UpdateGenre(List<BookGenreId> addBookGenreIds, List<BookGenreId> removeBookGenreIds)

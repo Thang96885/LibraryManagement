@@ -1,14 +1,10 @@
-﻿using LibraryManagement.Domain.BorrowRecordAggregate;
+﻿using System.Text.Json;
+using LibraryManagement.Domain.BorrowRecordAggregate;
 using LibraryManagement.Domain.BorrowRecordAggregate.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace LibraryManagement.Infastructure.Data.Data.Configurations
+namespace LibraryManagement.Infastructure.Data.Configurations
 {
     public class BorrowRecordConfiguration : IEntityTypeConfiguration<BorrowRecord>
     {
@@ -31,13 +27,22 @@ namespace LibraryManagement.Infastructure.Data.Data.Configurations
                 id => id.Value,
                 value => BorrowRecordReturnRecordId.Create(value));
 
-            builder.OwnsMany(x => x.BookIds, BorrowRecordBookBuilder =>
+            builder.OwnsMany(x => x.BookIds, borrowRecordBookBuilder =>
             {
-                BorrowRecordBookBuilder.ToTable("BorrowRecordBookId");
-                BorrowRecordBookBuilder.WithOwner().HasForeignKey("BorrowRecordId");
-                BorrowRecordBookBuilder.Property(x => x.Value)
-                .HasColumnName("BookId");
-                BorrowRecordBookBuilder.HasKey("Value", "BorrowRecordId");
+                borrowRecordBookBuilder.ToTable("BorrowRecordBookId");
+                borrowRecordBookBuilder.WithOwner().HasForeignKey("BorrowRecordId");
+                borrowRecordBookBuilder.Property(x => x.BookId)
+                    .HasColumnName("BookId");
+
+                borrowRecordBookBuilder.Property(x => x.BookCopyIds)
+                    .HasColumnName("BookCopyIds")
+                    .HasConversion((bookcopyids) => JsonSerializer.Serialize(bookcopyids, new JsonSerializerOptions()),
+                        value => JsonSerializer.Deserialize<List<string>>(value, new JsonSerializerOptions()))
+                    .HasMaxLength(500);
+                
+                borrowRecordBookBuilder.HasKey("BookId", "BorrowRecordId");
+
+                
             });
         }
     }

@@ -19,19 +19,33 @@ namespace LibraryManagement.Infastructure.Data.Interceptor
 			_mediator = mediator;
 		}
 
-		public override int SavedChanges(SaveChangesCompletedEventData eventData, int result)
+		/*public override int SavedChanges(SaveChangesCompletedEventData eventData, int result)
 		{
 			PublishDomainEvents(eventData.Context).GetAwaiter().GetResult();
 
 			return base.SavedChanges(eventData, result);
+		}*/
+
+		public override InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result)
+		{
+			PublishDomainEvents(eventData.Context).GetAwaiter().GetResult();
+			return base.SavingChanges(eventData, result);
 		}
 
-		public override async ValueTask<int> SavedChangesAsync(SaveChangesCompletedEventData eventData, int result, CancellationToken cancellationToken = default)
+		public override async ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, InterceptionResult<int> result,
+			CancellationToken cancellationToken = new CancellationToken())
+		{
+			await PublishDomainEvents(eventData.Context);
+			
+			return await base.SavingChangesAsync(eventData, result, cancellationToken);
+		}
+
+		/*public override async ValueTask<int> SavedChangesAsync(SaveChangesCompletedEventData eventData, int result, CancellationToken cancellationToken = default)
 		{
 			await PublishDomainEvents(eventData.Context);
 
 			return await base.SavedChangesAsync(eventData, result, cancellationToken);
-		}
+		}*/
 
 		private async Task PublishDomainEvents(DbContext? dbContext)
 		{

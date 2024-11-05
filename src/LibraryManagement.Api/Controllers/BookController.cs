@@ -57,7 +57,8 @@ namespace LibraryManagement.Api.Controllers
 			}
 			return Ok(result.Value);
 		}
-
+		
+		// TODO - Error when add book copy not update BookNumber and NumberAvaiable in Book
 		[HttpPost("add-book-copy")]
 		[AllowAnonymous]
 		public async Task<IActionResult> AddBookCopy(AddBookCopyCommand request)

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using FluentValidation.AspNetCore;
 
 namespace LibraryManagement.Application
 {
@@ -16,7 +17,8 @@ namespace LibraryManagement.Application
 		public static IServiceCollection AddApplication(this IServiceCollection service)
 		{
 			service.AddMediatR(configuration => configuration.RegisterServicesFromAssemblies(typeof(DependencyInjection).Assembly));
-
+			
+			service.AddFluentValidationAutoValidation();
 			service.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly);
 			AddMappingConfig(service);
 

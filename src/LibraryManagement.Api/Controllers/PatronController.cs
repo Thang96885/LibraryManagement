@@ -31,7 +31,7 @@ namespace LibraryManagement.Api.Controllers
 			{
 				return Problem(result.Errors);
 			}
-			return Ok(result);
+			return Ok(result.Value);
 		}
 
 		[HttpGet("list-patron")]

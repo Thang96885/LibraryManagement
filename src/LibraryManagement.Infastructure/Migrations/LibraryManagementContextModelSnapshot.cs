@@ -542,16 +542,23 @@ namespace LibraryManagement.Infastructure.Migrations
 
             modelBuilder.Entity("LibraryManagement.Domain.BorrowRecordAggregate.BorrowRecord", b =>
                 {
-                    b.OwnsMany("LibraryManagement.Domain.BorrowRecordAggregate.ValueObjects.BorrowRecordBookCopyId", "BookIds", b1 =>
+                    b.OwnsMany("LibraryManagement.Domain.BorrowRecordAggregate.ValueObjects.BorrowRecordBookId", "BookIds", b1 =>
                         {
-                            b1.Property<string>("Value")
-                                .HasColumnType("nvarchar(450)")
+                            b1.Property<Guid>("BookId")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("uniqueidentifier")
                                 .HasColumnName("BookId");
 
                             b1.Property<Guid>("BorrowRecordId")
                                 .HasColumnType("uniqueidentifier");
 
-                            b1.HasKey("Value", "BorrowRecordId");
+                            b1.Property<string>("BookCopyIds")
+                                .IsRequired()
+                                .HasMaxLength(500)
+                                .HasColumnType("nvarchar(500)")
+                                .HasColumnName("BookCopyIds");
+
+                            b1.HasKey("BookId", "BorrowRecordId");
 
                             b1.HasIndex("BorrowRecordId");
 

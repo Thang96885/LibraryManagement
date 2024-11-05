@@ -43,7 +43,6 @@ public class UpdatedBookGenreHandler : INotificationHandler<UpdatedBookGenres>
         {
             genre.RemoveBookId(GenreBookId.Create(notification.bookId));
         }
-
-        await _genreRepository.SaveChangeAsync();
+        
     }
 }

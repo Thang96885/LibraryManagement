@@ -56,8 +56,10 @@ namespace LibraryManagement.Api.Controllers
 				));
 
 			var bookCopys = fakerBookCopyCommand.Generate(1);
-
-			return Ok(await _sender.Send(bookCopys));
+			
+			return Ok(await _sender.Send(bookCopys[0]));
+			
+			
 		}
 	}
 }

@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 
 namespace LibraryManagement.Domain.BookAggregate.Entities
 {
-	// Id of BookCopy is IBNS code
 	public class BookCopy : Entity<string>
 	{
 		private static readonly BookCopyService _bookCopyService = new BookCopyService();
@@ -31,6 +30,11 @@ namespace LibraryManagement.Domain.BookAggregate.Entities
 				throw new ArgumentException("Invalid IBNS");
 			}
 			return new(Id, accquisitionDate);
+		}
+
+		public void ChangeStatus(BookStatus status)
+		{
+			this.Status = status;
 		}
 	}
 }
