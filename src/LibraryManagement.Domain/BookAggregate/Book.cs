@@ -61,6 +61,8 @@ namespace LibraryManagement.Domain.BookAggregate
 		public void AddBookCopy(BookCopy bookCopy)
 		{
 			this._bookCopies.Add(bookCopy);
+			this.NumberAvailable++;
+			this.NumberOfCopy++;
 		}
 
 		public void BorrowBook(List<string> bookCopyIds)
