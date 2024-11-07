@@ -13,12 +13,12 @@ namespace LibraryManagement.Application.Common.Interface
 
 	public interface IIdentityService
 	{
-		Task DeleteAccountAsync(Guid patronId);
+		Task DeleteAccountAsync(int patronId);
 		Task<ErrorOr<UserInfo>> SignInAsync(RegisterInfo info);
 		Task AddRefreshToken(string userName, string token);
 		Task<ErrorOr<bool>> AddRole(string roleName);
 		Task<UserInfo?> FindUserByNameAsync(string userName);
-		Task<UserInfo?> FindUserByPatronIdAsync(string patronId);
+		Task<UserInfo?> FindUserByPatronIdAsync(int patronId);
 		Task<ErrorOr<AuthResult>> Refresh(string userName, string refreshToken);
 
 		Task<ErrorOr<UserInfo>> Login(string userNameOrEmail, string password);

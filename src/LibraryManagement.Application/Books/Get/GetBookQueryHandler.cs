@@ -26,7 +26,7 @@ namespace LibraryManagement.Application.Books.Get
 
 		public async Task<ErrorOr<BookDto>> Handle(GetBookQuery request, CancellationToken cancellationToken)
 		{
-			var book = await _bookReposiotry.FindAsync(Guid.Parse(request.Id));
+			var book = await _bookReposiotry.FindAsync(request.Id);
 
 			if (book == null)
 				return Error.NotFound();

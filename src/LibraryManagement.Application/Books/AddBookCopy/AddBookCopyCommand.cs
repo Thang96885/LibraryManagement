@@ -8,5 +8,5 @@ using System.Threading.Tasks;
 
 namespace LibraryManagement.Application.Books.AddBookCopy
 {
-	public record AddBookCopyCommand(Guid BookId, List<string> IBNSCodes) : IRequest<ErrorOr<List<string>>>;
+	public record AddBookCopyCommand(int BookId, List<string> IBNSCodes) : IRequest<ErrorOr<List<string>>>;
 }

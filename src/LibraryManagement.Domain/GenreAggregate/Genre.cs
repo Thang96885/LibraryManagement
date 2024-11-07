@@ -20,9 +20,8 @@ namespace LibraryManagement.Domain.GenreAggregate
         public string Name { get; private set; }
         public IReadOnlyList<GenreBookId> BookIds => _bookIds.AsReadOnly();
 
-		private Genre(Guid Id, string Name)
+		private Genre(string Name)
 		{
-			this.Id = Id;
 			this.Name = Name;
 		}
 
@@ -33,7 +32,7 @@ namespace LibraryManagement.Domain.GenreAggregate
 			if(isNameUnique == false)
 				throw new DuplicateNameException("Genre name is already taken");
 			
-			return new Genre(Guid.NewGuid(), Name);
+			return new Genre(Name);
 		}
 
 		public void UpdateBookId(List<GenreBookId> addBookIds, List<GenreBookId> removeBookIds)

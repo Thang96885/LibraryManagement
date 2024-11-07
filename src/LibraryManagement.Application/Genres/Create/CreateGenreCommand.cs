@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LibraryManagement.Application.Genres.Create
 {
-	public record CreateGenreDto(string Id, string Name);
+	public record CreateGenreDto(int Id, string Name);
 
 	public record CreateGenreCommand(string genreName) : IRequest<ErrorOr<CreateGenreDto>>;
 }

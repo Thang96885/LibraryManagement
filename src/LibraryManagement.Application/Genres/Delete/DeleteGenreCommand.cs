@@ -3,6 +3,6 @@ using MediatR;
 
 namespace LibraryManagement.Application.Genres.Delete;
 
-public record DeleteGenreDto(Guid Id);
+public record DeleteGenreDto(int Id);
 
-public record DeleteGenreCommand(Guid Id) :IRequest<ErrorOr<DeleteGenreDto>>;
+public record DeleteGenreCommand(int Id) :IRequest<ErrorOr<DeleteGenreDto>>;

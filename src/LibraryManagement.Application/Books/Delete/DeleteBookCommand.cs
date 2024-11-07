@@ -8,5 +8,5 @@ using System.Threading.Tasks;
 
 namespace LibraryManagement.Application.Books.Delete
 {
-    public record DeleteBookCommand(string Id) : IRequest<ErrorOr<string>>;
+    public record DeleteBookCommand(int Id) : IRequest<ErrorOr<string>>;
 }

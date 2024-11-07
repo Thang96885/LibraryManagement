@@ -25,9 +25,8 @@ namespace LibraryManagement.Domain.PatronAggregate
 		public IReadOnlyList<PatronBorrowRecordId> BorrowRecordIds => _borrowRecordIds.AsReadOnly();
 		public IReadOnlyList<PatronReturnRecordId> ReturnRecordIds => _returnRecordIds.AsReadOnly();
 
-		private Patron(Guid id, string name, string email, string phoneNumber, PatronAddress address, DateTime registrationDate)
+		private Patron(string name, string email, string phoneNumber, PatronAddress address, DateTime registrationDate)
 		{
-			Id = id;
 			Name = name;
 			Email = email;
 			PhoneNumber = phoneNumber;
@@ -37,12 +36,12 @@ namespace LibraryManagement.Domain.PatronAggregate
 
 		public static Patron Create(string name, string email, string phoneNumber, PatronAddress address)
 		{
-			var patron = new Patron(Guid.NewGuid(), name, email, phoneNumber, address, DateTime.UtcNow);
+			var patron = new Patron(name, email, phoneNumber, address, DateTime.UtcNow);
 			patron.AddDomainEvent(new CreatedPatron(patron));
 			return patron;
 		}
 
-		public void AddBorrowRecordId(Guid borrowRecordId)
+		public void AddBorrowRecordId(int borrowRecordId)
 		{
 			_borrowRecordIds.Add(PatronBorrowRecordId.Create(borrowRecordId));
 		}

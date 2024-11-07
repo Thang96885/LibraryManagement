@@ -35,10 +35,9 @@ namespace LibraryManagement.Domain.BookAggregate
         public IReadOnlyList<BookReservationId> BookReservationId { get => _bookReservationId.AsReadOnly(); }
         public IReadOnlyList<BookCopy> BookCopies => _bookCopies.AsReadOnly();
 
-        private Book(Guid Id, string title, string authorName, string publisherName, 
+        private Book(string title, string authorName, string publisherName, 
 			int publicationYear, int pageCount, int numberOfCopy, int numberAvailable)
-		{
-			this.Id = Id;
+        {
 			Title = title;
 			AuthorName = authorName;
 			PublisherName = publisherName;
@@ -55,7 +54,7 @@ namespace LibraryManagement.Domain.BookAggregate
         public static Book Create(string title, string authorName, string publisherName, 
 			int publicationYear, int pageCount, int numberOfCopy, int numberAvailable)
 		{
-			return new Book(Guid.NewGuid(), title, authorName, publisherName, publicationYear, pageCount, numberOfCopy, numberAvailable);
+			return new Book(title, authorName, publisherName, publicationYear, pageCount, numberOfCopy, numberAvailable);
 		}
 
 		public void AddBookCopy(BookCopy bookCopy)

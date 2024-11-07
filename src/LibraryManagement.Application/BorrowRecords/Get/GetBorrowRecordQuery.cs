@@ -3,18 +3,18 @@ using ErrorOr;
 namespace LibraryManagement.Application.BorrowRecords.Get;
 
 public record GetBorrowRecordDto(
-    Guid Id,
+    int Id,
     DateTime BorrowDate,
     DateTime DueDate,
     bool IsReturned,
-    Guid PatronId,
+    int PatronId,
     string PatronName,
     List<GetBorrowRecordBookInfo> BookInfoList);
 
 public record GetBorrowRecordBookInfo(
-    Guid BookId,
+    int BookId,
     string BookName,
     int BookCopyBorrowCount,
     List<string> BookCopyBorrowId);
 
-public record GetBorrowRecordQuery(Guid Id) : IRequest<ErrorOr<GetBorrowRecordDto>>;
+public record GetBorrowRecordQuery(int Id) : IRequest<ErrorOr<GetBorrowRecordDto>>;

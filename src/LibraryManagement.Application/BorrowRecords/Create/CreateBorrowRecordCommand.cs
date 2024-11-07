@@ -4,7 +4,7 @@ using MediatR;
 namespace LibraryManagement.Application.BorrowRecords;
 
 public record CreateBorrowRecordDto(
-    Guid Id,
+    int Id,
     DateTime BorrowDate,
     DateTime DueDate,
     List<(string BookCopyId, string BookName)> BookCopiesInfo);
@@ -12,7 +12,7 @@ public record CreateBorrowRecordDto(
 public record CreateBorrowRecordCommand(
     List<CreateBorrowRecordBookInfo> BorrowRecordBooksInfo,
     DateTime DueDate,
-    Guid PatronId
+    int PatronId
 ) : IRequest<ErrorOr<CreateBorrowRecordDto>>;
 
-public record CreateBorrowRecordBookInfo(Guid BookId, List<string> BookCopyIds);
+public record CreateBorrowRecordBookInfo(int BookId, List<string> BookCopyIds);

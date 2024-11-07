@@ -9,18 +9,18 @@ namespace LibraryManagement.Domain.BorrowRecordAggregate.ValueObjects
 {
 	public class BorrowRecordReturnRecordId : ValueObject
 	{
-		public Guid Value { get; private set; }
+		public int Value { get; private set; }
 		protected override IEnumerable<object> GetEqualityComponents()
 		{
 			yield return Value;
 		}
 
-		private BorrowRecordReturnRecordId(Guid value)
+		private BorrowRecordReturnRecordId(int value)
 		{
 			Value = value;
 		}
 
-		public static BorrowRecordReturnRecordId Create(Guid value)
+		public static BorrowRecordReturnRecordId Create(int value)
 		{
 			return new(value);
 		}

@@ -43,7 +43,7 @@ namespace LibraryManagement.Api.Controllers
 		}
 
 		[HttpGet("book-copy")]
-		public async Task<IActionResult> FetchBookCopys([FromQuery] Guid bookId)
+		public async Task<IActionResult> FetchBookCopys([FromQuery] int bookId)
 		{
 			var ibnsFaker = new Faker<string>()
 				.CustomInstantiator(f => f.Random.Replace("##########"));

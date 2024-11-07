@@ -67,9 +67,9 @@ namespace LibraryManagement.Infastructure.Data.Identity.Services
 			return null;
 		}
 
-		public async Task<UserInfo?> FindUserByPatronIdAsync(string patronId)
+		public async Task<UserInfo?> FindUserByPatronIdAsync(int patronId)
 		{
-			var user = await _userManager.Users.Where(user => user.PatronId == Guid.Parse(patronId)).FirstOrDefaultAsync();
+			var user = await _userManager.Users.Where(user => user.PatronId == patronId).FirstOrDefaultAsync();
 
 			if (user == null)
 				return null;
@@ -112,7 +112,7 @@ namespace LibraryManagement.Infastructure.Data.Identity.Services
 			return Error.Failure();
 		}
 
-		public async Task DeleteAccountAsync(Guid patronId)
+		public async Task DeleteAccountAsync(int patronId)
 		{
 			var account = await _userManager.Users.Where(user => user.PatronId == patronId).FirstOrDefaultAsync();
 

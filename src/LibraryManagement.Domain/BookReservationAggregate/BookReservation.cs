@@ -16,17 +16,16 @@ namespace LibraryManagement.Domain.BookReservationAggregate
 		public DateTime ReservationDate { get; private set; }
 		public DateTime? ReservationExpirationDate { get; private set; }
 		public bool IsReserved { get; private set; }
-		private BookReservation(Guid id, Guid patronId, DateTime reservationDate, DateTime? reservationExpirationDate)
+		private BookReservation(int patronId, DateTime reservationDate, DateTime? reservationExpirationDate)
 		{
-			Id = id;
 			PatronId = BookReservationPatronId.Create(patronId);
 			ReservationDate = reservationDate;
 			ReservationExpirationDate = reservationExpirationDate;
 		}
 
-		public static BookReservation Create(Guid patronId, DateTime reservationDate, DateTime? reservationExpirationDate)
+		public static BookReservation Create(int patronId, DateTime reservationDate, DateTime? reservationExpirationDate)
 		{
-			return new(Guid.NewGuid(), patronId, reservationDate, reservationExpirationDate);
+			return new(patronId, reservationDate, reservationExpirationDate);
 		}
 
 		private BookReservation()

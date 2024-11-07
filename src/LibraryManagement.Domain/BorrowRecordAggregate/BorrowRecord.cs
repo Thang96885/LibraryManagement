@@ -20,21 +20,20 @@ namespace LibraryManagement.Domain.BorrowRecordAggregate
 		public BorrowRecordReturnRecordId? ReturnRecordId { get; private set; }
 		public IReadOnlyList<BorrowRecordBookId> BookIds => _bookIds.AsReadOnly();
 
-		private BorrowRecord(Guid id, 
-		Guid patronId, DateTime borrowDate, DateTime dueDate, List<BorrowRecordBookId> bookIds = null)
+		private BorrowRecord(
+		int patronId, DateTime borrowDate, DateTime dueDate, List<BorrowRecordBookId> bookIds = null)
 		{
-			Id = id;
 			PatronId = BorrowRecordPatronId.Create(patronId);
 			BorrowDate = borrowDate;
 			DueDate = dueDate;
 			_bookIds = bookIds ?? new List<BorrowRecordBookId>();
 		}
 
-		public static BorrowRecord Create(Guid patronId, DateTime borrowDate, DateTime dueDate, List<BorrowRecordBookId> bookIds = null)
+		public static BorrowRecord Create(int patronId, DateTime borrowDate, DateTime dueDate, List<BorrowRecordBookId> bookIds = null)
 		{
-			var borrowRecord = new BorrowRecord(Guid.NewGuid(), patronId, borrowDate, dueDate, bookIds);
+			var borrowRecord = new BorrowRecord(patronId, borrowDate, dueDate, bookIds);
 
-			var bookIdsInfo = new List<(Guid BookId, List<string> BookCopyIds)>();
+			var bookIdsInfo = new List<(int BookId, List<string> BookCopyIds)>();
 
 			foreach (var bookId in bookIds)
 			{

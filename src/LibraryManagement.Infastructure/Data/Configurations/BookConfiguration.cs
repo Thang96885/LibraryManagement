@@ -17,6 +17,9 @@ namespace LibraryManagement.Infastructure.Data.Data.Configurations
 
             builder.HasKey(b => b.Id);
 
+            builder.Property(b => b.Id)
+                .ValueGeneratedOnAdd();
+
             builder.Property(b => b.Title)
                 .HasMaxLength(200)
                 .IsRequired();

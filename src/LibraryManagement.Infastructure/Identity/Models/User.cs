@@ -9,7 +9,7 @@ namespace LibraryManagement.Infastructure.Data.Identity.Models
 {
 	public class User : IdentityUser
 	{
-		public Guid? PatronId { get; set; }
+		public int PatronId { get; set; }
 		public string? RefreshToken { get; set; }
 		public DateTime? RefreshTokenExpiryTime { get; set; }
 	}

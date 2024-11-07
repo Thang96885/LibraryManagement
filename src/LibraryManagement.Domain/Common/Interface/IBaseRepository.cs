@@ -12,8 +12,8 @@ namespace LibraryManagement.Domain.Common.Interface
 	public interface IBaseRepository<TEntity>
 		where TEntity : Entity
 	{
-		TEntity? Find(Guid id);
-		Task<TEntity>? FindAsync(Guid id);
+		TEntity? Find(int id);
+		Task<TEntity>? FindAsync(int id);
 		void Add(TEntity entity);
 		void Update(TEntity entity);
 		void Delete(TEntity entity);

@@ -16,6 +16,10 @@ namespace LibraryManagement.Infastructure.Data.Data.Configurations
         {
             builder.ToTable("Patrons");
             builder.HasKey(x => x.Id);
+
+            builder.Property(x => x.Id)
+                .ValueGeneratedOnAdd();
+            
             builder.Property(x => x.Name)
                 .HasMaxLength(40);
             builder.Property(x => x.Email)

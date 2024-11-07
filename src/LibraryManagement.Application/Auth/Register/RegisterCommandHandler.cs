@@ -28,7 +28,7 @@ namespace LibraryManagement.Application.Auth.Register
 
         public async Task<ErrorOr<AuthResult>> Handle(RegisterCommand request, CancellationToken cancellationToken)
         {
-            var patron = await _patronRepository.FindAsync(Guid.Parse(request.PatronId));
+            var patron = await _patronRepository.FindAsync(request.PatronId);
 
             var user = await _identityService.FindUserByPatronIdAsync(request.PatronId);
 

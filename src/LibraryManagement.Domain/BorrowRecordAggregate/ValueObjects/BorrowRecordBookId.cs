@@ -10,7 +10,7 @@ namespace LibraryManagement.Domain.BorrowRecordAggregate.ValueObjects
 {
 	public class BorrowRecordBookId : ValueObject
 	{
-		public Guid BookId { get; private set; }
+		public int BookId { get; private set; }
 		public List<string> BookCopyIds { get; private set; }
 		protected override IEnumerable<object> GetEqualityComponents()
 		{
@@ -22,13 +22,13 @@ namespace LibraryManagement.Domain.BorrowRecordAggregate.ValueObjects
 			}
 		}
 
-		private BorrowRecordBookId(Guid bookId, List<string> bookCopyIds)
+		private BorrowRecordBookId(int bookId, List<string> bookCopyIds)
 		{
 			BookId = bookId;
 			BookCopyIds = bookCopyIds;
 		}
 
-		public static BorrowRecordBookId Create(Guid bookId, List<string> bookCopyIds)
+		public static BorrowRecordBookId Create(int bookId, List<string> bookCopyIds)
 		{
 			return new(bookId, bookCopyIds);
 		}

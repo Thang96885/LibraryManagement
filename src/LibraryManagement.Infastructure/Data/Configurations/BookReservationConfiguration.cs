@@ -15,6 +15,8 @@ namespace LibraryManagement.Infastructure.Data.Data.Configurations
         public void Configure(EntityTypeBuilder<BookReservation> builder)
         {
             builder.HasKey(br => br.Id);
+            builder.Property(br => br.Id)
+                .ValueGeneratedOnAdd();
 
             builder.Property(br => br.ReservationDate)
                 .IsRequired();

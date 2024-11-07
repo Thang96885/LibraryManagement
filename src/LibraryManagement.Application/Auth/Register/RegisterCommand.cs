@@ -10,5 +10,5 @@ using System.Threading.Tasks;
 
 namespace LibraryManagement.Application.Auth.Register
 {
-    public record RegisterCommand(string PatronId, string userName, string password) : IRequest<ErrorOr<AuthResult>>;
+    public record RegisterCommand(int PatronId, string userName, string password) : IRequest<ErrorOr<AuthResult>>;
 }

@@ -9,5 +9,5 @@ using System.Threading.Tasks;
 
 namespace LibraryManagement.Application.Books.Get
 {
-    public record GetBookQuery(string Id) : IRequest<ErrorOr<BookDto>>;
+    public record GetBookQuery(int Id) : IRequest<ErrorOr<BookDto>>;
 }

@@ -3,6 +3,6 @@ using MediatR;
 
 namespace LibraryManagement.Application.Patrons.Delete;
 
-public record DeletePatronDto(Guid Id, string Name);
+public record DeletePatronDto(int Id, string Name);
 
-public record DeletePatronCommand(Guid Id) : IRequest<ErrorOr<DeletePatronDto>>;
+public record DeletePatronCommand(int Id) : IRequest<ErrorOr<DeletePatronDto>>;

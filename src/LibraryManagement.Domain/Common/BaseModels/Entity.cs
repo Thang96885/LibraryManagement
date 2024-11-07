@@ -16,7 +16,7 @@ namespace LibraryManagement.Domain.Common.BaseModels
 
 		}
 
-		public Guid Id { get; protected set; } = default!;
+		public int Id { get; protected set; } = default!;
 
 		public IReadOnlyList<IDomainEvent> DomainEvents => _domainEvents.AsReadOnly();
 

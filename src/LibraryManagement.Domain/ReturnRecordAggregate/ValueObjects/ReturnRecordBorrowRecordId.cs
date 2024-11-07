@@ -5,18 +5,18 @@ namespace LibraryManagement.Domain.ReturnRecordAggregate.ValueObjects
 {
     public class ReturnRecordBorrowRecordId : ValueObject
     {
-		public Guid Value { get; private set; }
+		public int Value { get; private set; }
 		protected override IEnumerable<object> GetEqualityComponents()
 		{
 			yield return Value;
 		}
 
-		private ReturnRecordBorrowRecordId(Guid value)
+		private ReturnRecordBorrowRecordId(int value)
 		{
 			Value = value;
 		}
 
-		public static ReturnRecordBorrowRecordId Create(Guid value)
+		public static ReturnRecordBorrowRecordId Create(int value)
 		{
 			return new(value);
 		}

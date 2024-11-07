@@ -30,12 +30,12 @@ namespace LibraryManagement.Infastructure.Data.Data.Repositories
             _context.Remove(entity);
         }
 
-        public Book? Find(Guid id)
+        public Book? Find(int id)
         {
             return _context.Books.Find(id);
         }
 
-        public async Task<Book?> FindAsync(Guid id)
+        public async Task<Book?> FindAsync(int id)
         {
             return await _context.Books.FindAsync(id);
         }

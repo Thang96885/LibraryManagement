@@ -32,12 +32,12 @@ namespace LibraryManagement.Infastructure.Data.Repositories
 			_context.Remove(entity);
 		}
 
-		public Genre? Find(Guid id)
+		public Genre? Find(int id)
 		{
 			return _context.Genres.Find(id);
 		}
 
-		public async Task<Genre>? FindAsync(Guid id)
+		public async Task<Genre>? FindAsync(int id)
 		{
 			return await _context.Genres.FindAsync(id);
 		}

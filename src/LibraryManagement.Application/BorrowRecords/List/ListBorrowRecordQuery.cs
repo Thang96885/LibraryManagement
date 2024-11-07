@@ -4,16 +4,16 @@ using MediatR;
 namespace LibraryManagement.Application.BorrowRecords.List;
 
 public record ListBorrowRecordDto(
-    Guid Id,
+    int Id,
     DateTime BorrowDate,
     DateTime DueDate,
     bool IsReturned,
-    Guid PatronId,
+    int PatronId,
     string PatronName,
     List<ListBorrowRecordBookInfo> BookInfoList);
 
 public record ListBorrowRecordBookInfo(
-    Guid BookId,
+    int BookId,
     string BookName,
     int BookCopyBorrowCount);
 

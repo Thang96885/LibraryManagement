@@ -15,6 +15,9 @@ namespace LibraryManagement.Infastructure.Data.Configurations
             builder.HasKey(x => x.Id);
 
             builder.Property(x => x.Id)
+                .ValueGeneratedOnAdd();
+
+            builder.Property(x => x.Id)
                 .ValueGeneratedNever();
 
             builder.Property(x => x.PatronId)

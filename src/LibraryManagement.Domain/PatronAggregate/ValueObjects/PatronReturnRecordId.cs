@@ -9,18 +9,18 @@ namespace LibraryManagement.Domain.PatronAggregate.ValueObjects
 {
 	public class PatronReturnRecordId : ValueObject
 	{
-		public Guid Value { get; private set; }
+		public int Value { get; private set; }
 		protected override IEnumerable<object> GetEqualityComponents()
 		{
 			yield return Value;
 		}
 
-		private PatronReturnRecordId(Guid value)
+		private PatronReturnRecordId(int value)
 		{
 			Value = value;
 		}
 
-		public static PatronReturnRecordId Create(Guid value)
+		public static PatronReturnRecordId Create(int value)
 		{
 			return new(value);
 		}

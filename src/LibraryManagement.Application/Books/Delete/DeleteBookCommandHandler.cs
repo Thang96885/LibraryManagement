@@ -21,14 +21,7 @@ namespace LibraryManagement.Application.Books.Delete
 
         public async Task<ErrorOr<string>> Handle(DeleteBookCommand request, CancellationToken cancellationToken)
         {
-            var parseResult = Guid.TryParse(request.Id, out var bookId);
-
-            if (parseResult == false)
-            {
-                return Error.Validation("Id is not guid type");
-            }
-
-            var book = await _bookRepository.FindAsync(Guid.Parse(request.Id));
+            var book = await _bookRepository.FindAsync(request.Id);
             if (book == null)
             {
                 return Error.NotFound();

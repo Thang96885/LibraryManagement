@@ -29,7 +29,7 @@ public class ListBorrowRecordQueryHandler : IRequestHandler<ListBorrowRecordQuer
         foreach (var borrowRecord in borrowRecordList)
         {
             var patron = await _patronRepository.FindAsync(borrowRecord.PatronId.Value)!;
-            var bookInfoList = new List<(Guid BookId, String BookName, int NumberOfBorrowedBooks)>();
+            var bookInfoList = new List<(int BookId, String BookName, int NumberOfBorrowedBooks)>();
             foreach (var bookIdInfo in borrowRecord.BookIds)
             {
                 var book = await _bookRepository.FindAsync(bookIdInfo.BookId)!;
@@ -44,7 +44,7 @@ public class ListBorrowRecordQueryHandler : IRequestHandler<ListBorrowRecordQuer
     }
 
     private ListBorrowRecordDto MappingToResult(Patron patron, 
-        List<(Guid BookId, String BookName, int NumberOfBorrowedBooks)> bookInfoList, 
+        List<(int BookId, String BookName, int NumberOfBorrowedBooks)> bookInfoList, 
         BorrowRecord borrowRecord)
     {
         return new ListBorrowRecordDto(

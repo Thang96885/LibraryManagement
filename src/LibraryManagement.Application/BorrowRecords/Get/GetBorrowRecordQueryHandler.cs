@@ -28,7 +28,7 @@ public class GetBorrowRecordQueryHandler : IRequestHandler<GetBorrowRecordQuery,
             return Error.NotFound("Brrow record with id: " + request.Id + " was not found");
         
         var patron = await _patronRepository.FindAsync(borrowRecord.PatronId.Value)!;
-        var bookInfoList = new List<(Guid BookId, String BookName, int NumberOfBorrowedBooks, List<string> BookCopyIds)>();
+        var bookInfoList = new List<(int BookId, String BookName, int NumberOfBorrowedBooks, List<string> BookCopyIds)>();
         
         foreach (var bookIdInfo in borrowRecord.BookIds)
         {
@@ -40,7 +40,7 @@ public class GetBorrowRecordQueryHandler : IRequestHandler<GetBorrowRecordQuery,
     }
     
     private GetBorrowRecordDto MappingToResult(Patron patron, 
-        List<(Guid BookId, String BookName, int NumberOfBorrowedBooks, List<string> BookCopyIds)> bookInfoList, 
+        List<(int BookId, String BookName, int NumberOfBorrowedBooks, List<string> BookCopyIds)> bookInfoList, 
         BorrowRecord borrowRecord)
     {
         return new GetBorrowRecordDto(

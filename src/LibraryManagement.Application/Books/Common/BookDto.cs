@@ -8,7 +8,7 @@ namespace LibraryManagement.Application.Books.Common
 {
 	public record BookDto
 	{
-		public Guid Id { get; init; }
+		public int Id { get; init; }
 		public string Title { get; init; }
 		public string AuthorName { get; init; }
 		public string PublisherName { get; init; }
@@ -21,7 +21,7 @@ namespace LibraryManagement.Application.Books.Common
 
 	public record GenreDto
 	{
-		public Guid Id { get; init; }
+		public int Id { get; init; }
 		public string Name { get; init; }
 	}
 

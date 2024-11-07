@@ -19,8 +19,7 @@ namespace LibraryManagement.Infastructure.Data.Data.Configurations
             builder.HasKey(x => x.Id);
 
             builder.Property(x => x.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("Id"); // Đảm bảo tên cột rõ ràng
+                .ValueGeneratedOnAdd();
 
             builder.Property(x => x.BorrowRecordId)
                 .HasConversion(borrowRecordId => borrowRecordId.Value,

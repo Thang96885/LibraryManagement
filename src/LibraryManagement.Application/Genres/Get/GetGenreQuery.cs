@@ -3,6 +3,6 @@ using MediatR;
 
 namespace LibraryManagement.Application.Genres.Get;
 
-public record GetGenreDto(Guid Id, string Name, int NumberOfBooks);
+public record GetGenreDto(int Id, string Name, int NumberOfBooks);
 
-public record GetGenreQuery(Guid Id) : IRequest<ErrorOr<GetGenreDto>>;
+public record GetGenreQuery(int Id) : IRequest<ErrorOr<GetGenreDto>>;

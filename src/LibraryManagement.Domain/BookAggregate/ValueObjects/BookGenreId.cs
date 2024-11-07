@@ -9,12 +9,12 @@ namespace LibraryManagement.Domain.BookAggregate.ValueObjects
 {
 	public class BookGenreId : ValueObject
 	{
-		public Guid Value { get; private set; }
+		public int Value { get; private set; }
 		protected override IEnumerable<object> GetEqualityComponents()
 		{
 			yield return Value;
 		}
-		public BookGenreId(Guid value)
+		public BookGenreId(int value)
 		{
 			Value = value;
 		}

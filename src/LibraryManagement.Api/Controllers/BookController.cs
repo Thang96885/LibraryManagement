@@ -46,7 +46,7 @@ namespace LibraryManagement.Api.Controllers
 		}
 
 		[HttpGet("get/{id}")]
-		public async Task<IActionResult> Get(string id)
+		public async Task<IActionResult> Get(int id)
 		{
 			var query = new GetBookQuery(id);
 			var result = await _sender.Send(query);

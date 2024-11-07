@@ -20,9 +20,8 @@ namespace LibraryManagement.Domain.ReturnRecordAggregate
 		public decimal TotalFee { get; private set; }
 		public  IReadOnlyList<ReturnStatus> BookReturnStatus => _bookReturnStatus;
 
-		private ReturnRecord(Guid id, Guid borrowRecordId, Guid patronId, DateTime returnDate, decimal? lateFee, decimal totalFee)
+		private ReturnRecord(int borrowRecordId, int patronId, DateTime returnDate, decimal? lateFee, decimal totalFee)
 		{
-			Id = id;
 			BorrowRecordId = ReturnRecordBorrowRecordId.Create(borrowRecordId);
 			PatronId = ReturnRecordPatronId.Create(patronId);
 			ReturnDate = returnDate;

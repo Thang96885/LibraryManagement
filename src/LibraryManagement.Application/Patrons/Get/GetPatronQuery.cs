@@ -8,5 +8,5 @@ using System.Threading.Tasks;
 
 namespace LibraryManagement.Application.Patrons.Get
 {
-	public record GetPatronQuery(Guid id) : IRequest<ErrorOr<GetPatronDto>>;
+	public record GetPatronQuery(int id) : IRequest<ErrorOr<GetPatronDto>>;
 }

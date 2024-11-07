@@ -4,4 +4,4 @@ using MediatR;
 
 namespace LibraryManagement.Application.Books.UpdateBookGenre;
 
-public record UpdateBookGenreCommand(Guid BookId, List<Guid> AddGenreIds, List<Guid> RemoveGenreIds) : IRequest<ErrorOr<BookDto>>;
+public record UpdateBookGenreCommand(int BookId, List<int> AddGenreIds, List<int> RemoveGenreIds) : IRequest<ErrorOr<BookDto>>;

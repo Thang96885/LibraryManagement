@@ -30,12 +30,12 @@ namespace LibraryManagement.Infastructure.Data.Repositories
 			_context.BorrowRecords.Remove(entity);
 		}
 
-		public BorrowRecord? Find(Guid id)
+		public BorrowRecord? Find(int id)
 		{
 			return _context.BorrowRecords.Find(id);
 		}
 
-		public async Task<BorrowRecord>? FindAsync(Guid id)
+		public async Task<BorrowRecord>? FindAsync(int id)
 		{
 			return await _context.BorrowRecords.FindAsync(id);
 		}

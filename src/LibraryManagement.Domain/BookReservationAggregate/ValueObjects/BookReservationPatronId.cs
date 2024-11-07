@@ -5,18 +5,18 @@ namespace LibraryManagement.Domain.BookReservationAggregate.ValueObjects
 {
     public class BookReservationPatronId : ValueObject
     {
-		public Guid Value { get; private set; }
+		public int Value { get; private set; }
 		protected override IEnumerable<object> GetEqualityComponents()
 		{
 			yield return Value;
 		}
 
-		private BookReservationPatronId(Guid value)
+		private BookReservationPatronId(int value)
 		{
 			Value = value;
 		}
 
-		public static BookReservationPatronId Create(Guid value)
+		public static BookReservationPatronId Create(int value)
 		{
 			return new(value);
 		}

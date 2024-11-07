@@ -29,12 +29,12 @@ namespace LibraryManagement.Infastructure.Data.Repositories
 			_context.Reservations.Remove(entity);
 		}
 
-		public BookReservation? Find(Guid id)
+		public BookReservation? Find(int id)
 		{
 			return _context.Reservations.Find(id);
 		}
 
-		public async Task<BookReservation>? FindAsync(Guid id)
+		public async Task<BookReservation>? FindAsync(int id)
 		{
 			return await _context.Reservations.FindAsync(id);
 		}

@@ -9,18 +9,18 @@ namespace LibraryManagement.Domain.GenreAggregate.ValueObjects
 {
 	public class GenreBookId : ValueObject
 	{
-		public Guid Value { get; private set; }
+		public int Value { get; private set; }
 		protected override IEnumerable<object> GetEqualityComponents()
 		{
 			yield return Value;
 		}
 
-		private GenreBookId(Guid value)
+		private GenreBookId(int value)
 		{
 			Value = value;
 		}
 
-		public static GenreBookId Create(Guid value) 
+		public static GenreBookId Create(int value) 
 		{ 
 			return new(value); 
 		}

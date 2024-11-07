@@ -29,12 +29,12 @@ namespace LibraryManagement.Infastructure.Data.Repositories
 			_context.Patrons.Remove(entity);
 		}
 
-		public Patron? Find(Guid id)
+		public Patron? Find(int id)
 		{
 			return _context.Patrons.Find(id);
 		}
 
-		public async Task<Patron>? FindAsync(Guid id)
+		public async Task<Patron>? FindAsync(int id)
 		{
 			return await _context.Patrons.FindAsync(id);
 		}
