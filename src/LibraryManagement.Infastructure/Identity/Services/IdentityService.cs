@@ -112,6 +112,20 @@ namespace LibraryManagement.Infastructure.Data.Identity.Services
 			return Error.Failure();
 		}
 
+		public async Task<ErrorOr<bool>> ChangePassword(string userId, string currentPassword, string newPassword)
+		{
+			var user = await _userManager.FindByIdAsync(userId);
+
+			var passwordResult = await _userManager.CheckPasswordAsync(user, currentPassword);
+			
+			var result = await _userManager.ChangePasswordAsync(user, currentPassword, newPassword);
+
+			if (result.Succeeded)
+				return true;
+			
+			return result.Errors.Select(error => Error.Conflict(error.Description)).ToList();
+		}
+
 		public async Task DeleteAccountAsync(int patronId)
 		{
 			var account = await _userManager.Users.Where(user => user.PatronId == patronId).FirstOrDefaultAsync();

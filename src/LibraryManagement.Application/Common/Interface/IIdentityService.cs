@@ -13,6 +13,7 @@ namespace LibraryManagement.Application.Common.Interface
 
 	public interface IIdentityService
 	{
+		Task<ErrorOr<bool>> ChangePassword(string userId, string currentPassword, string newPassword);
 		Task DeleteAccountAsync(int patronId);
 		Task<ErrorOr<UserInfo>> SignInAsync(RegisterInfo info);
 		Task AddRefreshToken(string userName, string token);

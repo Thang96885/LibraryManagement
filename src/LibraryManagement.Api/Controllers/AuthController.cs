@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Runtime.CompilerServices;
+using LibraryManagement.Application.Auth.ChangePassword;
 
 namespace LibraryManagement.Api.Controllers
 {
@@ -31,6 +32,17 @@ namespace LibraryManagement.Api.Controllers
 			{
 				return Problem(result.Errors);
 			}
+			return Ok(result.Value);
+		}
+
+		[HttpPost("change-password")]
+		public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordCommand request)
+		{
+			var result = await _sender.Send(request);
+			
+			if(result.IsError)
+				return Problem(result.Errors);
+			
 			return Ok(result.Value);
 		}
 
