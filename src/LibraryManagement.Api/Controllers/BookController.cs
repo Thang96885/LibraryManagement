@@ -4,6 +4,7 @@ using LibraryManagement.Application.Books.Delete;
 using LibraryManagement.Application.Books.Get;
 using LibraryManagement.Application.Books.List;
 using LibraryManagement.Application.Books.UpdateBookGenre;
+using LibraryManagement.Application.Books.UpdateBookInfo;
 using LibraryManagement.Domain.Common.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -91,6 +92,18 @@ namespace LibraryManagement.Api.Controllers
 			var result = await _sender.Send(command);
 			if(result.IsError)
 				return Problem(result.Errors);
+			return Ok(result.Value);
+		}
+
+		[HttpPost("update-bookinfo")]
+		[AllowAnonymous]
+		public async Task<IActionResult> UpdateBookInfo(UpdateBookInfoCommand request)
+		{
+			var result = await _sender.Send(request);
+			
+			if(result.IsError)
+				return Problem(result.Errors);
+			
 			return Ok(result.Value);
 		}
 	}

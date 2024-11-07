@@ -64,6 +64,15 @@ namespace LibraryManagement.Domain.BookAggregate
 			this.NumberOfCopy++;
 		}
 
+		public void UpdateBookInfo(string title = "", string authorName = "", string publisherName = "", int publicationYear = 0, int pageCount = 0)
+		{
+			this.Title = String.IsNullOrEmpty(title) ? Title : title;
+			this.AuthorName = String.IsNullOrEmpty(authorName) ? AuthorName : authorName;
+			this.PublisherName = String.IsNullOrEmpty(publisherName) ? PublisherName : publisherName;
+			this.PublicationYear = publicationYear == 0 ? PublicationYear : publicationYear; 
+			this.PageCount = pageCount == 0 ? PageCount : pageCount;
+		}
+
 		public void BorrowBook(List<string> bookCopyIds)
 		{
 			var bookCopies = _bookCopies.Where(bc => bookCopyIds.Contains(bc.Id)).ToList();
