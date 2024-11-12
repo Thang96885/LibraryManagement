@@ -32,6 +32,11 @@ namespace LibraryManagement.Infastructure.Data.Repositories
 			_context.Remove(entity);
 		}
 
+		public int GetNumberOfEntities()
+		{
+			return _context.Genres.Count();
+		}
+
 		public Genre? Find(int id)
 		{
 			return _context.Genres.Find(id);
@@ -60,6 +65,11 @@ namespace LibraryManagement.Infastructure.Data.Repositories
         public async Task<List<Genre>> ListAsync(int page, int pageSize)
         {
             return await _context.Genres.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+        }
+
+        public IQueryable<Genre> GetQueryable()
+        {
+	        return _context.Genres.AsQueryable();
         }
 
         public IEnumerable<Genre> Find(Expression<Func<Genre, bool>> predicate)

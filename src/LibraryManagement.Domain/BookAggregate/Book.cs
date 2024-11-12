@@ -28,6 +28,7 @@ namespace LibraryManagement.Domain.BookAggregate
         public int PageCount { get; private set; }
 		public int NumberOfCopy { get; private set; }
 		public int NumberAvailable { get; private set; }
+		public BookLocationId LocationId { get; private set; }
 
 		public IReadOnlyList<BookGenreId> GenreIds { get => _genreIds.AsReadOnly(); }
         public IReadOnlyList<BookBorrowRecordId> BorrowRecordIds { get => _borrowRecordIds.AsReadOnly(); }
@@ -72,7 +73,8 @@ namespace LibraryManagement.Domain.BookAggregate
 			this.PublicationYear = publicationYear == 0 ? PublicationYear : publicationYear; 
 			this.PageCount = pageCount == 0 ? PageCount : pageCount;
 		}
-
+		
+		
 		public void BorrowBook(List<string> bookCopyIds)
 		{
 			var bookCopies = _bookCopies.Where(bc => bookCopyIds.Contains(bc.Id)).ToList();

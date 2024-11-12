@@ -29,6 +29,11 @@ namespace LibraryManagement.Infastructure.Data.Repositories
 			_context.Reservations.Remove(entity);
 		}
 
+		public int GetNumberOfEntities()
+		{
+			return _context.Reservations.Count();
+		}
+
 		public BookReservation? Find(int id)
 		{
 			return _context.Reservations.Find(id);
@@ -58,6 +63,12 @@ namespace LibraryManagement.Infastructure.Data.Repositories
         {
             return await _context.Reservations.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
         }
+
+        public IQueryable<BookReservation> GetQueryable()
+        {
+	        return _context.Reservations.AsNoTracking().AsQueryable();
+        }
+
         public IEnumerable<BookReservation> Find(Expression<Func<BookReservation, bool>> predicate)
         {
 	        var result = _context.Reservations.Where(predicate).ToList();

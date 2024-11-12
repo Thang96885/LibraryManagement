@@ -36,6 +36,15 @@ namespace LibraryManagement.Api
 			builder.Services.AddEndpointsApiExplorer();
 			builder.Services.AddSwaggerGen();
 
+			builder.Services.AddCors(options =>
+			{
+				options.AddPolicy("CorsPolicy",
+					builder => builder
+						.WithOrigins("http://localhost:3000") // Replace with your frontend URL
+						.AllowAnyHeader()
+						.AllowAnyMethod());
+			});
+
 			var app = builder.Build();
 
 			// Configure the HTTP request pipeline.
@@ -47,14 +56,16 @@ namespace LibraryManagement.Api
 
 			app.MapPost("/createInitialUsers", async (UserManager<User> userManager) =>
 			{
-				var adminUser = new User { UserName = "admin", Email = "admin@example.com" };
-				var librarianUser = new User { UserName = "librarian", Email = "librarian@example.com" };
+				var adminUser = new User { UserName = "admin", Email = "admin@example.com", PatronId = null };
+				var librarianUser = new User { UserName = "librarian", Email = "librarian@example.com", PatronId = null};
 
 				var adminResult = await userManager.CreateAsync(adminUser, "Admin.123");
 				var librarianResult = await userManager.CreateAsync(librarianUser, "Librarian.123");
 
 				if (adminResult.Succeeded)
 				{
+					
+					
 					await userManager.AddToRoleAsync(adminUser, "Admin");
 				}
 
@@ -68,6 +79,8 @@ namespace LibraryManagement.Api
 
 			app.UseHttpsRedirection();
 
+			app.UseCors("CorsPolicy");
+			
 			app.UseAuthentication();
 			app.UseAuthorization();
 

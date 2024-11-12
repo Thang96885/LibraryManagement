@@ -7,12 +7,13 @@ using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace LibraryManagement.Application.Books.List
 {
-	public class ListBookQueryHandler : IRequestHandler<ListBookQuery, ErrorOr<List<BookDto>>>
+	public class ListBookQueryHandler : IRequestHandler<ListBookQuery, ErrorOr<ListBookDto>>
 	{
 		private readonly IBaseRepository<Book> _bookRepository;
 		private readonly IBaseRepository<Genre> _genreRepository;
@@ -23,9 +24,32 @@ namespace LibraryManagement.Application.Books.List
 			_genreRepository = genreRepository;
 		}
 
-		public async Task<ErrorOr<List<BookDto>>> Handle(ListBookQuery request, CancellationToken cancellationToken)
+		public async Task<ErrorOr<ListBookDto>> Handle(ListBookQuery request, CancellationToken cancellationToken)
 		{
-			var books = await _bookRepository.ListAsync(request.page, request.pageSize);
+			List<Book> books;
+			var totalBookCount = 0;
+
+			if (request.bookId == 0 && String.IsNullOrEmpty((request.bookTitle)) &&
+			    String.IsNullOrEmpty(request.authorName))
+			{
+				books = await _bookRepository.ListAsync(request.page, request.pageSize);
+				totalBookCount = _bookRepository.GetNumberOfEntities();
+			}
+			else
+			{
+				var queryBook = _bookRepository.GetQueryable();
+				
+				if(request.bookId > 0)
+					queryBook = queryBook.Where(b => b.Id == request.bookId);
+				if(String.IsNullOrEmpty(request.authorName) == false)
+					queryBook = queryBook.Where(b => b.AuthorName.Contains(request.authorName));
+				if(String.IsNullOrEmpty(request.bookTitle) == false)
+					queryBook = queryBook.Where(b => b.Title.Contains(request.bookTitle));
+				
+				totalBookCount = queryBook.Count();
+				books = queryBook.Skip((request.page - 1) * request.pageSize).Take(request.pageSize).ToList();
+			}
+			
 
 			var bookDtos = new List<BookDto>();
 
@@ -50,8 +74,10 @@ namespace LibraryManagement.Application.Books.List
 				};
 				bookDtos.Add(bookDto);
 			}
+
 			
-			return bookDtos;
+			
+			return new ListBookDto(totalBookCount, bookDtos);
 		}
 	}
 }

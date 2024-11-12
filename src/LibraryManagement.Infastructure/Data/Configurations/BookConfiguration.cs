@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LibraryManagement.Domain.BookAggregate.ValueObjects;
 
 namespace LibraryManagement.Infastructure.Data.Data.Configurations
 {
@@ -30,6 +31,11 @@ namespace LibraryManagement.Infastructure.Data.Data.Configurations
             builder.Property(b => b.PublisherName)
                 .HasMaxLength(200)
                 .IsRequired();
+            
+            builder.Property(b => b.LocationId)
+                .IsRequired(false)
+                .HasConversion(b => b.Value, value => BookLocationId.Create(value));
+            
 
             // Cấu hình cho các collection
             ConfigGenre(builder);

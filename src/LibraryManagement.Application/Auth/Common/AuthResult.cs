@@ -7,5 +7,6 @@ using System.Threading.Tasks;
 
 namespace LibraryManagement.Application.Auth.Common
 {
-    public record AuthResult(string jwtToken, string refreshToken);
+    public record AuthResult(string jwtToken, 
+        string refreshToken);
 }

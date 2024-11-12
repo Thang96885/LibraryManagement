@@ -8,6 +8,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using LibraryManagement.Domain.GenreAggregate;
 
 namespace LibraryManagement.Infastructure.Data.Repositories
 {
@@ -27,6 +28,11 @@ namespace LibraryManagement.Infastructure.Data.Repositories
 		public void Delete(Patron entity)
 		{
 			_context.Patrons.Remove(entity);
+		}
+
+		public int GetNumberOfEntities()
+		{
+			return _context.Patrons.Count();
 		}
 
 		public Patron? Find(int id)
@@ -57,6 +63,11 @@ namespace LibraryManagement.Infastructure.Data.Repositories
         public async Task<List<Patron>> ListAsync(int page, int pageSize)
         {
             return await _context.Patrons.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+        }
+
+        public IQueryable<Patron> GetQueryable()
+        {
+	        return _context.Patrons.AsNoTracking().AsQueryable();
         }
 
         public IEnumerable<Patron> Find(Expression<Func<Patron, bool>> predicate)

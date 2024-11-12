@@ -12,6 +12,7 @@ namespace LibraryManagement.Domain.Common.Interface
 	public interface IBaseRepository<TEntity>
 		where TEntity : Entity
 	{
+		int GetNumberOfEntities();
 		TEntity? Find(int id);
 		Task<TEntity>? FindAsync(int id);
 		void Add(TEntity entity);
@@ -22,6 +23,8 @@ namespace LibraryManagement.Domain.Common.Interface
 		List<TEntity> List(int page, int pageSize);
 		Task<List<TEntity>> ListAsync();
 		Task<List<TEntity>> ListAsync(int page, int pageSize);
+		
+		IQueryable<TEntity> GetQueryable();
 		
 		IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate);
 		IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate, int page, int pageSize);

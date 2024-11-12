@@ -24,8 +24,8 @@ namespace LibraryManagement.Infastructure.Data.Data.Configurations
                 .HasMaxLength(40);
             builder.Property(x => x.Email)
                 .HasMaxLength(100);
-            builder.Property(x => x.Id)
-                .ValueGeneratedNever();
+            
+            
             builder.Property(x => x.PhoneNumber)
                 .HasMaxLength(10);
             builder.Property(x => x.Address)

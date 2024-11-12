@@ -30,6 +30,11 @@ namespace LibraryManagement.Infastructure.Data.Data.Repositories
             _context.Remove(entity);
         }
 
+        public int GetNumberOfEntities()
+        {
+            return _context.Books.Count(); 
+        }
+
         public Book? Find(int id)
         {
             return _context.Books.Find(id);
@@ -59,6 +64,12 @@ namespace LibraryManagement.Infastructure.Data.Data.Repositories
         {
             return await _context.Books.AsNoTracking().Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
         }
+
+        public IQueryable<Book> GetQueryable()
+        {
+            return _context.Books.AsNoTracking().AsQueryable();
+        }
+
 
         public IEnumerable<Book> Find(Expression<Func<Book, bool>> predicate)
         {

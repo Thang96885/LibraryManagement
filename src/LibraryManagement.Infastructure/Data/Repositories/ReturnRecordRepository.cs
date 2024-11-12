@@ -30,6 +30,11 @@ namespace LibraryManagement.Infastructure.Data.Repositories
 			_context.ReturnRecords.Remove(entity);
 		}
 
+		public int GetNumberOfEntities()
+		{
+			return _context.ReturnRecords.Count();
+		}
+
 		public ReturnRecord? Find(int id)
 		{
 			return _context.ReturnRecords.Find(id);
@@ -58,6 +63,11 @@ namespace LibraryManagement.Infastructure.Data.Repositories
         public async Task<List<ReturnRecord>> ListAsync(int page, int pageSize)
         {
             return await _context.ReturnRecords.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+        }
+
+        public IQueryable<ReturnRecord> GetQueryable()
+        {
+	        return _context.ReturnRecords.AsNoTracking().AsQueryable();
         }
 
         public IEnumerable<ReturnRecord> Find(Expression<Func<ReturnRecord, bool>> predicate)

@@ -30,6 +30,11 @@ namespace LibraryManagement.Infastructure.Data.Repositories
 			_context.BorrowRecords.Remove(entity);
 		}
 
+		public int GetNumberOfEntities()
+		{ 
+			return _context.BorrowRecords.Count();
+		}
+
 		public BorrowRecord? Find(int id)
 		{
 			return _context.BorrowRecords.Find(id);
@@ -58,6 +63,11 @@ namespace LibraryManagement.Infastructure.Data.Repositories
         public async Task<List<BorrowRecord>> ListAsync(int page, int pageSize)
         {
             return await _context.BorrowRecords.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+        }
+
+        public IQueryable<BorrowRecord> GetQueryable()
+        {
+	        return _context.BorrowRecords.AsNoTracking().AsQueryable();
         }
 
         public IEnumerable<BorrowRecord> Find(Expression<Func<BorrowRecord, bool>> predicate)

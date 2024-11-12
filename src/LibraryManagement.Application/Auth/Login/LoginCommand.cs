@@ -9,5 +9,6 @@ using System.Threading.Tasks;
 
 namespace LibraryManagement.Application.Auth.Login
 {
-	public record LoginCommand(string userNameOrEmail, string password) : IRequest<ErrorOr<AuthResult>>;
+	public record LoginCommand(string userNameOrEmail,
+		string password) : IRequest<ErrorOr<AuthResult>>;
 }

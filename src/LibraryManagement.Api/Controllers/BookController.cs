@@ -25,7 +25,8 @@ namespace LibraryManagement.Api.Controllers
 		}
 		// POST: api/Book
 		[HttpPost("add")]
-		[Authorize(Roles = $"{nameof(RoleEnum.Admin)}, {nameof(RoleEnum.Librarian)}")]
+		[AllowAnonymous]
+		//[Authorize(Roles = $"{nameof(RoleEnum.Admin)}, {nameof(RoleEnum.Librarian)}")]
 		public async Task<IActionResult> Add([FromBody] CreateBookCommand command)
 		{
 			var result = await _sender.Send(command);
@@ -47,6 +48,7 @@ namespace LibraryManagement.Api.Controllers
 		}
 
 		[HttpGet("get/{id}")]
+		[AllowAnonymous]
 		public async Task<IActionResult> Get(int id)
 		{
 			var query = new GetBookQuery(id);
@@ -72,8 +74,8 @@ namespace LibraryManagement.Api.Controllers
 		}
 
 
-		[HttpPost("Delete")]
-		[Authorize(Roles = $"{nameof(RoleEnum.Admin)}, {nameof(RoleEnum.Librarian)}")]
+		[HttpDelete("Delete")]
+		//[Authorize(Roles = $"{nameof(RoleEnum.Admin)}, {nameof(RoleEnum.Librarian)}")]
 		public async Task<IActionResult> Delete([FromBody] DeleteBookCommand command)
 		{
 			var result = await _sender.Send(command);
