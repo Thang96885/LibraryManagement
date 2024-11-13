@@ -14,7 +14,8 @@ namespace LibraryManagement.Application.Patrons.Create
         string Name,
         string Email,
         string PhoneNumber,
-        PatronAddressDto Address = null) : IRequest<ErrorOr<CreatePatronResult>>;
+        PatronAddressDto Address = null,
+        int PatronTypeId = 1) : IRequest<ErrorOr<CreatePatronResult>>;
 
     public record PatronAddressDto(string Street, string City, string State, string ZipCode);
     public record CreatePatronResult(int Id);

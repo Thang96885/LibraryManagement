@@ -17,6 +17,7 @@ namespace LibraryManagement.Application.Books.Common
 		public int NumberOfCopy { get; init; }
 		public int NumberAvailable { get; init; }
 		public ICollection<GenreDto> Genres { get; init; }
+		public string Location { get; } = "Not available";
 	}
 
 	public record GenreDto

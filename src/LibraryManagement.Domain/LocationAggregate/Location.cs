@@ -6,7 +6,7 @@ namespace LibraryManagement.Domain.LocationAggregate;
 
 public class Location : AggregateRoot
 {
-    private readonly List<LocationBookId> _locaitonBookIds;
+    private readonly List<LocationBookId> _locaitonBookIds = new();
     
     public string Name { get; private set; }
 

@@ -27,7 +27,12 @@ namespace LibraryManagement.Application.Patrons.Create
 		public async Task<ErrorOr<CreatePatronResult>> Handle(CreatePatronCommand request, CancellationToken cancellationToken)
         {
 
-            var patron = Patron.Create(request.Name, request.Email, request.PhoneNumber, PatronAddress.Create(request.Address.Street, request.Address.City, request.Address.State, request.Address.ZipCode));
+            var patron = Patron.Create(request.Name, request.Email, 
+	            request.PhoneNumber, 
+	            PatronAddress.Create(request.Address.Street, 
+		            request.Address.City, request.Address.State, 
+		            request.Address.ZipCode),
+	            PatronPatronTypeId.Create(request.PatronTypeId));
 
             _patronRepository.Add(patron);
 

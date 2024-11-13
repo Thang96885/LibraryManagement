@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using LibraryManagement.Domain.BookAggregate.Events;
 using LibraryManagement.Domain.BorrowRecordAggregate;
+using LibraryManagement.Domain.PatronTypeAggregate.ValueObjects;
 
 namespace LibraryManagement.Domain.PatronAggregate
 {
@@ -21,22 +22,29 @@ namespace LibraryManagement.Domain.PatronAggregate
         public string PhoneNumber { get; private set; }
 		public PatronAddress Address { get; private set; }
 		public DateTime RegistrationDate { get; private set; }
+		public PatronPatronTypeId TypeId { get; private set; }
 		public IReadOnlyList<PatronReservationId> ReservationIds => _reservationIds.AsReadOnly();
 		public IReadOnlyList<PatronBorrowRecordId> BorrowRecordIds => _borrowRecordIds.AsReadOnly();
 		public IReadOnlyList<PatronReturnRecordId> ReturnRecordIds => _returnRecordIds.AsReadOnly();
 
-		private Patron(string name, string email, string phoneNumber, PatronAddress address, DateTime registrationDate)
+		private Patron(
+			string name, string email,
+			string phoneNumber, PatronAddress address, 
+			DateTime registrationDate, PatronPatronTypeId typeId)
 		{
 			Name = name;
 			Email = email;
 			PhoneNumber = phoneNumber;
 			Address = address;
 			RegistrationDate = registrationDate;
+			typeId = typeId;
 		}
 
-		public static Patron Create(string name, string email, string phoneNumber, PatronAddress address)
+		public static Patron Create(string name, string email, 
+			string phoneNumber, PatronAddress address, PatronPatronTypeId typeId 
+			)
 		{
-			var patron = new Patron(name, email, phoneNumber, address, DateTime.UtcNow);
+			var patron = new Patron(name, email, phoneNumber, address, DateTime.UtcNow, typeId);
 			patron.AddDomainEvent(new CreatedPatron(patron));
 			return patron;
 		}

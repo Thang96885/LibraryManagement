@@ -16,6 +16,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LibraryManagement.Domain.LocationAggregate;
+using LibraryManagement.Domain.PatronTypeAggregate;
 
 namespace LibraryManagement.Infastructure.Data.Data
 {
@@ -49,6 +51,8 @@ namespace LibraryManagement.Infastructure.Data.Data
 		public DbSet<BookReservation> Reservations { get; set; }
         public DbSet<BorrowRecord> BorrowRecords { get; set; }
         public DbSet<ReturnRecord> ReturnRecords { get; set; }
-		public DbSet<Genre> Genres {  get; set; } 
+		public DbSet<Genre> Genres {  get; set; }
+		public DbSet<Location> Location { get; set; }
+		public DbSet<PatronType> PatronType { get; set; }
     }
 }

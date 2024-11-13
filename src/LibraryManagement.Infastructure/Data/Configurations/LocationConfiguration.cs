@@ -13,6 +13,9 @@ public class LocationConfiguration : IEntityTypeConfiguration<Location>
         
         builder.HasKey(x => x.Id);
 
+        builder.Property(x => x.Id)
+            .ValueGeneratedOnAdd();
+
         builder.Property(x => x.Name);
 
         builder.OwnsMany(x => x.LocationBookIds, builder =>
@@ -21,6 +24,8 @@ public class LocationConfiguration : IEntityTypeConfiguration<Location>
             builder.Property(x => x.Value)
                 .HasColumnName("BookId");
             builder.WithOwner().HasForeignKey("LocationId");
+
+            builder.HasKey("Value", "LocationId");
         });
     }
 }

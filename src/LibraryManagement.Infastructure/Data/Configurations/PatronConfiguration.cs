@@ -25,12 +25,15 @@ namespace LibraryManagement.Infastructure.Data.Data.Configurations
             builder.Property(x => x.Email)
                 .HasMaxLength(100);
             
-            
             builder.Property(x => x.PhoneNumber)
                 .HasMaxLength(10);
             builder.Property(x => x.Address)
                 .HasConversion(address => address.ToString(),
                 value => PatronAddress.Parse(value));
+
+            builder.Property(x => x.TypeId)
+                .HasConversion(typeId => typeId.Value, value => PatronPatronTypeId.Create(value));
+            
             ReservationIdConfig(builder);
             BorrowRecordIdConfig(builder);
             ReturnRecordIdConfig(builder);
