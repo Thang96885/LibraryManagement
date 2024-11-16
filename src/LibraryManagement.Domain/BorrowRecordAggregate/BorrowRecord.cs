@@ -16,6 +16,7 @@ namespace LibraryManagement.Domain.BorrowRecordAggregate
 		public DateTime BorrowDate { get; private set; }
 		public DateTime DueDate { get; private set; }
 		public bool IsReturned { get; private set; }
+		public decimal Cost { get; private set; }
 		public BorrowRecordPatronId PatronId { get; private set; }
 		public BorrowRecordReturnRecordId? ReturnRecordId { get; private set; }
 		public IReadOnlyList<BorrowRecordBookId> BookIds => _bookIds.AsReadOnly();

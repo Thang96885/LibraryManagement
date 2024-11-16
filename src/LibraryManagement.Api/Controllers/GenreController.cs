@@ -2,6 +2,7 @@
 using LibraryManagement.Application.Genres.Delete;
 using LibraryManagement.Application.Genres.Get;
 using LibraryManagement.Application.Genres.List;
+using LibraryManagement.Application.Genres.Update;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -52,7 +53,7 @@ namespace LibraryManagement.Api.Controllers
 			return Ok(result.Value);
 		}
 
-		[HttpPost("delete")]
+		[HttpDelete("delete")]
 		[AllowAnonymous]
 		public async Task<IActionResult> Delete([FromBody] DeleteGenreCommand request)
 		{
@@ -61,5 +62,18 @@ namespace LibraryManagement.Api.Controllers
 				return Problem(result.Errors);
 			return Ok(result.Value);
 		}
+
+		[HttpPatch("update")]
+		[AllowAnonymous]
+		public async Task<IActionResult> Update([FromBody] UpdateGenreCommand request)
+		{
+			var result = await _sender.Send(request);
+			
+			if(result.IsError)
+				return Problem(result.Errors);
+
+			return Ok();
+		}
+		
 	}
 }

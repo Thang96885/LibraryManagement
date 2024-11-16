@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LibraryManagement.Application.Genres.List
 {
-	public record ListGenreDto(Guid Id, string Name, int NumberBook);
-
-	public record ListGenreQuery(int page, int pageSize) : IRequest<ErrorOr<List<ListGenreDto>>>;
+	public record ListGenreRecord(int Id, string Name, int NumberBook);
+	public record ListGenreDto(List<ListGenreRecord> Genres, int NumberGenres);
+	public record ListGenreQuery(int page, int pageSize, int genreId = 0, string SearchName = "") : IRequest<ErrorOr<ListGenreDto>>;
 }

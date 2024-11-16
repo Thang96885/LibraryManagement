@@ -14,9 +14,6 @@ namespace LibraryManagement.Application.Genres.Common.MappingConfiguration
 	{
 		public void Register(TypeAdapterConfig config)
 		{
-			config.NewConfig<Genre, ListGenreDto>()
-				.Map(dest => dest.NumberBook, src => src.BookIds.Count());
-
 			config.NewConfig<Genre, GetGenreDto>()
 				.Map(dest => dest.NumberOfBooks, src => src.BookIds.Count());
 		}

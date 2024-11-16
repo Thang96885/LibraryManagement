@@ -35,6 +35,11 @@ namespace LibraryManagement.Domain.GenreAggregate
 			return new Genre(Name);
 		}
 
+		public void Update(string newName)
+		{
+			this.Name = newName;
+		}
+
 		public void UpdateBookId(List<GenreBookId> addBookIds, List<GenreBookId> removeBookIds)
 		{
 			addBookIds = addBookIds.Except(_bookIds).ToList();

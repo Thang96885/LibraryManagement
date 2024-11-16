@@ -8,11 +8,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LibraryManagement.Application.Books.Common;
 
 namespace LibraryManagement.Application.Genres.List
 {
 	public class ListGenreQueryHandler
-		: IRequestHandler<ListGenreQuery, ErrorOr<List<ListGenreDto>>>
+		: IRequestHandler<ListGenreQuery, ErrorOr<ListGenreDto>>
 	{
 		private readonly IBaseRepository<Genre> _genreRepository;
 		private readonly IMapper _mapper;
@@ -23,13 +24,31 @@ namespace LibraryManagement.Application.Genres.List
 			_mapper = mapper;
 		}
 
-		public async Task<ErrorOr<List<ListGenreDto>>> Handle(ListGenreQuery request, CancellationToken cancellationToken)
+		public async Task<ErrorOr<ListGenreDto>> Handle(ListGenreQuery request, CancellationToken cancellationToken)
 		{
-			var genres = await _genreRepository.ListAsync(request.page, request.pageSize);
+			
+			var genres = new List<Genre>();
 
-			var genreDtos = genres.Select(genre => _mapper.Map<Genre, ListGenreDto>(genre)).ToList();
+			if (request.genreId == 0 && request.SearchName == "")
+			{
+				genres = await _genreRepository.ListAsync();
+			}
+			else
+			{
+				var genreQuery = _genreRepository.GetQueryable();
+				if (request.genreId != 0)
+					genreQuery = genreQuery.Where(g => g.Id == request.genreId);
+				if (request.SearchName != "")
+					genreQuery = genreQuery.Where(g => g.Name.Contains(request.SearchName));
 
-			return genreDtos;
+				genres = genreQuery.ToList();
+			}
+			var totalCount = genres.Count();
+
+			var result = new ListGenreDto(
+				genres.Select(g => new ListGenreRecord(g.Id, g.Name, g.BookIds.Count)).ToList(), totalCount);
+
+			return result;
 		}
 	}
 }

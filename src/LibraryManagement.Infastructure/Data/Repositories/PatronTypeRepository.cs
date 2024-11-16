@@ -97,6 +97,6 @@ public class PatronTypeRepository : IBaseRepository<PatronType>
 
     public async Task<int> SaveChangeAsync()
     {
-        return await _context.SaveChangesAsync();s
+        return await _context.SaveChangesAsync();
     }
 }
