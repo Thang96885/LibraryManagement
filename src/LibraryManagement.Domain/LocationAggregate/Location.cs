@@ -1,5 +1,6 @@
 using System.Collections;
 using LibraryManagement.Domain.Common.BaseModels;
+using LibraryManagement.Domain.LocationAggregate.Events;
 using LibraryManagement.Domain.LocationAggregate.ValueObjects;
 
 namespace LibraryManagement.Domain.LocationAggregate;
@@ -26,6 +27,20 @@ public class Location : AggregateRoot
     {
         _locaitonBookIds.Add(locationBookId);
     }
+
+    public void Update(string Name)
+    {
+        this.Name = Name;
+    }
+
+    public void Delete()
+    {
+        var deleteEvent = new DeletedLocation(this.Id, this._locaitonBookIds.Select(id => id.Value).ToList());
+        
+        AddDomainEvent(deleteEvent);
+    }
+    
+    
 
     private Location()
     {

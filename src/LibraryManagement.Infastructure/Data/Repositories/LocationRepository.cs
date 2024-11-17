@@ -9,7 +9,12 @@ namespace LibraryManagement.Infastructure.Data.Repositories;
 public class LocationRepository : IBaseRepository<Location>
 {
     private readonly LibraryManagementContext _context;
-    
+
+    public LocationRepository(LibraryManagementContext context)
+    {
+        _context = context;
+    }
+
     public int GetNumberOfEntities()
     {
         return _context.Location.Count();

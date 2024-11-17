@@ -21,6 +21,8 @@ public class DeleteGenreCommandHandler : IRequestHandler<DeleteGenreCommand, Err
         if (genre == null)
             return Error.NotFound("Genre with given id doesn't exist");
         
+        genre.Delete();
+        
         _genreRepository.Delete(genre);
 
         await _genreRepository.SaveChangeAsync();

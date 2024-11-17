@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using LibraryManagement.Domain.Common.Error;
 using LibraryManagement.Domain.Common.Interface.DomainServices;
+using LibraryManagement.Domain.GenreAggregate.Events;
 
 namespace LibraryManagement.Domain.GenreAggregate
 {
@@ -48,6 +49,11 @@ namespace LibraryManagement.Domain.GenreAggregate
 			_bookIds.AddRange(addBookIds);
 			
 			_bookIds.RemoveAll(bookId => removeBookIds.Contains(bookId));
+		}
+
+		public void Delete()
+		{
+			AddDomainEvent(new DeletedGenre(this.Id, _bookIds.Select(id => id.Value).ToList()));
 		}
 
 		public void AddBookId(List<GenreBookId> addBookIds)

@@ -7,7 +7,9 @@ using LibraryManagement.Domain.BorrowRecordAggregate;
 using LibraryManagement.Domain.Common.Interface;
 using LibraryManagement.Domain.Common.Interface.DomainServices;
 using LibraryManagement.Domain.GenreAggregate;
+using LibraryManagement.Domain.LocationAggregate;
 using LibraryManagement.Domain.PatronAggregate;
+using LibraryManagement.Domain.PatronTypeAggregate;
 using LibraryManagement.Domain.ReturnRecordAggregate;
 using LibraryManagement.Infastructure.Data.Data;
 using LibraryManagement.Infastructure.Data.Data.Repositories;
@@ -95,6 +97,8 @@ namespace LibraryManagement.Infastructure
 			service.AddScoped<IBaseRepository<BorrowRecord>, BorrowRecordRepository>();
 			service.AddScoped<IBaseRepository<ReturnRecord>, ReturnRecordRepository>();
 			service.AddScoped<IBaseRepository<Genre>, GenreRepository>();
+			service.AddScoped<IBaseRepository<Location>, LocationRepository>();
+			service.AddScoped<IBaseRepository<PatronType>, PatronTypeRepository>();
 
 			service.AddScoped<PublishDomainEventInterceptor>();
 		}

@@ -28,7 +28,7 @@ namespace LibraryManagement.Domain.BookAggregate
         public int PageCount { get; private set; }
 		public int NumberOfCopy { get; private set; }
 		public int NumberAvailable { get; private set; }
-		public BookLocationId LocationId { get; private set; }
+		public BookLocationId? LocationId { get; private set; }
 
 		public IReadOnlyList<BookGenreId> GenreIds { get => _genreIds.AsReadOnly(); }
         public IReadOnlyList<BookBorrowRecordId> BorrowRecordIds { get => _borrowRecordIds.AsReadOnly(); }
@@ -102,8 +102,17 @@ namespace LibraryManagement.Domain.BookAggregate
 			{
 				_genreIds.Remove(genreId);
 			}
-			
 			this.AddDomainEvent(updatedBookGenre);
+		}
+
+		public void DeletedLocation()
+		{
+			this.LocationId = null;
+		}
+
+		public void DeletedGenre(BookGenreId genreId)
+		{
+			this._genreIds.Remove(genreId);
 		}
 
         public void Delete()
