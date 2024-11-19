@@ -21,5 +21,22 @@ public class PatronType : AggregateRoot
     {
         return new(name, discountPercent);
     }
-    
+
+    public void Update(string Name = "", int discountPercent = -1)
+    {
+        if(Name != "")
+            this.Name = Name;
+        
+        if(DiscountPercent != -1)
+            this.DiscountPercent = discountPercent;
+    }
+
+    public void Delete()
+    {
+        if (this.PatronIds.Count > 0)
+            throw new AggregateException($"Patron type still have {PatronIds} patrons");
+        
+        
+    }
+
 }
