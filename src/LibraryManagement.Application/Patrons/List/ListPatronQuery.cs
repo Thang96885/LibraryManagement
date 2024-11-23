@@ -10,5 +10,17 @@ using System.Threading.Tasks;
 
 namespace LibraryManagement.Application.Patrons.List
 {
-	public record ListPatronQuery(int page, int pageSize) : IRequest<ErrorOr<List<ListPatronDto>>>; 
+	public record ListPatronRecord(int Id,
+		string Name,
+		string Email,
+		string PhoneNumber, string Street, string City, string State,
+		int BorrowRecordCount, int ReturnRecordCount,
+		int PatronTypeId, string PatronTypeName);
+
+	public record ListPatronDto(
+		List<ListPatronRecord> Records,
+		int TotalNumberOfPatrons);
+	public record ListPatronQuery(int page, int pageSize,
+		int SearchId = 0, string SearchPatronName = "",
+		string SearchEmail = "") : IRequest<ErrorOr<ListPatronDto>>;
 }

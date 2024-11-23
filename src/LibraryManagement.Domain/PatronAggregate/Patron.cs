@@ -22,6 +22,7 @@ namespace LibraryManagement.Domain.PatronAggregate
         public string PhoneNumber { get; private set; }
 		public PatronAddress Address { get; private set; }
 		public DateTime RegistrationDate { get; private set; }
+
 		public PatronPatronTypeId TypeId { get; private set; }
 		public IReadOnlyList<PatronReservationId> ReservationIds => _reservationIds.AsReadOnly();
 		public IReadOnlyList<PatronBorrowRecordId> BorrowRecordIds => _borrowRecordIds.AsReadOnly();
@@ -37,7 +38,7 @@ namespace LibraryManagement.Domain.PatronAggregate
 			PhoneNumber = phoneNumber;
 			Address = address;
 			RegistrationDate = registrationDate;
-			typeId = typeId;
+			TypeId = typeId;
 		}
 
 		public static Patron Create(string name, string email, 
@@ -59,6 +60,23 @@ namespace LibraryManagement.Domain.PatronAggregate
 			this.AddDomainEvent(new DeletedPatron(this));
 		}
 
+		public void Update(string Name, string Email, string PhoneNumber, string address,
+			int typeId)
+		{
+			if(string.IsNullOrEmpty(Name) == false)
+				this.Name = Name;
+			if(string.IsNullOrEmpty(Email) == false)
+				this.Email = Email;
+			if(string.IsNullOrEmpty(PhoneNumber) == false)
+				this.PhoneNumber = PhoneNumber;
+			if (string.IsNullOrEmpty(address) == false)
+				this.Address = PatronAddress.Create("", address, "", "");
+			if (typeId != 0 && typeId != this.TypeId.Value)
+			{
+				this.AddDomainEvent(new UpdatedPatronType(this.Id, this.TypeId.Value, typeId));
+				this.TypeId = PatronPatronTypeId.Create(typeId);
+			}
+		}
 		private Patron()
 		{
 

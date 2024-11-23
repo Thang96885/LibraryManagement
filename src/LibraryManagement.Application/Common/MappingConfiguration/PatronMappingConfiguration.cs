@@ -5,9 +5,9 @@ using Mapster;
 
 namespace LibraryManagement.Application.Common.MappingConfiguration
 {
-	public class PatronMappingConfiguration : IRegister
+	/*public class PatronMappingConfiguration : IRegister
 	{
-		public void Register(TypeAdapterConfig config)
+		/*public void Register(TypeAdapterConfig config)
 		{
 			config.NewConfig<Patron, ListPatronDto>()
 				.Map(dest => dest.Id, src => src.Id.ToString())
@@ -32,6 +32,6 @@ namespace LibraryManagement.Application.Common.MappingConfiguration
 				.Map(dest => dest.BorrowRecordCount, src => src.BorrowRecordIds.Count.ToString())
 				.Map(dest => dest.ReturnRecordCount, src => src.ReturnRecordIds.Count.ToString())
 				.Map(dest => dest.ReservationCount, src => src.ReservationIds.Count.ToString());
-		}
-	}
+		}#1#
+	}*/
 }

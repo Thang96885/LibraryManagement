@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 using LibraryManagement.Application.Patrons.Delete;
+using LibraryManagement.Application.Patrons.Update;
 
 namespace LibraryManagement.Api.Controllers
 {
@@ -60,7 +61,20 @@ namespace LibraryManagement.Api.Controllers
 			return Ok(result.Value);
 		}
 
-		[HttpPost("delete-patron")]
+		[HttpPatch("update")]
+		[AllowAnonymous]
+		public async Task<IActionResult> Update([FromBody] UpdatePatronCommand request)
+		{
+			var result = await _sender.Send(request);
+
+			if(result.IsError)
+			{
+				return Problem(result.Errors);
+			}
+			return Ok(result.Value);
+		}
+
+		[HttpDelete("delete-patron")]
 		[AllowAnonymous]
 		public async Task<IActionResult> Delete([FromBody] DeletePatronCommand request)
 		{

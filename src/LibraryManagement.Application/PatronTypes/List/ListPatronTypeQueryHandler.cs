@@ -20,7 +20,7 @@ public class ListPatronTypeQueryHandler : IRequestHandler<ListPatronTypeQuery, E
         var listPatronType = new List<PatronType>();
         
         
-        if(request.searchId == 0 && request.SearchName == "")
+        if(request.SearchId == 0 && request.SearchName == "")
         {
             listPatronType = await _patronTypeRepository.ListAsync(request.Page, request.PageSize); 
         }
@@ -28,8 +28,8 @@ public class ListPatronTypeQueryHandler : IRequestHandler<ListPatronTypeQuery, E
         {
             var patronTypeQuery = _patronTypeRepository.GetQueryable();
             
-            if(request.searchId != 0)
-                patronTypeQuery = patronTypeQuery.Where(p => p.Id == request.searchId);
+            if(request.SearchId != 0)
+                patronTypeQuery = patronTypeQuery.Where(p => p.Id == request.SearchId);
             if(request.SearchName != "")
                 patronTypeQuery = patronTypeQuery.Where(p => p.Name.Contains(request.SearchName));
 

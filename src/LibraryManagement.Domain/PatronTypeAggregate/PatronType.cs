@@ -35,8 +35,16 @@ public class PatronType : AggregateRoot
     {
         if (this.PatronIds.Count > 0)
             throw new AggregateException($"Patron type still have {PatronIds} patrons");
-        
-        
+    }
+
+    public void AddPatron(int PatronId)
+    {
+        _patronIds.Add(PatronTypePatronId.Create(PatronId));
+    }
+
+    public void RemovePatron(int PatronId)
+    {
+        _patronIds.Remove(PatronTypePatronId.Create(PatronId));
     }
 
 }

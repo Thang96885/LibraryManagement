@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Runtime.CompilerServices;
 using LibraryManagement.Application.Auth.ChangePassword;
+using LibraryManagement.Application.Auth.ListAccount;
 
 namespace LibraryManagement.Api.Controllers
 {
@@ -20,6 +21,20 @@ namespace LibraryManagement.Api.Controllers
 		public AuthController(ISender sender)
 		{
 			_sender = sender;
+		}
+		
+		[HttpGet("list-account")]
+		[AllowAnonymous]
+		public async Task<IActionResult> ListAccounts([FromQuery] ListAccountQuery request)
+		{
+			var result = await _sender.Send(request);
+
+			if (result.IsError)
+			{
+				return Problem(result.Errors);
+			}
+
+			return Ok(result.Value);
 		}
 
 		[HttpPost("register")]

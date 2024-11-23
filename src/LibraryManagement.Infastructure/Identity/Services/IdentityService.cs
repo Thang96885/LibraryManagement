@@ -9,11 +9,15 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using LibraryManagement.Application.Auth.ListAccount;
+using MimeKit;
 
 namespace LibraryManagement.Infastructure.Data.Identity.Services
 {
@@ -25,8 +29,10 @@ namespace LibraryManagement.Infastructure.Data.Identity.Services
 		private readonly RoleManager<IdentityRole> _roleManager;
 		private readonly IDateTimeProvider _datetimeProvider;
 		private readonly ITokenGennerator _tokenGennerator;
+		private readonly IBaseRepository<Patron> _patronRepository;
+		private readonly IEmailService _emailService;
 
-		public IdentityService(UserManager<User> userManager, IUserClaimsPrincipalFactory<User> userClaimsPrincipalFactory, IAuthorizationService authorizationService, RoleManager<IdentityRole> roleManager, IDateTimeProvider datetimeProvider, ITokenGennerator tokenGennerator)
+		public IdentityService(UserManager<User> userManager, IUserClaimsPrincipalFactory<User> userClaimsPrincipalFactory, IAuthorizationService authorizationService, RoleManager<IdentityRole> roleManager, IDateTimeProvider datetimeProvider, ITokenGennerator tokenGennerator, IBaseRepository<Patron> patronRepository, IEmailService emailService)
 		{
 			_userManager = userManager;
 			_userClaimsPrincipalFactory = userClaimsPrincipalFactory;
@@ -34,6 +40,8 @@ namespace LibraryManagement.Infastructure.Data.Identity.Services
 			_roleManager = roleManager;
 			_datetimeProvider = datetimeProvider;
 			this._tokenGennerator = tokenGennerator;
+			_patronRepository = patronRepository;
+			_emailService = emailService;
 		}
 
 		public async Task AddRefreshToken(string userName, string token)
@@ -93,6 +101,63 @@ namespace LibraryManagement.Infastructure.Data.Identity.Services
 			return new UserInfo(user.UserName, roles.ToList());
 		}
 
+		public async Task<ErrorOr<ListAccountDto>> ListAccounts(int page, int pageSize, 
+			int searchPatronId, string seachPatronName, string searchEmail,
+			string searchName)
+		{
+			IList<User> users = new List<User>();
+			var totalRecords = 0;
+
+			if (searchPatronId == 0 && searchEmail == "" && searchName == "" && seachPatronName == "")
+			{
+				users = await _userManager.GetUsersInRoleAsync(nameof(RoleEnum.User));
+				users = users.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+				
+				totalRecords = await _userManager.Users.CountAsync();
+			}
+			else
+			{
+				var query = users.AsQueryable();
+				
+				query = query.Where(u => u.UserName != "Admin" && u.UserName != "Librarian");
+				
+				if(searchPatronId != 0)
+					query = query.Where(user => user.PatronId == searchPatronId);
+				if(searchEmail != "")
+					query = query.Where(user => user.Email.Contains(searchEmail));
+				if(searchName != "")
+					query = query.Where(user => user.UserName.Contains(searchName));
+				if (seachPatronName != "")
+				{
+					var patronQuery = _patronRepository.GetQueryable();
+					patronQuery.Where(p => p.Name.Contains(seachPatronName));
+					
+					var patrons = await patronQuery.ToListAsync();
+
+					foreach (var patron in patrons)
+					{
+							query.Where(u => u.PatronId == patron.Id);
+					}
+				}
+				totalRecords = query.Count();
+				users = query.Skip((page - 1) * pageSize).Take(pageSize).ToList();	
+			}
+
+			var listAccountRecords = new List<ListAccountRecord>();
+
+			foreach (var user in users)
+			{
+				var patron = await _patronRepository.FindAsync((int)user.PatronId);
+				
+				var record = new ListAccountRecord(user.Id, patron.Id, patron.Name, user.UserName, user.Email);
+				
+				listAccountRecords.Add(record);
+			}
+
+			return new ListAccountDto(listAccountRecords, totalRecords);
+		}
+		
+
 		public async Task<ErrorOr<AuthResult>> Refresh(string userName, string refreshToken)
 		{
 			var user = await _userManager.FindByNameAsync(userName);
@@ -146,10 +211,20 @@ namespace LibraryManagement.Infastructure.Data.Identity.Services
 
 			if(userResult.Succeeded && roleResult.Succeeded)
 			{
+				var message = new Message(
+					new List<MailboxAddress> { new(user.UserName, user.Email) },
+					"Welcome to the Library",
+					$"Welcome to the Library, we are glad to have you as our patron.\n" +
+					$"Your account name is {user.UserName}.\n" +
+					$"Your passwork is {info.password}"
+				);
+				await _emailService.SendEmailAsync(message);
 				return new UserInfo(user.UserName, new List<string> { nameof(RoleEnum.User) });
 			}
 			var errors = userResult.Errors.Select(error => Error.Conflict(error.Description)).ToList().Concat(roleResult.Errors.Select(error => Error.Conflict(error.Description)).ToList());
 			return errors.ToList();
 		}
+		
+		
 	}
 }

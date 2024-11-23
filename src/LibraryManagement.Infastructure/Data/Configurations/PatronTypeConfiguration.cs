@@ -23,6 +23,7 @@ public class PatronTypeConfiguration : IEntityTypeConfiguration<PatronType>
             builder.ToTable("PatronTypePatronId");
 
             builder.Property(x => x.Value)
+                .ValueGeneratedNever()
                 .HasColumnName("PatronId");
 
             builder.WithOwner().HasForeignKey("PatronTypeId");

@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LibraryManagement.Application.Auth.ListAccount;
+using Microsoft.AspNetCore.Identity;
 
 namespace LibraryManagement.Application.Common.Interface
 {
@@ -23,5 +25,9 @@ namespace LibraryManagement.Application.Common.Interface
 		Task<ErrorOr<AuthResult>> Refresh(string userName, string refreshToken);
 
 		Task<ErrorOr<UserInfo>> Login(string userNameOrEmail, string password);
+
+		Task<ErrorOr<ListAccountDto>> ListAccounts(int page, int pageSize, int searchPatronId,
+			string seachPatronName, string searchEmail
+			, string searchName);
 	}
 }

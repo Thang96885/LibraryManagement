@@ -17,7 +17,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using LibraryManagement.Application.Auth.AddRole;
+using LibraryManagement.Application.PatronTypes.Create;
 using LibraryManagement.Infastructure;
+using MediatR;
 
 namespace LibraryManagement.Api
 {
@@ -54,8 +57,13 @@ namespace LibraryManagement.Api
 				app.UseSwaggerUI();
 			}
 
-			app.MapPost("/createInitialUsers", async (UserManager<User> userManager) =>
+			app.MapPost("/createInitialUsers", async (UserManager<User> userManager, ISender sender ) =>
 			{
+				await sender.Send(new AddRoleCommand("User"));
+				await sender.Send(new AddRoleCommand("Admin"));
+				await sender.Send(new AddRoleCommand("Librarian"));
+				await sender.Send(new CreatePatronTypeCommand("User", 0));
+				
 				var adminUser = new User { UserName = "admin", Email = "admin@example.com", PatronId = null };
 				var librarianUser = new User { UserName = "librarian", Email = "librarian@example.com", PatronId = null};
 
