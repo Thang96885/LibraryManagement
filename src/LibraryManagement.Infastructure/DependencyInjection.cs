@@ -81,6 +81,7 @@ namespace LibraryManagement.Infastructure
 		{
 			service.AddIdentityCore<User>()
 						.AddRoles<IdentityRole>()
+						.AddDefaultTokenProviders()
 						.AddEntityFrameworkStores<LibraryManagementContext>();
 		}
 

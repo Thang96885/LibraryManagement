@@ -113,7 +113,7 @@ namespace LibraryManagement.Infastructure.Data.Identity.Services
 				users = await _userManager.GetUsersInRoleAsync(nameof(RoleEnum.User));
 				users = users.Skip((page - 1) * pageSize).Take(pageSize).ToList();
 				
-				totalRecords = await _userManager.Users.CountAsync();
+				totalRecords = await _userManager.Users.CountAsync() - 2;
 			}
 			else
 			{
@@ -144,7 +144,8 @@ namespace LibraryManagement.Infastructure.Data.Identity.Services
 			}
 
 			var listAccountRecords = new List<ListAccountRecord>();
-
+			
+			
 			foreach (var user in users)
 			{
 				var patron = await _patronRepository.FindAsync((int)user.PatronId);
@@ -156,7 +157,19 @@ namespace LibraryManagement.Infastructure.Data.Identity.Services
 
 			return new ListAccountDto(listAccountRecords, totalRecords);
 		}
-		
+
+		public async Task<bool> ResetPassword(string userName)
+		{
+			var user = await _userManager.FindByNameAsync(userName);
+			string resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+			
+			IdentityResult result = await _userManager.ResetPasswordAsync(user, resetToken, "Abc@123");
+
+			if (result.Succeeded)
+				return true;
+			return false;
+		}
+
 
 		public async Task<ErrorOr<AuthResult>> Refresh(string userName, string refreshToken)
 		{

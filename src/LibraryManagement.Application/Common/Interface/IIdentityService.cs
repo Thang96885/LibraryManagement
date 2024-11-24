@@ -29,5 +29,7 @@ namespace LibraryManagement.Application.Common.Interface
 		Task<ErrorOr<ListAccountDto>> ListAccounts(int page, int pageSize, int searchPatronId,
 			string seachPatronName, string searchEmail
 			, string searchName);
+		
+		Task<bool> ResetPassword(string userName);
 	}
 }

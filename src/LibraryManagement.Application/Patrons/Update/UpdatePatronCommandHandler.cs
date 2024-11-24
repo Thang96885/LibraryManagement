@@ -16,18 +16,25 @@ public class UpdatePatronCommandHandler : IRequestHandler<UpdatePatronCommand, E
 
     public async Task<ErrorOr<bool>> Handle(UpdatePatronCommand request, CancellationToken cancellationToken)
     {
-        var patron = await _patronRepository.FindAsync(request.Id);
-        
-        if(patron == null)
-            return Error.NotFound("Patron with id: " + request.Id + " does not exist");
-        
-        patron.Update(request.Name, request.PhoneNumber,
-            request.Email, request.Address, request.PatronTypeId);
-        
-        _patronRepository.Update(patron);
+        try
+        {
+            var patron = await _patronRepository.FindAsync(request.Id);
 
-        await _patronRepository.SaveChangeAsync();
+            if (patron == null)
+                return Error.NotFound("Patron with id: " + request.Id + " does not exist");
 
-        return true;
+            patron.Update(request.Name,request.Email, request.PhoneNumber,
+                 request.Address, request.PatronTypeId);
+
+            _patronRepository.Update(patron);
+
+            await _patronRepository.SaveChangeAsync();
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
     }
 }

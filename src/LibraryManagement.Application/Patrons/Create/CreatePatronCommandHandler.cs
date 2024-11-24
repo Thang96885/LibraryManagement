@@ -57,6 +57,9 @@ namespace LibraryManagement.Application.Patrons.Create
 		        return input;
 
 	        // Normalize chuỗi thành dạng FormD (Decomposition Form)
+	        input = input.Replace('Đ', 'D');
+	        input = input.Replace('đ', 'd');
+	        
 	        string normalizedString = input.Normalize(NormalizationForm.FormD);
 	        StringBuilder stringBuilder = new StringBuilder();
 

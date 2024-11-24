@@ -63,6 +63,7 @@ namespace LibraryManagement.Api
 				await sender.Send(new AddRoleCommand("Admin"));
 				await sender.Send(new AddRoleCommand("Librarian"));
 				await sender.Send(new CreatePatronTypeCommand("User", 0));
+				await sender.Send(new CreatePatronTypeCommand("VIP User", 10));
 				
 				var adminUser = new User { UserName = "admin", Email = "admin@example.com", PatronId = null };
 				var librarianUser = new User { UserName = "librarian", Email = "librarian@example.com", PatronId = null};

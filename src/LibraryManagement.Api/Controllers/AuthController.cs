@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Runtime.CompilerServices;
 using LibraryManagement.Application.Auth.ChangePassword;
 using LibraryManagement.Application.Auth.ListAccount;
+using LibraryManagement.Application.Auth.ResetPassword;
 
 namespace LibraryManagement.Api.Controllers
 {
@@ -91,5 +92,19 @@ namespace LibraryManagement.Api.Controllers
 				return Problem(result.Errors);
 			return Ok(result.Value);
 		}
+
+		[HttpPatch("reset-password")]
+		[AllowAnonymous]
+		public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordCommand request)
+		{
+			var result = await _sender.Send(request);
+
+			if (result.IsError)
+				return Problem(result.Errors);
+			return Ok(result.Value);
+		}
+		
+		
+		
 	}
 }
