@@ -10,9 +10,11 @@ using System.Threading.Tasks;
 namespace LibraryManagement.Application.Books.List
 {
 	public record ListBookDto(
-		int numberOfBooks,
-		List<BookDto> books);
+		int NumberOfBooks,
+		List<BookDto> Books);
 	
-	public record ListBookQuery(int page,
-		int pageSize, int bookId = 0, string bookTitle = "", string authorName = "") : IRequest<ErrorOr<ListBookDto>>;
+	public record ListBookQuery(int Page,
+		int PageSize, int BookId = 0, string BookTitle = "",
+		int AuthorId = 0, int LocationId = 0, int YearPublicationId = 0,
+		bool IsAvailable = false) : IRequest<ErrorOr<ListBookDto>>;
 }

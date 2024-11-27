@@ -13,7 +13,7 @@ namespace LibraryManagement.Application.Books.Create
         {
             RuleFor(x => x.Title).NotEmpty();
             RuleFor(x => x.PublisherName).NotEmpty();
-            RuleFor(x => x.PublicationYear).NotEmpty();
+            RuleFor(x => x.PublicationYearId).NotEmpty();
             RuleFor(x => x.PageCount).NotEmpty().GreaterThan(0);
         }
     }

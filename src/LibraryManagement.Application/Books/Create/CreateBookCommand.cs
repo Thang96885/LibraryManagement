@@ -10,8 +10,11 @@ namespace LibraryManagement.Application.Books.Create
 {
     public record CreateBookCommand(
         string Title,
-        string AuthorName,
         string PublisherName,
-        int PublicationYear,
-        int PageCount): IRequest<ErrorOr<string>>;
+        int PublicationYearId,
+        int PageCount,
+        int AuthorId,
+        string ImageUrl,
+        string Description,
+        int LocationId): IRequest<ErrorOr<string>>;
 }

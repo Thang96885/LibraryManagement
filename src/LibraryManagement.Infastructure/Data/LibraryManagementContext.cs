@@ -16,8 +16,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LibraryManagement.Domain.AuthorAggregate;
 using LibraryManagement.Domain.LocationAggregate;
 using LibraryManagement.Domain.PatronTypeAggregate;
+using LibraryManagement.Domain.YearPublicationAggregate;
 
 namespace LibraryManagement.Infastructure.Data.Data
 {
@@ -52,7 +54,9 @@ namespace LibraryManagement.Infastructure.Data.Data
         public DbSet<BorrowRecord> BorrowRecords { get; set; }
         public DbSet<ReturnRecord> ReturnRecords { get; set; }
 		public DbSet<Genre> Genres {  get; set; }
-		public DbSet<Location> Location { get; set; }
+		public DbSet<Location> Location { get; set;}
 		public DbSet<PatronType> PatronType { get; set; }
+		public DbSet<PublicationYear> PublicationYears { get; set; }
+		public DbSet<Author> Authors { get; set; }
     }
 }

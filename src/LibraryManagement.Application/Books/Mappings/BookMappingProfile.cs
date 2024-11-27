@@ -14,7 +14,7 @@ namespace LibraryManagement.Application.Books.Mappings
                 .Map(dest => dest.Title, src => src.Title)
                 .Map(dest => dest.AuthorName, src => string.Empty) // Cần xử lý riêng
                 .Map(dest => dest.PublisherName, src => src.PublisherName)
-                .Map(dest => dest.PublicationYear, src => src.PublicationYear)
+                .Map(dest => dest.PublicationYear, src => src.PublicationYearId)
                 .Map(dest => dest.PageCount, src => src.PageCount)
                 .Map(dest => dest.NumberOfCopy, src => src.NumberOfCopy)
                 .Map(dest => dest.NumberAvailable, src => src.NumberAvailable)
@@ -27,9 +27,8 @@ namespace LibraryManagement.Application.Books.Mappings
             config.NewConfig<BookDto, Book>()
                 .Map(dest => dest.Id, src => src.Id)
                 .Map(dest => dest.Title, src => src.Title)
-                .Map(dest => dest.AuthorName, src => src.AuthorName)
                 .Map(dest => dest.PublisherName, src => src.PublisherName)
-                .Map(dest => dest.PublicationYear, src => src.PublicationYear)
+                .Map(dest => dest.PublicationYearId, src => src.PublicationYear)
                 .Map(dest => dest.PageCount, src => src.PageCount)
                 .Map(dest => dest.NumberOfCopy, src => src.NumberOfCopy)
                 .Map(dest => dest.NumberAvailable, src => src.NumberAvailable);

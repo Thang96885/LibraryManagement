@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 namespace LibraryManagement.Domain.Common.Interface
 {
 	public interface IBaseRepository<TEntity>
-		where TEntity : Entity
 	{
 		int GetNumberOfEntities();
 		TEntity? Find(int id);

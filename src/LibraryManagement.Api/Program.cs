@@ -18,6 +18,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using LibraryManagement.Application.Auth.AddRole;
+using LibraryManagement.Application.Locations.Create;
 using LibraryManagement.Application.PatronTypes.Create;
 using LibraryManagement.Infastructure;
 using MediatR;
@@ -59,6 +60,9 @@ namespace LibraryManagement.Api
 
 			app.MapPost("/createInitialUsers", async (UserManager<User> userManager, ISender sender ) =>
 			{
+				await sender.Send(new CreateLocationCommand("Khu a"));
+				await sender.Send(new CreateLocationCommand("Khu b"));
+				await sender.Send(new CreateLocationCommand("Khu c"));
 				await sender.Send(new AddRoleCommand("User"));
 				await sender.Send(new AddRoleCommand("Admin"));
 				await sender.Send(new AddRoleCommand("Librarian"));

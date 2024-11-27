@@ -23,13 +23,12 @@ namespace LibraryManagement.Application.Books.Create
         {
             try
             {
-                var book = Book.Create(request.Title, request.AuthorName,
-                request.PublisherName, request.PublicationYear, request.PageCount, 0, 0);
-
+                var book = Book.Create(request.Title, request.AuthorId,
+                request.PublisherName, request.PublicationYearId
+                , request.PageCount, 0, 0, request.ImageUrl,
+                request.Description, request.LocationId);
                 _bookRepository.Add(book);
-
                 await _bookRepository.SaveChangeAsync();
-
                 return book.Id.ToString();
             }
             catch (Exception ex)

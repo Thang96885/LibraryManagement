@@ -163,7 +163,7 @@ namespace LibraryManagement.Infastructure.Data.Identity.Services
 			var user = await _userManager.FindByNameAsync(userName);
 			string resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
 			
-			IdentityResult result = await _userManager.ResetPasswordAsync(user, resetToken, "Abc@123");
+			IdentityResult result = await _userManager.ResetPasswordAsync(user, resetToken, "Abc.123");
 
 			if (result.Succeeded)
 				return true;

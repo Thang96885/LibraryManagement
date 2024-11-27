@@ -14,22 +14,24 @@ namespace LibraryManagement.Domain.BookAggregate.Entities
 		private static readonly BookCopyService _bookCopyService = new BookCopyService();
 		public DateTime AcquisitionDate { get; private set; }
 		public BookStatus Status { get; private set; } = BookStatus.Available;
+		public decimal Price { get; private set; }
 
 		public BookPhysicalCondition PhysicalCondition { get; private set; } = BookPhysicalCondition.Good;
 
-		private BookCopy(string Id, DateTime AcquisitionDate)
+		private BookCopy(string Id, DateTime AcquisitionDate, decimal price)
 		{
 			this.Id = Id;
 			this.AcquisitionDate = AcquisitionDate;
+			Price = price;
 		}
 		
-		public static BookCopy Create(string Id, DateTime accquisitionDate)
+		public static BookCopy Create(string Id, DateTime accquisitionDate, decimal price)
 		{
 			if (!_bookCopyService.CheckIBNS(Id))
 			{
 				throw new ArgumentException("Invalid IBNS");
 			}
-			return new(Id, accquisitionDate);
+			return new(Id, accquisitionDate, price);
 		}
 
 		public void ChangeStatus(BookStatus status)

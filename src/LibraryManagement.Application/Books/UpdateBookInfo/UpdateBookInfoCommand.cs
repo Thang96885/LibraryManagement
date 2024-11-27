@@ -8,7 +8,8 @@ public record UpdateBookInfoDto(int Id);
 public record UpdateBookInfoCommand(
     int BookId, 
     string Title,
-    string AuthorName,
+    int AuthorId,
     string PublisherName,
-    int PublicationYear,
-    int PageCount) : IRequest<ErrorOr<UpdateBookInfoDto>>;
+    int PublicationYearId,
+    int PageCount,
+    int LocationId) : IRequest<ErrorOr<UpdateBookInfoDto>>;

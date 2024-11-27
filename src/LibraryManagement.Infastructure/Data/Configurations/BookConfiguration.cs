@@ -25,8 +25,13 @@ namespace LibraryManagement.Infastructure.Data.Data.Configurations
                 .HasMaxLength(200)
                 .IsRequired();
 
-            builder.Property(b => b.AuthorName)
-                .IsRequired(false);
+            builder.Property(b => b.PublicationYearId)
+                .HasConversion(id => id.Value, data => new BookPublicationYearId(data));
+
+            builder.Property(b => b.AuthorId)
+                .HasConversion(id => id.Value, data => BookAuthorId.Create(data));
+
+            builder.Property(b => b.ImageUrl);
 
             builder.Property(b => b.PublisherName)
                 .HasMaxLength(200)
@@ -37,7 +42,7 @@ namespace LibraryManagement.Infastructure.Data.Data.Configurations
                 .HasConversion(b => b.Value, value => BookLocationId.Create(value));
             
 
-            // Cấu hình cho các collection
+            
             ConfigGenre(builder);
             ConfigReservation(builder);
             ConfigBorrowRecord(builder);
@@ -57,6 +62,9 @@ namespace LibraryManagement.Infastructure.Data.Data.Configurations
 
                 bookCopyBuilder.Property(b => b.Status)
                 .HasConversion<string>();
+
+                bookCopyBuilder.Property(b => b.Price)
+                    .HasConversion<decimal>();
             });
         }
 

@@ -1,4 +1,5 @@
 ﻿using Bogus;
+using ErrorOr;
 using LibraryManagement.Application.Books.AddBookCopy;
 using LibraryManagement.Application.Books.Create;
 using LibraryManagement.Domain.BookAggregate;
@@ -27,9 +28,12 @@ namespace LibraryManagement.Api.Controllers
 				.CustomInstantiator(f => new CreateBookCommand(
 					f.Lorem.Sentence(),
 					f.Name.FullName(),
-					f.Company.CompanyName(),
+					f.PickRandom<int>(new int[] {1, 2}),
 					f.Date.Past(10).Year,
-					f.Random.Number(100, 1000)
+					f.PickRandom<int>(new int[] {1, 2}),
+					"",
+					f.Lorem.Sentence(),
+					f.PickRandom<int>(new int[] {1, 2})
 				));
 
 			var books = faker.Generate(100);
@@ -52,7 +56,8 @@ namespace LibraryManagement.Api.Controllers
 				.CustomInstantiator(f => new AddBookCopyCommand
 				(
 					bookId,
-					ibnsFaker.Generate(50)
+					ibnsFaker.Generate(50),
+					f.PickRandom<decimal>(new decimal[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 })
 				));
 
 			var bookCopys = fakerBookCopyCommand.Generate(1);

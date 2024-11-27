@@ -11,7 +11,7 @@ using MediatR;
 namespace LibraryManagement.Application.Books.UpdateBookGenre;
 
 
-public class UpdateBookGenreCommandHandler : IRequestHandler<UpdateBookGenreCommand,ErrorOr<BookDto>>
+public class UpdateBookGenreCommandHandler : IRequestHandler<UpdateBookGenreCommand,ErrorOr<bool>>
 {
     private readonly IBaseRepository<Book> _bookRepository;
     private readonly IBaseRepository<Genre> _genreRepository;
@@ -24,7 +24,8 @@ public class UpdateBookGenreCommandHandler : IRequestHandler<UpdateBookGenreComm
         _mapper = mapper;
     }
 
-    public async Task<ErrorOr<BookDto>> Handle(UpdateBookGenreCommand request, CancellationToken cancellationToken)
+    public async Task<ErrorOr<bool>> Handle(UpdateBookGenreCommand request,
+        CancellationToken cancellationToken)
     {
         var book = await _bookRepository.FindAsync(request.BookId);
         
@@ -47,17 +48,6 @@ public class UpdateBookGenreCommandHandler : IRequestHandler<UpdateBookGenreComm
             bookGenres.Add(genre);
         }
 
-        return new BookDto()
-        {
-            Id = book.Id,
-            Title = book.Title,
-            AuthorName = book.AuthorName,
-            PublisherName = book.PublisherName,
-            PublicationYear = book.PublicationYear,
-            PageCount = book.PageCount,
-            NumberOfCopy = book.NumberOfCopy,
-            NumberAvailable = book.NumberAvailable,
-            Genres = bookGenres.Select(genre => new GenreDto() { Id = genre.Id, Name = genre.Name }).ToList()
-        };
+        return true;
     }
 }

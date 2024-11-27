@@ -33,7 +33,7 @@ namespace LibraryManagement.Application.Books.AddBookCopy
 
 				foreach (var IBNS in request.IBNSCodes)
 				{
-					var bookCopy = BookCopy.Create(IBNS, _dateTimeProvider.Now);
+					var bookCopy = BookCopy.Create(IBNS, _dateTimeProvider.Now, request.Price);
 					book.AddBookCopy(bookCopy);
 				}
 				_bookRepository.Update(book);

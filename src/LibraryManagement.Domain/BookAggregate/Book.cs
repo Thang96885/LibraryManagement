@@ -22,13 +22,15 @@ namespace LibraryManagement.Domain.BookAggregate
         private readonly List<BookReservationId> _bookReservationId = new();
 		private readonly List<BookCopy> _bookCopies = new();
         public string Title { get; private set; }
-        public string AuthorName { get;private set; }
         public string PublisherName { get;private set; }
-        public int PublicationYear { get; private set; }
+        public BookPublicationYearId PublicationYearId { get; private set; }
         public int PageCount { get; private set; }
 		public int NumberOfCopy { get; private set; }
 		public int NumberAvailable { get; private set; }
+		public string ImageUrl { get; private set; }
+		public string Description { get; private set; }
 		public BookLocationId? LocationId { get; private set; }
+		public BookAuthorId AuthorId { get; private set; }
 
 		public IReadOnlyList<BookGenreId> GenreIds { get => _genreIds.AsReadOnly(); }
         public IReadOnlyList<BookBorrowRecordId> BorrowRecordIds { get => _borrowRecordIds.AsReadOnly(); }
@@ -36,26 +38,34 @@ namespace LibraryManagement.Domain.BookAggregate
         public IReadOnlyList<BookReservationId> BookReservationId { get => _bookReservationId.AsReadOnly(); }
         public IReadOnlyList<BookCopy> BookCopies => _bookCopies.AsReadOnly();
 
-        private Book(string title, string authorName, string publisherName, 
-			int publicationYear, int pageCount, int numberOfCopy, int numberAvailable)
+        private Book(string title, int authorId, string publisherName, 
+			int publicationYearId, int pageCount, int numberOfCopy,
+			int numberAvailable, string imageUrl, string description, int locationId)
         {
 			Title = title;
-			AuthorName = authorName;
+			AuthorId = BookAuthorId.Create(authorId);
 			PublisherName = publisherName;
-			PublicationYear = publicationYear;
+			PublicationYearId = new BookPublicationYearId(publicationYearId);
 			PageCount = pageCount;
 			NumberOfCopy = numberOfCopy;
 			NumberAvailable = numberAvailable;
+			ImageUrl = imageUrl;
+			Description = description;
+			LocationId = new BookLocationId(locationId);
 		}
 		private Book()
 		{
 
 		}
 
-        public static Book Create(string title, string authorName, string publisherName, 
-			int publicationYear, int pageCount, int numberOfCopy, int numberAvailable)
+        public static Book Create(string title, int authorId, string publisherName, 
+			int publicationYearId, int pageCount, int numberOfCopy,
+			int numberAvailable, string imageUrl, string description, int locationId)
 		{
-			return new Book(title, authorName, publisherName, publicationYear, pageCount, numberOfCopy, numberAvailable);
+			var book = new Book(title, authorId, publisherName, publicationYearId,
+				pageCount, numberOfCopy, numberAvailable, imageUrl, description, locationId);
+			book.AddDomainEvent(new CreatedBook(book));
+			return book;
 		}
 
 		public void AddBookCopy(BookCopy bookCopy)
@@ -65,13 +75,31 @@ namespace LibraryManagement.Domain.BookAggregate
 			this.NumberOfCopy++;
 		}
 
-		public void UpdateBookInfo(string title = "", string authorName = "", string publisherName = "", int publicationYear = 0, int pageCount = 0)
+		public void UpdateBookInfo(string title = "", int authorId = 0,
+			string publisherName = "", int publicationYearId = 0,
+			int pageCount = 0, int locationId = 0)
 		{
+			AddDomainEvent(new UpdatedBook(this.Id, authorId, publicationYearId));
 			this.Title = String.IsNullOrEmpty(title) ? Title : title;
-			this.AuthorName = String.IsNullOrEmpty(authorName) ? AuthorName : authorName;
 			this.PublisherName = String.IsNullOrEmpty(publisherName) ? PublisherName : publisherName;
-			this.PublicationYear = publicationYear == 0 ? PublicationYear : publicationYear; 
 			this.PageCount = pageCount == 0 ? PageCount : pageCount;
+
+			if (publicationYearId != 0 &&
+			    this.PublicationYearId != BookPublicationYearId.Create(publicationYearId))
+			{
+				this.PublicationYearId = BookPublicationYearId.Create(publicationYearId);
+			}
+
+			if (authorId != 0 &&
+			    this.AuthorId != BookAuthorId.Create(authorId))
+			{
+				this.AuthorId = BookAuthorId.Create(authorId);
+			}
+
+			if (locationId != 0 && this.LocationId != BookLocationId.Create(locationId))
+			{
+				this.LocationId = BookLocationId.Create(locationId);
+			}
 		}
 		
 		

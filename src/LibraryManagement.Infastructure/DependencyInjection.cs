@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using LibraryManagement.Application.Common.Interface;
 using LibraryManagement.Application.Common.Services;
+using LibraryManagement.Domain.AuthorAggregate;
 using LibraryManagement.Domain.BookAggregate;
 using LibraryManagement.Domain.BookReservationAggregate;
 using LibraryManagement.Domain.BorrowRecordAggregate;
@@ -11,6 +12,7 @@ using LibraryManagement.Domain.LocationAggregate;
 using LibraryManagement.Domain.PatronAggregate;
 using LibraryManagement.Domain.PatronTypeAggregate;
 using LibraryManagement.Domain.ReturnRecordAggregate;
+using LibraryManagement.Domain.YearPublicationAggregate;
 using LibraryManagement.Infastructure.Data.Data;
 using LibraryManagement.Infastructure.Data.Data.Repositories;
 using LibraryManagement.Infastructure.Data.Identity.Models;
@@ -100,6 +102,8 @@ namespace LibraryManagement.Infastructure
 			service.AddScoped<IBaseRepository<Genre>, GenreRepository>();
 			service.AddScoped<IBaseRepository<Location>, LocationRepository>();
 			service.AddScoped<IBaseRepository<PatronType>, PatronTypeRepository>();
+			service.AddScoped<IBaseRepository<Author>, AuthorRepository>();
+			service.AddScoped<IBaseRepository<PublicationYear>, PublicationYearRepository>();
 
 			service.AddScoped<PublishDomainEventInterceptor>();
 		}

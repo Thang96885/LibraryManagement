@@ -16,8 +16,9 @@ namespace LibraryManagement.Application.Books.Common
 		public int PageCount { get; init; }
 		public int NumberOfCopy { get; init; }
 		public int NumberAvailable { get; init; }
+		public string Description { get; init; }
+		public LocationDto Location { get; init; }
 		public ICollection<GenreDto> Genres { get; init; }
-		public string Location { get; } = "Not available";
 	}
 
 	public record GenreDto
@@ -25,5 +26,7 @@ namespace LibraryManagement.Application.Books.Common
 		public int Id { get; init; }
 		public string Name { get; init; }
 	}
+
+	public record LocationDto(int Id, string Name);
 
 }

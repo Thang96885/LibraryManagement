@@ -21,7 +21,9 @@ public class UpdateBookInfoCommandHandler : IRequestHandler<UpdateBookInfoComman
         if(book == null)
             return Error.NotFound("book with id = " + request.BookId + " not found");
         
-        book.UpdateBookInfo(request.Title, request.AuthorName, request.PublisherName, request.PublicationYear, request.PageCount);
+        book.UpdateBookInfo(request.Title,
+            request.AuthorId, request.PublisherName,
+            request.PublicationYearId, request.PageCount, request.LocationId);
         
        _bookRepository.Update(book);
 
