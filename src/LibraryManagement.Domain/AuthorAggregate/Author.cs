@@ -30,4 +30,9 @@ public class Author : AggregateRoot
     {
         _bookIds.Remove(bookId);
     }
+
+    public void Update(string Name)
+    {
+        this.Name = Name;
+    }
 }

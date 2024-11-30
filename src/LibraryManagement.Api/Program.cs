@@ -18,8 +18,10 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using LibraryManagement.Application.Auth.AddRole;
+using LibraryManagement.Application.Authors.Create;
 using LibraryManagement.Application.Locations.Create;
 using LibraryManagement.Application.PatronTypes.Create;
+using LibraryManagement.Application.PublicationYears.Create;
 using LibraryManagement.Infastructure;
 using MediatR;
 
@@ -60,6 +62,10 @@ namespace LibraryManagement.Api
 
 			app.MapPost("/createInitialUsers", async (UserManager<User> userManager, ISender sender ) =>
 			{
+				await sender.Send(new CreatePublicationYearCommand(2000));
+				await sender.Send(new CreatePublicationYearCommand(2001));
+				await sender.Send(new CreateAuthorCommand("Thang Dinh"));
+				await sender.Send(new CreateAuthorCommand("Dinh Thang"));
 				await sender.Send(new CreateLocationCommand("Khu a"));
 				await sender.Send(new CreateLocationCommand("Khu b"));
 				await sender.Send(new CreateLocationCommand("Khu c"));

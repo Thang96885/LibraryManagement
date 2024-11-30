@@ -22,7 +22,8 @@ public class LocationConfiguration : IEntityTypeConfiguration<Location>
         {
             builder.ToTable("LocationBookId");
             builder.Property(x => x.Value)
-                .HasColumnName("BookId");
+                .ValueGeneratedNever()
+                .HasColumnName("LocationBookId");
             builder.WithOwner().HasForeignKey("LocationId");
 
             builder.HasKey("Value", "LocationId");

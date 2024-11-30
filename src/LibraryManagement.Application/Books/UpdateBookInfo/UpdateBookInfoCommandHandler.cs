@@ -1,5 +1,6 @@
 using ErrorOr;
 using LibraryManagement.Domain.BookAggregate;
+using LibraryManagement.Domain.BookAggregate.ValueObjects;
 using LibraryManagement.Domain.Common.Interface;
 using MediatR;
 
@@ -21,9 +22,10 @@ public class UpdateBookInfoCommandHandler : IRequestHandler<UpdateBookInfoComman
         if(book == null)
             return Error.NotFound("book with id = " + request.BookId + " not found");
         
-        book.UpdateBookInfo(request.Title,
-            request.AuthorId, request.PublisherName,
-            request.PublicationYearId, request.PageCount, request.LocationId);
+        book.UpdateBookInfo(request.Title, request.PublisherName,
+            request.PublicationYearId, request.PageCount, request.LocationId,
+            request.RemoveAuthorIds?.Select(id => BookAuthorId.Create(id)).ToList(),
+            request.AddAuthorIds?.Select(id => BookAuthorId.Create(id)).ToList());
         
        _bookRepository.Update(book);
 

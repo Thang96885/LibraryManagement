@@ -17,6 +17,7 @@ namespace LibraryManagement.Domain.BookAggregate
 	public class Book : AggregateRoot
 	{
         private readonly List<BookGenreId> _genreIds = new();
+        private readonly List<BookAuthorId> _authorIds = new();
         private readonly List<BookBorrowRecordId> _borrowRecordIds = new();
         private readonly List<BookReturnRecordId> _returnRecordIds = new();
         private readonly List<BookReservationId> _bookReservationId = new();
@@ -30,7 +31,7 @@ namespace LibraryManagement.Domain.BookAggregate
 		public string ImageUrl { get; private set; }
 		public string Description { get; private set; }
 		public BookLocationId? LocationId { get; private set; }
-		public BookAuthorId AuthorId { get; private set; }
+		public List<BookAuthorId> AuthorIds => _authorIds;
 
 		public IReadOnlyList<BookGenreId> GenreIds { get => _genreIds.AsReadOnly(); }
         public IReadOnlyList<BookBorrowRecordId> BorrowRecordIds { get => _borrowRecordIds.AsReadOnly(); }
@@ -38,12 +39,12 @@ namespace LibraryManagement.Domain.BookAggregate
         public IReadOnlyList<BookReservationId> BookReservationId { get => _bookReservationId.AsReadOnly(); }
         public IReadOnlyList<BookCopy> BookCopies => _bookCopies.AsReadOnly();
 
-        private Book(string title, int authorId, string publisherName, 
+        private Book(string title, List<int> authorIds, string publisherName, 
 			int publicationYearId, int pageCount, int numberOfCopy,
 			int numberAvailable, string imageUrl, string description, int locationId)
         {
 			Title = title;
-			AuthorId = BookAuthorId.Create(authorId);
+			_authorIds = authorIds.Select(authorId => BookAuthorId.Create(authorId)).ToList();
 			PublisherName = publisherName;
 			PublicationYearId = new BookPublicationYearId(publicationYearId);
 			PageCount = pageCount;
@@ -58,11 +59,11 @@ namespace LibraryManagement.Domain.BookAggregate
 
 		}
 
-        public static Book Create(string title, int authorId, string publisherName, 
+        public static Book Create(string title, List<int> authorIds, string publisherName, 
 			int publicationYearId, int pageCount, int numberOfCopy,
 			int numberAvailable, string imageUrl, string description, int locationId)
 		{
-			var book = new Book(title, authorId, publisherName, publicationYearId,
+			var book = new Book(title, authorIds, publisherName, publicationYearId,
 				pageCount, numberOfCopy, numberAvailable, imageUrl, description, locationId);
 			book.AddDomainEvent(new CreatedBook(book));
 			return book;
@@ -75,11 +76,15 @@ namespace LibraryManagement.Domain.BookAggregate
 			this.NumberOfCopy++;
 		}
 
-		public void UpdateBookInfo(string title = "", int authorId = 0,
+		public void UpdateBookInfo(string title = "",
 			string publisherName = "", int publicationYearId = 0,
-			int pageCount = 0, int locationId = 0)
+			int pageCount = 0, int locationId = 0,
+			List<BookAuthorId> removeAuthorIds = null, List<BookAuthorId> addAuthorIds = null)
 		{
-			AddDomainEvent(new UpdatedBook(this.Id, authorId, publicationYearId));
+			AddDomainEvent(new UpdatedBook(this.Id, publicationYearId, locationId,
+				removeAuthorIds?.Select(id => id.Value).ToList(),
+				addAuthorIds?.Select(id => id.Value).ToList()));
+			
 			this.Title = String.IsNullOrEmpty(title) ? Title : title;
 			this.PublisherName = String.IsNullOrEmpty(publisherName) ? PublisherName : publisherName;
 			this.PageCount = pageCount == 0 ? PageCount : pageCount;
@@ -89,16 +94,27 @@ namespace LibraryManagement.Domain.BookAggregate
 			{
 				this.PublicationYearId = BookPublicationYearId.Create(publicationYearId);
 			}
-
-			if (authorId != 0 &&
-			    this.AuthorId != BookAuthorId.Create(authorId))
-			{
-				this.AuthorId = BookAuthorId.Create(authorId);
-			}
-
 			if (locationId != 0 && this.LocationId != BookLocationId.Create(locationId))
 			{
 				this.LocationId = BookLocationId.Create(locationId);
+			}
+
+			if (removeAuthorIds != null && removeAuthorIds.Count > 0)
+			{
+				foreach (var removeAuthorId in removeAuthorIds)
+				{
+					if(_authorIds.Contains(removeAuthorId))
+						_authorIds.Remove(removeAuthorId);
+				}
+			}
+
+			if (addAuthorIds != null && addAuthorIds.Count > 0)
+			{
+				foreach (var bookAuthorId in addAuthorIds)
+				{
+					if(_authorIds.Contains(bookAuthorId))
+						_authorIds.Add(bookAuthorId);
+				}
 			}
 		}
 		

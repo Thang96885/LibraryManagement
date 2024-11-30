@@ -56,7 +56,7 @@ namespace LibraryManagement.Application.Books.List
 				if(request.BookId > 0)
 					queryBook = queryBook.Where(b => b.Id == request.BookId);
 				if(request.AuthorId > 0)
-					queryBook = queryBook.Where(b => b.AuthorId == BookAuthorId.Create(request.AuthorId));
+					queryBook = queryBook.Where(b => b.AuthorIds.Contains(BookAuthorId.Create(request.AuthorId)));
 				if(String.IsNullOrEmpty(request.BookTitle) == false)
 					queryBook = queryBook.Where(b => b.Title.Contains(request.BookTitle));
 				if(request.LocationId > 0)
@@ -84,14 +84,22 @@ namespace LibraryManagement.Application.Books.List
 				}
 
 				var location = await _locationRepository.FindAsync(book.LocationId.Value);
-				var author = await _authorRepository.FindAsync(book.AuthorId.Value);
+
+				var authorsName = "";
+
+				foreach (var authorId in book.AuthorIds)
+				{
+					var author = await _authorRepository.FindAsync(authorId.Value);
+					authorsName += author.Name + ", ";
+				}
+				
 				var publicationYear = await _publicationYearRepository.FindAsync(book.PublicationYearId.Value);
 				
 				var bookDto = new BookDto
 				{
 					Id = book.Id,
 					Title = book.Title,
-					AuthorName = author.Name,
+					AuthorName = authorsName,
 					PublisherName = book.PublisherName,
 					PublicationYear = publicationYear.Year,
 					PageCount = book.PageCount,

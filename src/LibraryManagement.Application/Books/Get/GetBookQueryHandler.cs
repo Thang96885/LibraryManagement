@@ -50,13 +50,18 @@ namespace LibraryManagement.Application.Books.Get
 			
 			var location = await _locationRepository.FindAsync(book.LocationId.Value);
 			var publicationYear = await _publicationYearRepository.FindAsync(book.PublicationYearId.Value);
-			var author = await _authorRepository.FindAsync(book.AuthorId.Value);
+			var authorNames = "";
+			foreach (var authorId in book.AuthorIds)
+			{
+				var author = await _authorRepository.FindAsync(authorId.Value);
+				authorNames += author.Name + ", ";
+			}
 
 			return new BookDto
 			{
 				Id = book.Id,
 				Title = book.Title,
-				AuthorName = author.Name,
+				AuthorName = authorNames,
 				PublisherName = book.PublisherName,
 				PublicationYear = publicationYear.Year,
 				PageCount = book.PageCount,

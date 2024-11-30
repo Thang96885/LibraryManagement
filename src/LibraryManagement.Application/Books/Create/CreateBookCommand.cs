@@ -13,7 +13,7 @@ namespace LibraryManagement.Application.Books.Create
         string PublisherName,
         int PublicationYearId,
         int PageCount,
-        int AuthorId,
+        List<int> AuthorIds,
         string ImageUrl,
         string Description,
         int LocationId): IRequest<ErrorOr<string>>;

@@ -26,17 +26,22 @@ public class CreatedBookEventHandler : INotificationHandler<CreatedBook>
     public async Task Handle(CreatedBook notification, CancellationToken cancellationToken)
     {
         var publicationYear =  await _publicationYearRepository.FindAsync(notification.Book.PublicationYearId.Value);
-        var author = await _authorRepository.FindAsync(notification.Book.AuthorId.Value);
+
+        foreach (var authorId in notification.Book.AuthorIds)
+        {
+            var author = await _authorRepository.FindAsync(authorId.Value);
+            author.AddBook(AuthorBookId.Create(notification.Book.Id));
+            _authorRepository.Update(author);
+        }
+        
         var location = await _locationRepository.FindAsync(notification.Book.LocationId.Value);
         
         publicationYear.AddBookId(PublicationYearBookId.Create(notification.Book.Id));
         
-        author.AddBook(AuthorBookId.Create(notification.Book.Id));
-        
         location.AddLocationBookId(LocationBookId.Create(notification.Book.Id));
         
         _locationRepository.Update(location);
-        _authorRepository.Update(author);
+
         _publicationYearRepository.Update(publicationYear);
 
         await _locationRepository.SaveChangeAsync();

@@ -30,7 +30,7 @@ namespace LibraryManagement.Api.Controllers
 					f.Name.FullName(),
 					f.PickRandom<int>(new int[] {1, 2}),
 					f.Date.Past(10).Year,
-					f.PickRandom<int>(new int[] {1, 2}),
+					f.PickRandom<List<int>>(new List<int> {1}, new List<int> {2}),
 					"",
 					f.Lorem.Sentence(),
 					f.PickRandom<int>(new int[] {1, 2})

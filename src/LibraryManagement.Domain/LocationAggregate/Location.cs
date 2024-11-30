@@ -25,7 +25,8 @@ public class Location : AggregateRoot
 
     public void AddLocationBookId(LocationBookId locationBookId)
     {
-        _locaitonBookIds.Add(locationBookId);
+        if(_locaitonBookIds.Contains(locationBookId) == false)
+            _locaitonBookIds.Add(locationBookId);
     }
 
     public void Update(string Name)
@@ -35,6 +36,9 @@ public class Location : AggregateRoot
 
     public void Delete()
     {
+        if(_locaitonBookIds.Count > 0)
+            throw new AggregateException("Location still have books");
+        
         var deleteEvent = new DeletedLocation(this.Id, this._locaitonBookIds.Select(id => id.Value).ToList());
         
         AddDomainEvent(deleteEvent);

@@ -15,15 +15,17 @@ public class AuthorConfiguration : IEntityTypeConfiguration<Author>
         builder.Property(x => x.Name)
             .HasMaxLength(50);
 
-        builder.OwnsMany(x => x.BookIds, builder =>
+        builder.OwnsMany(x => x.BookIds, navigationBuilder =>
         {
-            builder.ToTable("AuthorBookIds");
+            
+            navigationBuilder.ToTable("AuthorBookIds");
 
-            builder.WithOwner().HasForeignKey("AuthorId");
-            builder.Property(x => x.Value)
-                .HasColumnName("BookId");
+            navigationBuilder.WithOwner().HasForeignKey("AuthorId");
+            navigationBuilder.Property(x => x.Value)
+                .ValueGeneratedNever()
+                .HasColumnName("AuthorBookId");
 
-            builder.HasKey("AuthorId", "Value");
+            navigationBuilder.HasKey("Value", "AuthorId");
         });
     }
 }

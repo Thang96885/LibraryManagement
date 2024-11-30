@@ -21,9 +21,10 @@ public class PublicationYearConfiguration : IEntityTypeConfiguration<Publication
             builder.WithOwner().HasForeignKey("PublicationYearId");
 
             builder.Property(x => x.Value)
+                .ValueGeneratedNever()
                 .HasColumnName("BookId");
 
-            builder.HasKey("Value", "PublicationYearId");
+            builder.HasKey("PublicationYearId", "Value");
         });
     }
 }

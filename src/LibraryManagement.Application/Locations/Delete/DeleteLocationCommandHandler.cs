@@ -16,17 +16,25 @@ public class DeleteLocationCommandHandler : IRequestHandler<DeleteLocationComman
 
     public async Task<ErrorOr<bool>> Handle(DeleteLocationCommand request, CancellationToken cancellationToken)
     {
-        var location = await _locationRepository.FindAsync(request.Id);
-        
-        if(location == null)
-            return Error.NotFound("Location not found");
-        
-        location.Delete();
-        
-        _locationRepository.Delete(location);
+        try
+        {
+            var location = await _locationRepository.FindAsync(request.Id);
 
-        await _locationRepository.SaveChangeAsync();
+            if (location == null)
+                return Error.NotFound("Location not found");
 
-        return true;
+            location.Delete();
+
+            _locationRepository.Delete(location);
+
+            await _locationRepository.SaveChangeAsync();
+
+            return true;
+        }
+        catch (ArgumentException e)
+        {
+            return Error.Conflict(e.Message);
+        }
+        
     }
 }

@@ -28,8 +28,7 @@ namespace LibraryManagement.Infastructure.Data.Data.Configurations
             builder.Property(b => b.PublicationYearId)
                 .HasConversion(id => id.Value, data => new BookPublicationYearId(data));
 
-            builder.Property(b => b.AuthorId)
-                .HasConversion(id => id.Value, data => BookAuthorId.Create(data));
+            
 
             builder.Property(b => b.ImageUrl);
 
@@ -47,6 +46,7 @@ namespace LibraryManagement.Infastructure.Data.Data.Configurations
             ConfigReservation(builder);
             ConfigBorrowRecord(builder);
             ConfigReturnRecord(builder);
+            ConfigAuthor(builder);
 
             builder.OwnsMany(b => b.BookCopies, bookCopyBuilder =>
             {
@@ -65,6 +65,21 @@ namespace LibraryManagement.Infastructure.Data.Data.Configurations
 
                 bookCopyBuilder.Property(b => b.Price)
                     .HasConversion<decimal>();
+            });
+        }
+
+        private static void ConfigAuthor(EntityTypeBuilder<Book> builder)
+        {
+            builder.OwnsMany(b => b.AuthorIds, builder =>
+            {
+                builder.ToTable("BookAuthorIds");
+                builder.WithOwner().HasForeignKey("BookId");
+                builder.Property(x => x.Value)
+                    .ValueGeneratedNever()
+                    .HasColumnName("AuthorId");
+
+
+                builder.HasKey("Value", "BookId");
             });
         }
 
