@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace LibraryManagement.Api.Controllers
 {
 	[ApiController]
-	[Authorize]
 	public class ApiController : ControllerBase
 	{
 		protected IActionResult Problem(List<Error> errors)

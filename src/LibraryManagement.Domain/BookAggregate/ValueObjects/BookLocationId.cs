@@ -19,4 +19,6 @@ public class BookLocationId : ValueObject
     {
         return new BookLocationId(value);
     }
+    
+    private BookLocationId() { }
 }

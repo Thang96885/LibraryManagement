@@ -31,7 +31,7 @@ public class ListPublicationYearQueryHandler : IRequestHandler<ListPublicationYe
             publicationYearQuery = publicationYearQuery.Where(p => p.Year == request.SearchYear);
             
             totalNumberOfPublicationYears = publicationYearQuery.Count();
-            publicationYear = await _publicationYearRepository.ListAsync(request.Page, request.PageSize);
+            publicationYear = publicationYearQuery.Skip((request.Page - 1) * request.PageSize).Take(request.PageSize).ToList();
         }
 
         return new ListPublicationYearDto(

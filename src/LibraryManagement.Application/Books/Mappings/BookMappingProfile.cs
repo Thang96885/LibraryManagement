@@ -16,7 +16,7 @@ namespace LibraryManagement.Application.Books.Mappings
                 .Map(dest => dest.PublisherName, src => src.PublisherName)
                 .Map(dest => dest.PublicationYear, src => src.PublicationYearId)
                 .Map(dest => dest.PageCount, src => src.PageCount)
-                .Map(dest => dest.NumberOfCopy, src => src.NumberOfCopy)
+                .Map(dest => dest.NumberOfCopies, src => src.NumberOfCopy)
                 .Map(dest => dest.NumberAvailable, src => src.NumberAvailable)
                 .Map(dest => dest.Genres, src => new List<GenreDto>()); // Cần xử lý riêng
 
@@ -30,7 +30,7 @@ namespace LibraryManagement.Application.Books.Mappings
                 .Map(dest => dest.PublisherName, src => src.PublisherName)
                 .Map(dest => dest.PublicationYearId, src => src.PublicationYear)
                 .Map(dest => dest.PageCount, src => src.PageCount)
-                .Map(dest => dest.NumberOfCopy, src => src.NumberOfCopy)
+                .Map(dest => dest.NumberOfCopy, src => src.NumberOfCopies)
                 .Map(dest => dest.NumberAvailable, src => src.NumberAvailable);
         }
     }

@@ -16,5 +16,5 @@ namespace LibraryManagement.Application.Books.Create
         List<int> AuthorIds,
         string ImageUrl,
         string Description,
-        int LocationId): IRequest<ErrorOr<string>>;
+        int LocationId, List<int> GenreIds): IRequest<ErrorOr<string>>;
 }

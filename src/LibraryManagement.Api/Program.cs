@@ -19,6 +19,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using LibraryManagement.Application.Auth.AddRole;
 using LibraryManagement.Application.Authors.Create;
+using LibraryManagement.Application.Genres.Create;
 using LibraryManagement.Application.Locations.Create;
 using LibraryManagement.Application.PatronTypes.Create;
 using LibraryManagement.Application.PublicationYears.Create;
@@ -62,6 +63,8 @@ namespace LibraryManagement.Api
 
 			app.MapPost("/createInitialUsers", async (UserManager<User> userManager, ISender sender ) =>
 			{
+				await sender.Send(new CreateGenreCommand("Action"));
+				await sender.Send(new CreateGenreCommand("Drama"));
 				await sender.Send(new CreatePublicationYearCommand(2000));
 				await sender.Send(new CreatePublicationYearCommand(2001));
 				await sender.Send(new CreateAuthorCommand("Thang Dinh"));

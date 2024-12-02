@@ -16,5 +16,5 @@ namespace LibraryManagement.Application.Books.List
 	public record ListBookQuery(int Page,
 		int PageSize, int BookId = 0, string BookTitle = "",
 		int AuthorId = 0, int LocationId = 0, int YearPublicationId = 0,
-		bool IsAvailable = false) : IRequest<ErrorOr<ListBookDto>>;
+		bool IsAvailable = false, List<int>? GenreIds = null) : IRequest<ErrorOr<ListBookDto>>;
 }

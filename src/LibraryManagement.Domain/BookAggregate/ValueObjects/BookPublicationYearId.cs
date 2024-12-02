@@ -18,4 +18,6 @@ public class BookPublicationYearId : ValueObject
     {
         return new BookPublicationYearId(value);
     }
+    
+    private BookPublicationYearId() { }
 }

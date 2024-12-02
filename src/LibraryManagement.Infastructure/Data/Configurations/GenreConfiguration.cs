@@ -30,7 +30,9 @@ namespace LibraryManagement.Infastructure.Data.Data.Configurations
             {
                 genreBookBuilder.ToTable("GenreBookIds");
                 genreBookBuilder.WithOwner().HasForeignKey("GenreId");
-                genreBookBuilder.Property(x => x.Value).HasColumnName("BookId");
+                genreBookBuilder.Property(x => x.Value)
+                .ValueGeneratedNever()
+                .HasColumnName("BookId");
                 genreBookBuilder.HasKey("Value", "GenreId");
             });
             builder.Metadata.FindNavigation(nameof(Genre.BookIds)).SetPropertyAccessMode(PropertyAccessMode.Field);

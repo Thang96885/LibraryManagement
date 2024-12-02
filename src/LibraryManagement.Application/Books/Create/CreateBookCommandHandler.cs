@@ -25,8 +25,8 @@ namespace LibraryManagement.Application.Books.Create
             {
                 var book = Book.Create(request.Title, request.AuthorIds,
                 request.PublisherName, request.PublicationYearId
-                , request.PageCount, 0, 0, request.ImageUrl,
-                request.Description, request.LocationId);
+                 , request.PageCount, 0, 0, request.ImageUrl,
+                request.Description, request.LocationId, request.GenreIds);
                 _bookRepository.Add(book);
                 await _bookRepository.SaveChangeAsync();
                 return book.Id.ToString();

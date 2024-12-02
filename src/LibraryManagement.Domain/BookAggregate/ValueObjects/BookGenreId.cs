@@ -18,5 +18,10 @@ namespace LibraryManagement.Domain.BookAggregate.ValueObjects
 		{
 			Value = value;
 		}
+
+		private BookGenreId()
+		{
+			
+		}
 	}
 }

@@ -20,4 +20,7 @@ public class BookAuthorId : ValueObject
     {
         return new(value);
     }
+    
+    
+    private BookAuthorId() { }
 }

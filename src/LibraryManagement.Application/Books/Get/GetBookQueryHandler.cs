@@ -65,7 +65,7 @@ namespace LibraryManagement.Application.Books.Get
 				PublisherName = book.PublisherName,
 				PublicationYear = publicationYear.Year,
 				PageCount = book.PageCount,
-				NumberOfCopy = book.NumberOfCopy,
+				NumberOfCopies = book.NumberOfCopy,
 				NumberAvailable = book.NumberAvailable,
 				Genres = genres,
 				Description = book.Description,

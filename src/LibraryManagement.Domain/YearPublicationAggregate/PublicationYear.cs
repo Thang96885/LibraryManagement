@@ -29,4 +29,9 @@ public class PublicationYear : AggregateRoot
             return;
         _bookIds.Remove(bookId);
     }
+
+    public void Update(int year)
+    {
+        Year = year;
+    }
 }

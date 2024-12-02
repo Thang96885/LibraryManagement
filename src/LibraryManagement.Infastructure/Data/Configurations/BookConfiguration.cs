@@ -81,6 +81,7 @@ namespace LibraryManagement.Infastructure.Data.Data.Configurations
 
                 builder.HasKey("Value", "BookId");
             });
+            builder.Metadata.FindNavigation(nameof(Book.AuthorIds)).SetPropertyAccessMode(PropertyAccessMode.Field);
         }
 
         private static void ConfigBorrowRecord(EntityTypeBuilder<Book> builder)
@@ -128,7 +129,9 @@ namespace LibraryManagement.Infastructure.Data.Data.Configurations
             {
                 genreBuilder.ToTable("BookGenres");
                 genreBuilder.WithOwner().HasForeignKey("BookId");
-                genreBuilder.Property(x => x.Value).HasColumnName("BookGenreId");
+                genreBuilder.Property(x => x.Value)
+                    .ValueGeneratedNever()
+                    .HasColumnName("BookGenreId");
                 genreBuilder.HasKey("Value", "BookId");
 
             });

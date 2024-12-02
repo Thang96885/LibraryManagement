@@ -44,7 +44,7 @@ namespace LibraryManagement.Application.Books.List
 
 			if (request.BookId == 0 && String.IsNullOrEmpty((request.BookTitle)) &&
 			    request.AuthorId == 0 && request.YearPublicationId == 0 && request.LocationId == 0 && 
-			    request.IsAvailable == false)
+			    request.IsAvailable == false && (request.GenreIds == null || request.GenreIds.Any() == false))
 			{
 				books = await _bookRepository.ListAsync(request.Page, request.PageSize);
 				totalBookCount = _bookRepository.GetNumberOfEntities();
@@ -56,7 +56,7 @@ namespace LibraryManagement.Application.Books.List
 				if(request.BookId > 0)
 					queryBook = queryBook.Where(b => b.Id == request.BookId);
 				if(request.AuthorId > 0)
-					queryBook = queryBook.Where(b => b.AuthorIds.Contains(BookAuthorId.Create(request.AuthorId)));
+					queryBook = queryBook.Where(b => b.AuthorIds.Select(id => id.Value).Contains(request.AuthorId));
 				if(String.IsNullOrEmpty(request.BookTitle) == false)
 					queryBook = queryBook.Where(b => b.Title.Contains(request.BookTitle));
 				if(request.LocationId > 0)
@@ -66,6 +66,18 @@ namespace LibraryManagement.Application.Books.List
 				if (request.YearPublicationId != 0)
 					queryBook = queryBook.Where(b =>
 						b.PublicationYearId == BookPublicationYearId.Create(request.YearPublicationId));
+				if (request.GenreIds != null && request.GenreIds.Any())
+				{
+					var genreIds = request.GenreIds.ToList();
+					/*queryBook = queryBook.AsEnumerable()
+						.Where(book => genreIds.All(genreId => book.GenreIds.Select(g => g.Value)
+							.Contains(genreId))).AsQueryable();*/
+
+					foreach (var genreId in genreIds)
+					{
+						queryBook = queryBook.Where(b => b.GenreIds.Select(id => id.Value).Contains(genreId));
+					}
+				}
 				
 				totalBookCount = queryBook.Count();
 				books = queryBook.Skip((request.Page - 1) * request.PageSize).Take(request.PageSize).ToList();
@@ -103,7 +115,7 @@ namespace LibraryManagement.Application.Books.List
 					PublisherName = book.PublisherName,
 					PublicationYear = publicationYear.Year,
 					PageCount = book.PageCount,
-					NumberOfCopy = book.NumberOfCopy,
+					NumberOfCopies = book.NumberOfCopy,
 					Genres = genres,
 					Location = new LocationDto(location.Id, location.Name),
 					NumberAvailable = book.NumberAvailable,

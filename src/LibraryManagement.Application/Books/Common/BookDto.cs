@@ -14,7 +14,7 @@ namespace LibraryManagement.Application.Books.Common
 		public string PublisherName { get; init; }
 		public int PublicationYear { get; init; }
 		public int PageCount { get; init; }
-		public int NumberOfCopy { get; init; }
+		public int NumberOfCopies { get; init; }
 		public int NumberAvailable { get; init; }
 		public string Description { get; init; }
 		public LocationDto Location { get; init; }

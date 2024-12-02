@@ -31,7 +31,10 @@ namespace LibraryManagement.Domain.BookAggregate
 		public string ImageUrl { get; private set; }
 		public string Description { get; private set; }
 		public BookLocationId? LocationId { get; private set; }
-		public List<BookAuthorId> AuthorIds => _authorIds;
+		public IReadOnlyList<BookAuthorId> AuthorIds
+		{
+			get => _authorIds.AsReadOnly();
+		}
 
 		public IReadOnlyList<BookGenreId> GenreIds { get => _genreIds.AsReadOnly(); }
         public IReadOnlyList<BookBorrowRecordId> BorrowRecordIds { get => _borrowRecordIds.AsReadOnly(); }
@@ -41,7 +44,8 @@ namespace LibraryManagement.Domain.BookAggregate
 
         private Book(string title, List<int> authorIds, string publisherName, 
 			int publicationYearId, int pageCount, int numberOfCopy,
-			int numberAvailable, string imageUrl, string description, int locationId)
+			int numberAvailable, string imageUrl, string description,
+			int locationId, List<int> genreIds)
         {
 			Title = title;
 			_authorIds = authorIds.Select(authorId => BookAuthorId.Create(authorId)).ToList();
@@ -53,6 +57,7 @@ namespace LibraryManagement.Domain.BookAggregate
 			ImageUrl = imageUrl;
 			Description = description;
 			LocationId = new BookLocationId(locationId);
+			_genreIds = genreIds.Select(bookGenreId => new BookGenreId(bookGenreId)).ToList();
 		}
 		private Book()
 		{
@@ -61,10 +66,12 @@ namespace LibraryManagement.Domain.BookAggregate
 
         public static Book Create(string title, List<int> authorIds, string publisherName, 
 			int publicationYearId, int pageCount, int numberOfCopy,
-			int numberAvailable, string imageUrl, string description, int locationId)
+			int numberAvailable, string imageUrl, string description,
+			int locationId, List<int> genreIds)
 		{
 			var book = new Book(title, authorIds, publisherName, publicationYearId,
-				pageCount, numberOfCopy, numberAvailable, imageUrl, description, locationId);
+				pageCount, numberOfCopy, numberAvailable, imageUrl,
+				description, locationId, genreIds);
 			book.AddDomainEvent(new CreatedBook(book));
 			return book;
 		}
