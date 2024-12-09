@@ -46,6 +46,7 @@ namespace LibraryManagement.Infastructure.Data.Data.Configurations
                 returnRecordIdBuilder.ToTable("PatronReturnRecordId");
                 returnRecordIdBuilder.WithOwner().HasForeignKey("PatronId");
                 returnRecordIdBuilder.Property(x => x.Value)
+                .ValueGeneratedNever()
                     .HasColumnName("ReturnRecordId");
                 returnRecordIdBuilder.HasKey("Value", "PatronId");
             });
@@ -60,6 +61,7 @@ namespace LibraryManagement.Infastructure.Data.Data.Configurations
                 borrowRecordIdBuilder.ToTable("PatronBorrowRecordId");
                 borrowRecordIdBuilder.WithOwner().HasForeignKey("PatronId");
                 borrowRecordIdBuilder.Property(x => x.Value)
+                .ValueGeneratedNever()
                     .HasColumnName("BorrowRecordId");
                 borrowRecordIdBuilder.HasKey("Value", "PatronId");
             });
@@ -74,6 +76,7 @@ namespace LibraryManagement.Infastructure.Data.Data.Configurations
                 reservationIdBuilder.ToTable("PatronReservationId");
                 reservationIdBuilder.WithOwner().HasForeignKey("PatronId");
                 reservationIdBuilder.Property(x => x.Value)
+                .ValueGeneratedNever()
                 .HasColumnName("ReservationId");
                 reservationIdBuilder.HasKey("Value", "PatronId");
             });

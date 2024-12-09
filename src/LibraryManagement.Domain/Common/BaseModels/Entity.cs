@@ -72,7 +72,7 @@ namespace LibraryManagement.Domain.Common.BaseModels
 	}
 
 	public abstract class Entity<T>
-		: IEquatable<Entity>, IHasDomainEvent
+		: IEquatable<Entity<T>>, IHasDomainEvent
 	{
 
 		private readonly List<IDomainEvent> _domainEvents = new();
@@ -87,22 +87,22 @@ namespace LibraryManagement.Domain.Common.BaseModels
 		public IReadOnlyList<IDomainEvent> DomainEvents => _domainEvents.AsReadOnly();
 
 
+		public bool Equals(Entity<T>? other)
+		{
+			if (other == null)
+				return false;
+			
+			return other.Id.Equals(Id);
+		}
+
 		public override bool Equals(object? obj)
 		{
 			if (obj is null || obj.GetType() != GetType())
 				return false;
 
-			var entity = (Entity)obj;
+			var entity = (Entity<string>)obj;
 
 			return entity.Id.Equals(Id);
-		}
-
-		public bool Equals(Entity? other)
-		{
-			if (other == null)
-				return false;
-
-			return other.Id.Equals(Id);
 		}
 
 		public override int GetHashCode()

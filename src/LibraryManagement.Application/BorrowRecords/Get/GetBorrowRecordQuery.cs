@@ -14,7 +14,10 @@ public record GetBorrowRecordDto(
 public record GetBorrowRecordBookInfo(
     int BookId,
     string BookName,
-    int BookCopyBorrowCount,
-    List<string> BookCopyBorrowId);
+    List<GetBorrowRecordBookCopyInfo> BookCopyBorrowInfoList);
+
+public record GetBorrowRecordBookCopyInfo(
+    string Id,
+    string Condition);
 
 public record GetBorrowRecordQuery(int Id) : IRequest<ErrorOr<GetBorrowRecordDto>>;

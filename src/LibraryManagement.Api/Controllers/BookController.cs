@@ -1,8 +1,10 @@
 ﻿using LibraryManagement.Application.Books.AddBookCopy;
 using LibraryManagement.Application.Books.Create;
 using LibraryManagement.Application.Books.Delete;
+using LibraryManagement.Application.Books.DeleteBookCopy;
 using LibraryManagement.Application.Books.Get;
 using LibraryManagement.Application.Books.List;
+using LibraryManagement.Application.Books.UpdateBookCopy;
 using LibraryManagement.Application.Books.UpdateBookGenre;
 using LibraryManagement.Application.Books.UpdateBookInfo;
 using LibraryManagement.Domain.Common.Enums;
@@ -64,7 +66,8 @@ namespace LibraryManagement.Api.Controllers
 		// TODO - Error when add book copy not update BookNumber and NumberAvaiable in Book
 		[HttpPost("add-book-copy")]
 		[AllowAnonymous]
-		public async Task<IActionResult> AddBookCopy(AddBookCopyCommand request)
+		public async Task<IActionResult> 
+			AddBookCopy(AddBookCopyCommand request)
 		{
 			var result = await _sender.Send(request);
 
@@ -100,6 +103,30 @@ namespace LibraryManagement.Api.Controllers
 		[HttpPost("update-bookinfo")]
 		[AllowAnonymous]
 		public async Task<IActionResult> UpdateBookInfo(UpdateBookInfoCommand request)
+		{
+			var result = await _sender.Send(request);
+			
+			if(result.IsError)
+				return Problem(result.Errors);
+			
+			return Ok(result.Value);
+		}
+
+		[HttpPatch("update-book-copy")]
+		[AllowAnonymous]
+		public async Task<IActionResult> UpdateBookCopy(UpdateBookCopyCommand request)
+		{
+			var result = await _sender.Send(request);
+			
+			if(result.IsError)
+				return Problem(result.Errors);
+			
+			return Ok(result.Value);
+		}
+
+		[HttpDelete("delete-book-copy")]
+		[AllowAnonymous]
+		public async Task<IActionResult> DeleteBookCopy(DeleteBookCopyCommand request)
 		{
 			var result = await _sender.Send(request);
 			

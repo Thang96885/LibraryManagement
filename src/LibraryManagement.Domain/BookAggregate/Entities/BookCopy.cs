@@ -38,5 +38,16 @@ namespace LibraryManagement.Domain.BookAggregate.Entities
 		{
 			this.Status = status;
 		}
+
+		public void UpdateBookValue(BookStatus status,
+			BookPhysicalCondition condition,
+			decimal price)
+		{
+			if(status != BookStatus.NotChange)
+				this.Status = status;
+			if(condition != BookPhysicalCondition.NotChange)
+				this.PhysicalCondition = condition;
+			this.Price = price;
+		}
 	}
 }

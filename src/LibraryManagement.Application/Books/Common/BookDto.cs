@@ -10,16 +10,21 @@ namespace LibraryManagement.Application.Books.Common
 	{
 		public int Id { get; init; }
 		public string Title { get; init; }
-		public string AuthorName { get; init; }
 		public string PublisherName { get; init; }
-		public int PublicationYear { get; init; }
 		public int PageCount { get; init; }
 		public int NumberOfCopies { get; init; }
 		public int NumberAvailable { get; init; }
 		public string Description { get; init; }
+		public string ImageUrl { get; init; }
+		public PublicationYearDto PublicationYear { get; init; }
+		public ICollection<AuthorDto> Authors { get; init; }
 		public LocationDto Location { get; init; }
 		public ICollection<GenreDto> Genres { get; init; }
 	}
+
+	public record PublicationYearDto(int Id, int Year);
+
+	public record AuthorDto(int Id, string Name);
 
 	public record GenreDto
 	{

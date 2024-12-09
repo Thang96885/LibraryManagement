@@ -44,6 +44,7 @@ namespace LibraryManagement.Infastructure.Data.Data.Configurations
                 returnStatusBuilder.WithOwner().HasForeignKey("ReturnRecordId");
 
                 returnStatusBuilder.Property(x => x.BookId)
+                .ValueGeneratedNever()
                 .HasConversion(bookId => bookId.Value, value => ReturnRecordBookCopyId.Create(value))
                     .HasMaxLength(13);
 

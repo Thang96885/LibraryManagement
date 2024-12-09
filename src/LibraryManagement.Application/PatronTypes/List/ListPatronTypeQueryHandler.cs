@@ -39,7 +39,7 @@ public class ListPatronTypeQueryHandler : IRequestHandler<ListPatronTypeQuery, E
         var patronTypeCount = _patronTypeRepository.GetNumberOfEntities();
 
         return new ListPatronTypeDto(listPatronType.Select(p => new ListPatronTypeRecord(
-            p.Id, p.Name, p.DiscountPercent, p.PatronIds.Count)).ToList(), patronTypeCount);
+            p.Id, p.Name, p.BookRentalFee, p.PatronIds.Count)).ToList(), patronTypeCount);
 
     }
 }

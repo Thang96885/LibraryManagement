@@ -31,6 +31,7 @@ namespace LibraryManagement.Infastructure.Data.Data
 		public LibraryManagementContext(DbContextOptions<LibraryManagementContext> options, 
 			PublishDomainEventInterceptor publishDomainEventInterceptor) : base(options)
 		{
+			
 			_publishDomainEventInterceptor = publishDomainEventInterceptor;
 		}
 
@@ -44,6 +45,7 @@ namespace LibraryManagement.Infastructure.Data.Data
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
+			optionsBuilder.EnableSensitiveDataLogging();
 			optionsBuilder.AddInterceptors(_publishDomainEventInterceptor);
 			base.OnConfiguring(optionsBuilder);
 		}

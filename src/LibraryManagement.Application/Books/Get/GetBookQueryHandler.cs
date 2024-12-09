@@ -6,6 +6,7 @@ using LibraryManagement.Domain.GenreAggregate;
 using MediatR;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -16,7 +17,7 @@ using LibraryManagement.Domain.YearPublicationAggregate;
 
 namespace LibraryManagement.Application.Books.Get
 {
-    public class GetBookQueryHandler : IRequestHandler<GetBookQuery, ErrorOr<BookDto>>
+    public class GetBookQueryHandler : IRequestHandler<GetBookQuery, ErrorOr<GetBookDto>>
 	{
 		private readonly IBaseRepository<Book> _bookReposiotry;
 		private readonly IBaseRepository<Genre> _genreRepository;
@@ -33,7 +34,7 @@ namespace LibraryManagement.Application.Books.Get
 			_publicationYearRepository = publicationYearRepository;
 		}
 
-		public async Task<ErrorOr<BookDto>> Handle(GetBookQuery request, CancellationToken cancellationToken)
+		public async Task<ErrorOr<GetBookDto>> Handle(GetBookQuery request, CancellationToken cancellationToken)
 		{
 			var book = await _bookReposiotry.FindAsync(request.Id);
 
@@ -41,29 +42,30 @@ namespace LibraryManagement.Application.Books.Get
 				return Error.NotFound();
 
 			var genres = new List<GenreDto>();
-			foreach(var genreId in book.GenreIds)
+			foreach (var genreId in book.GenreIds)
 			{
 				var genre = await _genreRepository.FindAsync(genreId.Value);
 
 				genres.Add(new GenreDto { Id = genre.Id, Name = genre.Name });
 			}
-			
+
 			var location = await _locationRepository.FindAsync(book.LocationId.Value);
 			var publicationYear = await _publicationYearRepository.FindAsync(book.PublicationYearId.Value);
-			var authorNames = "";
+			var authors = new List<AuthorDto>();
 			foreach (var authorId in book.AuthorIds)
 			{
 				var author = await _authorRepository.FindAsync(authorId.Value);
-				authorNames += author.Name + ", ";
+				authors.Add(new AuthorDto(author.Id, author.Name));
 			}
 
-			return new BookDto
+			var bookInfo = new BookDto
 			{
 				Id = book.Id,
 				Title = book.Title,
-				AuthorName = authorNames,
+				Authors = authors,
+				ImageUrl = book.ImageUrl,
 				PublisherName = book.PublisherName,
-				PublicationYear = publicationYear.Year,
+				PublicationYear = new PublicationYearDto(publicationYear.Id, publicationYear.Year),
 				PageCount = book.PageCount,
 				NumberOfCopies = book.NumberOfCopy,
 				NumberAvailable = book.NumberAvailable,
@@ -71,8 +73,10 @@ namespace LibraryManagement.Application.Books.Get
 				Description = book.Description,
 				Location = new LocationDto(location.Id, location.Name)
 			};
+			
+			return new GetBookDto(bookInfo, book.BookCopies.Select(copy => new GetBookBookCopy(
+				copy.Id, copy.AcquisitionDate,
+				copy.Status.ToString(), copy.Price, copy.PhysicalCondition.ToString())).ToList());
 		}
-
-
 	}
 }

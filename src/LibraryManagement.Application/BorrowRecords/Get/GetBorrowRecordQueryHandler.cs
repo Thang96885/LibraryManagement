@@ -28,31 +28,26 @@ public class GetBorrowRecordQueryHandler : IRequestHandler<GetBorrowRecordQuery,
             return Error.NotFound("Brrow record with id: " + request.Id + " was not found");
         
         var patron = await _patronRepository.FindAsync(borrowRecord.PatronId.Value)!;
-        var bookInfoList = new List<(int BookId, String BookName, int NumberOfBorrowedBooks, List<string> BookCopyIds)>();
+        var bookInfoList = new List<GetBorrowRecordBookInfo>();
         
         foreach (var bookIdInfo in borrowRecord.BookIds)
         {
             var book = await _bookRepository.FindAsync(bookIdInfo.BookId)!;
-            bookInfoList.Add(new (book.Id, book.Title, bookIdInfo.BookCopyIds.Count, bookIdInfo.BookCopyIds));
+            var bookCopyBorrowInfoList = new List<GetBorrowRecordBookCopyInfo>();
+            
+            foreach (var bookCopyId in bookIdInfo.BookCopyIds)
+            {
+                var bookCopy = book.BookCopies.FirstOrDefault(bc => bc.Id == bookCopyId);
+                if(bookCopy != null)
+                    bookCopyBorrowInfoList.Add(new(bookCopy.Id, bookCopy.PhysicalCondition.ToString()));
+            }
+            
+            bookInfoList.Add(new GetBorrowRecordBookInfo(book.Id, book.Title, bookCopyBorrowInfoList));
         }
         
-        return MappingToResult(patron, bookInfoList, borrowRecord);
+        return new GetBorrowRecordDto(borrowRecord.Id,
+         borrowRecord.BorrowDate, borrowRecord.DueDate,
+          borrowRecord.IsReturned, patron.Id, patron.Name, bookInfoList);
     }
-    
-    private GetBorrowRecordDto MappingToResult(Patron patron, 
-        List<(int BookId, String BookName, int NumberOfBorrowedBooks, List<string> BookCopyIds)> bookInfoList, 
-        BorrowRecord borrowRecord)
-    {
-        return new GetBorrowRecordDto(
-            borrowRecord.Id,
-            borrowRecord.BorrowDate,
-            borrowRecord.DueDate,
-            borrowRecord.IsReturned,
-            patron.Id,
-            patron.Name,
-            bookInfoList.Select(bookInfo =>
-                    new GetBorrowRecordBookInfo(bookInfo.BookId, bookInfo.BookName, 
-                        bookInfo.NumberOfBorrowedBooks, bookInfo.BookCopyIds))
-                .ToList());
-    }
+
 }

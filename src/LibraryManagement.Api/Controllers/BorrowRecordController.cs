@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using LibraryManagement.Application.BorrowRecords;
 using LibraryManagement.Application.BorrowRecords.Get;
 using LibraryManagement.Application.BorrowRecords.List;
+using LibraryManagement.Application.BorrowRecords.Update;
 using LibraryManagement.Domain.BorrowRecordAggregate;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -51,6 +52,17 @@ namespace LibraryManagement.Api.Controllers
 
         [HttpGet("get")]
         public async Task<IActionResult> GetBorrowRecord([FromQuery] GetBorrowRecordQuery request)
+        {
+            var result = await _sender.Send(request);
+            
+            if(result.IsError)
+                return Problem(result.Errors);
+
+            return Ok(result.Value);
+        }
+
+        [HttpPatch("update")]
+        public async Task<IActionResult> UpdateBorrowRecord([FromBody] UpdateBorrowRecordCommand request)
         {
             var result = await _sender.Send(request);
             

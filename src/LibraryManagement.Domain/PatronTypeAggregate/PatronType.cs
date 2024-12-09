@@ -8,27 +8,27 @@ public class PatronType : AggregateRoot
     private readonly IList<PatronTypePatronId> _patronIds = new List<PatronTypePatronId>();
     
     public string Name { get; private set; }
-    public int DiscountPercent { get; private set; }
+    public int BookRentalFee { get; private set; }
     public IList<PatronTypePatronId> PatronIds => _patronIds;
 
-    private PatronType(string name, int discountPercent)
+    private PatronType(string name, int bookRentalFee)
     {
         Name = name;
-        DiscountPercent = discountPercent;
+        BookRentalFee = bookRentalFee;
     }
 
-    public static PatronType Create(string name, int discountPercent)
+    public static PatronType Create(string name, int bookRetalFee)
     {
-        return new(name, discountPercent);
+        return new(name, bookRetalFee);
     }
 
-    public void Update(string Name = "", int discountPercent = -1)
+    public void Update(string Name = "", int bookRentalFee = -1)
     {
         if(Name != "")
             this.Name = Name;
         
-        if(DiscountPercent != -1)
-            this.DiscountPercent = discountPercent;
+        if(BookRentalFee != -1)
+            this.BookRentalFee = bookRentalFee;
     }
 
     public void Delete()

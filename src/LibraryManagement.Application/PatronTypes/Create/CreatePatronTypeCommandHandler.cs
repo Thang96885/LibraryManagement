@@ -17,7 +17,7 @@ public class CreatePatronTypeCommandHandler : IRequestHandler<CreatePatronTypeCo
     public async Task<ErrorOr<bool>> Handle(CreatePatronTypeCommand request, CancellationToken cancellationToken)
     {
         
-        var patronType = PatronType.Create(request.name, request.DiscountPercent);
+        var patronType = PatronType.Create(request.name, request.BookRentalFee);
         
         _patronTypeRepository.Add(patronType);
 

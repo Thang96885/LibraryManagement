@@ -8,11 +8,10 @@ namespace LibraryManagement.Domain.Common.Enums
 {
 	public enum BookPhysicalCondition
 	{
-		New,           // Mới
-		Good,          // Tốt
-		Fair,          // Khá
-		Poor,          // Kém
-		Damaged,       // Hư hỏng
-		NeedsRepair    // Cần sửa chữa
+		NotChange,
+		New,         
+		Good,
+		Fair,
+		Damaged,
 	}
 }

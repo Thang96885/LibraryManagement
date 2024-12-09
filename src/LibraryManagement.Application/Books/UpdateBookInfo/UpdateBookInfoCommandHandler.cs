@@ -22,10 +22,10 @@ public class UpdateBookInfoCommandHandler : IRequestHandler<UpdateBookInfoComman
         if(book == null)
             return Error.NotFound("book with id = " + request.BookId + " not found");
         
-        book.UpdateBookInfo(request.Title, request.PublisherName,
+        book.UpdateBookInfo(request.Title, request.PublisherName, request.ImageUrl, request.Description,
             request.PublicationYearId, request.PageCount, request.LocationId,
-            request.RemoveAuthorIds?.Select(id => BookAuthorId.Create(id)).ToList(),
-            request.AddAuthorIds?.Select(id => BookAuthorId.Create(id)).ToList());
+            request.AuthorIds.Select(id => BookAuthorId.Create(id)).ToList(),
+            request.GenreIds.Select(id => BookGenreId.Create(id)).ToList());
         
        _bookRepository.Update(book);
 

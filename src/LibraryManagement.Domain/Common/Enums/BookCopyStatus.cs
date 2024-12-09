@@ -8,6 +8,7 @@ namespace LibraryManagement.Domain.Common.Enums
 {
 	public enum BookStatus
 	{
+		NotChange,
 		Available,
 		Borrowed,
 		UnderMaintenance,

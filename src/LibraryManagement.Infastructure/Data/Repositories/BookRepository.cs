@@ -8,6 +8,9 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using ErrorOr;
+using Microsoft.Data.SqlClient;
+using System.Text.RegularExpressions;
 
 namespace LibraryManagement.Infastructure.Data.Data.Repositories
 {
@@ -100,9 +103,51 @@ namespace LibraryManagement.Infastructure.Data.Data.Repositories
             return _context.SaveChanges();
         }
 
-        public Task<int> SaveChangeAsync()
+        public async Task<int> SaveChangeAsync()
         {
-            return _context.SaveChangesAsync();
+            try
+            {
+                var result = await  _context.SaveChangesAsync();
+                return result;
+            }
+            catch (DbUpdateConcurrencyException e)
+            {
+                Console.WriteLine(e);
+                throw e;
+            }
+            catch (DbUpdateException e)
+            {
+                Console.WriteLine(e);
+                if (e.InnerException != null)
+                {
+                    var innerEx = e.InnerException as SqlException;
+                    if (innerEx.Number == 2627)
+                    {
+                        string duplicateKey = ExtractDuplicateKey(innerEx.Message);
+                        if (!string.IsNullOrEmpty(duplicateKey))
+                        {
+                            Console.WriteLine($"Duplicate key value: {duplicateKey}");
+                        }
+                        throw new ArgumentException($"Duplicate key value: {duplicateKey}");
+                    }
+                }
+                throw e;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw e;
+            }
+        }
+
+        private string ExtractDuplicateKey(string message)
+        {
+            var match = Regex.Match(message, @"The duplicate key value is \((.*?)\)");
+            if (match.Success)
+            {
+                return match.Groups[1].Value;
+            }
+            return null;
         }
 
         public void Update(Book entity)

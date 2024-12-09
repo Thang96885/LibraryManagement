@@ -89,7 +89,9 @@ namespace LibraryManagement.Infastructure.Data.Data.Configurations
             builder.OwnsMany(b => b.BorrowRecordIds, borrowRecordBuilder =>
             {
                 borrowRecordBuilder.WithOwner().HasForeignKey("BookId");
-                borrowRecordBuilder.Property(x => x.Value).HasColumnName("BorrowRecordId");
+                borrowRecordBuilder.Property(x => x.Value)
+                .ValueGeneratedNever()
+                .HasColumnName("BorrowRecordId");
                 borrowRecordBuilder.HasKey("Value", "BookId");
                 borrowRecordBuilder.ToTable("BookBorrowRecords");
             });
@@ -102,7 +104,9 @@ namespace LibraryManagement.Infastructure.Data.Data.Configurations
             builder.OwnsMany(b => b.BookReservationId, bookReservationBuilder =>
             {
                 bookReservationBuilder.WithOwner().HasForeignKey("BookId");
-                bookReservationBuilder.Property(x => x.Value).HasColumnName("BookReservationId");
+                bookReservationBuilder.Property(x => x.Value)
+                .ValueGeneratedNever()
+                .HasColumnName("BookReservationId");
                 bookReservationBuilder.HasKey("Value", "BookId");
                 bookReservationBuilder.ToTable("BookReservations");
             });
@@ -115,7 +119,9 @@ namespace LibraryManagement.Infastructure.Data.Data.Configurations
             builder.OwnsMany(b => b.ReturnRecordIds, returnRecordBuilder =>
             {
                 returnRecordBuilder.WithOwner().HasForeignKey("BookId");
-                returnRecordBuilder.Property(x => x.Value).HasColumnName("BookReturnRecordId");
+                returnRecordBuilder.Property(x => x.Value)
+                .ValueGeneratedNever()
+                .HasColumnName("BookReturnRecordId");
                 returnRecordBuilder.HasKey("Value", "BookId");
                 returnRecordBuilder.ToTable("BookReturnRecords");
             });

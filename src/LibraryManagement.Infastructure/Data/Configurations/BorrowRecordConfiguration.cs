@@ -17,9 +17,6 @@ namespace LibraryManagement.Infastructure.Data.Configurations
             builder.Property(x => x.Id)
                 .ValueGeneratedOnAdd();
 
-            builder.Property(x => x.Id)
-                .ValueGeneratedNever();
-
             builder.Property(x => x.PatronId)
                 .HasConversion(id => id.Value, value => BorrowRecordPatronId.Create(value));
 
@@ -35,6 +32,7 @@ namespace LibraryManagement.Infastructure.Data.Configurations
                 borrowRecordBookBuilder.ToTable("BorrowRecordBookId");
                 borrowRecordBookBuilder.WithOwner().HasForeignKey("BorrowRecordId");
                 borrowRecordBookBuilder.Property(x => x.BookId)
+                    .ValueGeneratedNever()
                     .HasColumnName("BookId");
 
                 borrowRecordBookBuilder.Property(x => x.BookCopyIds)
@@ -44,8 +42,6 @@ namespace LibraryManagement.Infastructure.Data.Configurations
                     .HasMaxLength(500);
                 
                 borrowRecordBookBuilder.HasKey("BookId", "BorrowRecordId");
-
-                
             });
         }
     }

@@ -12,7 +12,7 @@ namespace LibraryManagement.Application.Books.Mappings
             config.NewConfig<Book, BookDto>()
                 .Map(dest => dest.Id, src => src.Id)
                 .Map(dest => dest.Title, src => src.Title)
-                .Map(dest => dest.AuthorName, src => string.Empty) // Cần xử lý riêng
+                .Map(dest => dest.Authors, src => string.Empty) // Cần xử lý riêng
                 .Map(dest => dest.PublisherName, src => src.PublisherName)
                 .Map(dest => dest.PublicationYear, src => src.PublicationYearId)
                 .Map(dest => dest.PageCount, src => src.PageCount)

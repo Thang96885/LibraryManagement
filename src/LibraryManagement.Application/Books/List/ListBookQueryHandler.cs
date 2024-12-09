@@ -97,23 +97,22 @@ namespace LibraryManagement.Application.Books.List
 
 				var location = await _locationRepository.FindAsync(book.LocationId.Value);
 
-				var authorsName = "";
+				var authors = new List<AuthorDto>();
 
 				foreach (var authorId in book.AuthorIds)
 				{
 					var author = await _authorRepository.FindAsync(authorId.Value);
-					authorsName += author.Name + ", ";
+					authors.Add(new AuthorDto(author.Id, author.Name));
 				}
-				
 				var publicationYear = await _publicationYearRepository.FindAsync(book.PublicationYearId.Value);
 				
 				var bookDto = new BookDto
 				{
 					Id = book.Id,
 					Title = book.Title,
-					AuthorName = authorsName,
+					Authors = authors,
 					PublisherName = book.PublisherName,
-					PublicationYear = publicationYear.Year,
+					PublicationYear = new PublicationYearDto(publicationYear.Id, publicationYear.Year),
 					PageCount = book.PageCount,
 					NumberOfCopies = book.NumberOfCopy,
 					Genres = genres,

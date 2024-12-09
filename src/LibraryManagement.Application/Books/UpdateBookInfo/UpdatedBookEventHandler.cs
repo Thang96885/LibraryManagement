@@ -2,6 +2,8 @@ using LibraryManagement.Domain.AuthorAggregate;
 using LibraryManagement.Domain.AuthorAggregate.ValueObjects;
 using LibraryManagement.Domain.BookAggregate.Events;
 using LibraryManagement.Domain.Common.Interface;
+using LibraryManagement.Domain.GenreAggregate;
+using LibraryManagement.Domain.GenreAggregate.ValueObjects;
 using LibraryManagement.Domain.LocationAggregate;
 using LibraryManagement.Domain.LocationAggregate.ValueObjects;
 using LibraryManagement.Domain.YearPublicationAggregate;
@@ -15,12 +17,14 @@ public class UpdatedBookEventHandler : INotificationHandler<UpdatedBook>
     private readonly IBaseRepository<Author> _authorRepository;
     private readonly IBaseRepository<PublicationYear> _publicationYearRepository;
     private readonly IBaseRepository<Location> _locationRepository;
+    private readonly IBaseRepository<Genre> _genreRepository;
 
-    public UpdatedBookEventHandler(IBaseRepository<Location> locationRepository, IBaseRepository<Author> authorRepository, IBaseRepository<PublicationYear> publicationYearRepository)
+    public UpdatedBookEventHandler(IBaseRepository<Location> locationRepository, IBaseRepository<Author> authorRepository, IBaseRepository<PublicationYear> publicationYearRepository, IBaseRepository<Genre> genreRepository)
     {
         _locationRepository = locationRepository;
         _authorRepository = authorRepository;
         _publicationYearRepository = publicationYearRepository;
+        _genreRepository = genreRepository;
     }
 
     public async Task Handle(UpdatedBook notification, CancellationToken cancellationToken)
@@ -71,6 +75,25 @@ public class UpdatedBookEventHandler : INotificationHandler<UpdatedBook>
                 }
             }
         }
+
+        if (notification.AddGenreIds != null)
+        {
+            foreach (var addGenreId in notification.AddGenreIds)
+            {
+                var genre =await _genreRepository.FindAsync(addGenreId)!;
+                genre.AddBookId(GenreBookId.Create(notification.BookId));
+            }
+        }
+
+        if (notification.RemovdeGenreIds != null)
+        {
+            foreach (var removdeGenreId in notification.RemovdeGenreIds)
+            {
+                var genre = await _genreRepository.FindAsync(removdeGenreId)!;
+                genre.RemoveBookId(GenreBookId.Create(notification.BookId));
+            }
+        }
+        
         await _authorRepository.SaveChangeAsync();
     }
 }

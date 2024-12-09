@@ -84,17 +84,25 @@ namespace LibraryManagement.Domain.BookAggregate
 		}
 
 		public void UpdateBookInfo(string title = "",
-			string publisherName = "", int publicationYearId = 0,
+			string publisherName = "", string imageUrl = "", string description = "",
+			int publicationYearId = 0,
 			int pageCount = 0, int locationId = 0,
-			List<BookAuthorId> removeAuthorIds = null, List<BookAuthorId> addAuthorIds = null)
+			List<BookAuthorId> authorIds = null, List<BookGenreId> genreIds = null)
 		{
+			var removeAndAddAuthorIds = FindAddAndRemoveAuthorIds(authorIds);
+			var removeAndAddGenreIds = FindAddAndRemoveGenreIds(genreIds);
+			
 			AddDomainEvent(new UpdatedBook(this.Id, publicationYearId, locationId,
-				removeAuthorIds?.Select(id => id.Value).ToList(),
-				addAuthorIds?.Select(id => id.Value).ToList()));
+				removeAndAddAuthorIds.removeAuthorIds,
+				removeAndAddAuthorIds.addAuthorIds,
+				removeAndAddGenreIds.removeGenreIds,
+				removeAndAddGenreIds.addGenreIds));
 			
 			this.Title = String.IsNullOrEmpty(title) ? Title : title;
 			this.PublisherName = String.IsNullOrEmpty(publisherName) ? PublisherName : publisherName;
 			this.PageCount = pageCount == 0 ? PageCount : pageCount;
+			this.ImageUrl = imageUrl == "" ? ImageUrl : imageUrl;
+			this.Description = description == "" ? Description : description;
 
 			if (publicationYearId != 0 &&
 			    this.PublicationYearId != BookPublicationYearId.Create(publicationYearId))
@@ -105,24 +113,68 @@ namespace LibraryManagement.Domain.BookAggregate
 			{
 				this.LocationId = BookLocationId.Create(locationId);
 			}
-
-			if (removeAuthorIds != null && removeAuthorIds.Count > 0)
+			
+			if (authorIds != null && authorIds.Count > 0)
 			{
-				foreach (var removeAuthorId in removeAuthorIds)
+				foreach (var addAuthorId in removeAndAddAuthorIds.addAuthorIds)
 				{
-					if(_authorIds.Contains(removeAuthorId))
-						_authorIds.Remove(removeAuthorId);
+					_authorIds.Add(BookAuthorId.Create(addAuthorId));
+				}
+
+				foreach (var removeAuthorId in removeAndAddAuthorIds.removeAuthorIds)
+				{
+					_authorIds.Remove(BookAuthorId.Create(removeAuthorId));
 				}
 			}
 
-			if (addAuthorIds != null && addAuthorIds.Count > 0)
+			if (genreIds != null && genreIds.Count > 0)
 			{
-				foreach (var bookAuthorId in addAuthorIds)
+				
+				foreach (var addGenreId in removeAndAddGenreIds.addGenreIds)
 				{
-					if(_authorIds.Contains(bookAuthorId))
-						_authorIds.Add(bookAuthorId);
+					_genreIds.Add(new BookGenreId(addGenreId));
+				}
+				foreach (var removeGenreId in removeAndAddAuthorIds.removeAuthorIds)
+				{
+					_genreIds.Remove(new BookGenreId(removeGenreId));
 				}
 			}
+
+			
+		}
+
+		public void RemoveBorrowRecordId(BookBorrowRecordId borrowRecordId)
+		{
+			_borrowRecordIds.Remove(borrowRecordId);
+		}
+
+		private (List<int> removeGenreIds, List<int> addGenreIds) FindAddAndRemoveGenreIds(
+			List<BookGenreId>? bookGenreIds)
+		{
+			var removeGenreIds = new List<int>();
+			var addGenreIds = new List<int>();
+
+			if (bookGenreIds != null)
+			{
+				removeGenreIds = this._genreIds.Except(bookGenreIds).ToList().Select(id => id.Value).ToList();
+				addGenreIds = bookGenreIds.Except(this._genreIds).ToList().Select(id => id.Value).ToList();
+			}
+			
+			return (removeGenreIds, addGenreIds);
+		}
+
+		private (List<int> removeAuthorIds, List<int> addAuthorIds) FindAddAndRemoveAuthorIds(
+			List<BookAuthorId>? newBookAuthorIds)
+		{
+			var removeAuthorIds = new List<int>();
+			var addAuthorIds = new List<int>();
+
+			if (newBookAuthorIds != null)
+			{
+				removeAuthorIds = this._authorIds.Except(newBookAuthorIds).ToList().Select(id => id.Value).ToList();
+				addAuthorIds = newBookAuthorIds.Except(this._authorIds).ToList().Select(id => id.Value).ToList();
+			}
+			return (removeAuthorIds, addAuthorIds);
 		}
 		
 		
@@ -164,6 +216,16 @@ namespace LibraryManagement.Domain.BookAggregate
 		public void DeletedGenre(BookGenreId genreId)
 		{
 			this._genreIds.Remove(genreId);
+		}
+
+		public void DeleteBookCopy(string bookCopyId)
+		{
+			var bookCopy = this._bookCopies.FirstOrDefault(bc => bc.Id == bookCopyId);
+
+			if (bookCopy != null)
+			{
+				_bookCopies.Remove(bookCopy);
+			}
 		}
 
         public void Delete()

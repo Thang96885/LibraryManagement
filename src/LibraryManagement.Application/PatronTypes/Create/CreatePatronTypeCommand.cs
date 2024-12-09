@@ -3,4 +3,4 @@ using MediatR;
 
 namespace LibraryManagement.Application.PatronTypes.Create;
 
-public record CreatePatronTypeCommand(string name, int DiscountPercent) : IRequest<ErrorOr<bool>>;
+public record CreatePatronTypeCommand(string name, int BookRentalFee) : IRequest<ErrorOr<bool>>;

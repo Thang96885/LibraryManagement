@@ -21,7 +21,7 @@ public class UpdateTypePatronCommandHandler : IRequestHandler<UpdateTypePatornCo
         if(patronType == null)
             return Error.NotFound("Patron type doesn't exist");
         
-        patronType.Update(request.NewName, request.NewDiscountPercent);
+        patronType.Update(request.NewName, request.NewBookRentalFee);
         
         _patronTypeRepository.Update(patronType);
 

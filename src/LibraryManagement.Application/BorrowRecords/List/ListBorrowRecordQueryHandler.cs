@@ -4,10 +4,11 @@ using LibraryManagement.Domain.BookAggregate;
 using LibraryManagement.Domain.BorrowRecordAggregate;
 using LibraryManagement.Domain.Common.Interface;
 using LibraryManagement.Domain.PatronAggregate;
+using LibraryManagement.Domain.BorrowRecordAggregate.ValueObjects;
 
 namespace LibraryManagement.Application.BorrowRecords.List;
 
-public class ListBorrowRecordQueryHandler : IRequestHandler<ListBorrowRecordQuery, ErrorOr<List<ListBorrowRecordDto>>>
+public class ListBorrowRecordQueryHandler : IRequestHandler<ListBorrowRecordQuery, ErrorOr<ListBorrowRecordDto>>
 {
     private readonly IBaseRepository<BorrowRecord> _borrowRecordRepository;
     private readonly IBaseRepository<Book> _bookRepository;
@@ -20,43 +21,59 @@ public class ListBorrowRecordQueryHandler : IRequestHandler<ListBorrowRecordQuer
         _patronRepository = patronRepository;
     }
 
-    public async Task<ErrorOr<List<ListBorrowRecordDto>>> Handle(ListBorrowRecordQuery request, CancellationToken cancellationToken)
+    public async Task<ErrorOr<ListBorrowRecordDto>> Handle(ListBorrowRecordQuery request, CancellationToken cancellationToken)
     {
-        var borrowRecordList = await _borrowRecordRepository.ListAsync(request.Page, request.PageSize);
+        var borrowRecords = new List<BorrowRecord>();
+        var totalNumberOfRecords = 0;
 
-        var result = new List<ListBorrowRecordDto>();
-
-        foreach (var borrowRecord in borrowRecordList)
+        if(request.PatronId == 0 && request.NotReturned == false)
         {
-            var patron = await _patronRepository.FindAsync(borrowRecord.PatronId.Value)!;
-            var bookInfoList = new List<(int BookId, String BookName, int NumberOfBorrowedBooks)>();
-            foreach (var bookIdInfo in borrowRecord.BookIds)
+            borrowRecords = await _borrowRecordRepository.ListAsync(request.Page, request.PageSize);
+            totalNumberOfRecords = _borrowRecordRepository.GetNumberOfEntities();
+        }
+        else
+        {
+            var query = _borrowRecordRepository.GetQueryable();
+
+            if(request.PatronId != 0)
             {
-                var book = await _bookRepository.FindAsync(bookIdInfo.BookId)!;
-                bookInfoList.Add(new (book.Id, book.Title, bookIdInfo.BookCopyIds.Count));
+                query = query.Where(b => b.PatronId == BorrowRecordPatronId.Create(request.PatronId));
+            }
+            if(request.NotReturned)
+            {
+                query = query.Where(b => b.IsReturned == false);
             }
 
-            var bookBorrowRecorDto = MappingToResult(patron, bookInfoList, borrowRecord);
-            result.Add(bookBorrowRecorDto);
+            borrowRecords = query.ToList().Skip((request.Page - 1) * request.PageSize).Take(request.PageSize).ToList();
+            totalNumberOfRecords = query.Count();
         }
 
-        return result;
-    }
+        var borrowRecordDtos = new List<ListBorrowRecordBookRecord>();
 
-    private ListBorrowRecordDto MappingToResult(Patron patron, 
-        List<(int BookId, String BookName, int NumberOfBorrowedBooks)> bookInfoList, 
-        BorrowRecord borrowRecord)
-    {
-        return new ListBorrowRecordDto(
-            borrowRecord.Id,
-            borrowRecord.BorrowDate,
-            borrowRecord.DueDate,
-            borrowRecord.IsReturned,
-            patron.Id,
-            patron.Name,
-            bookInfoList.Select(bookInfo =>
-                    new ListBorrowRecordBookInfo(bookInfo.BookId, bookInfo.BookName, 
-                        bookInfo.NumberOfBorrowedBooks))
-                .ToList());
+        foreach(var record in borrowRecords)
+        {
+            var patron = await _patronRepository.FindAsync(record.PatronId.Value);
+
+            var bookInfoList = new List<ListBorrowRecordBookInfo>();
+
+            int numberOfBooksBorrowed = 0;
+
+            foreach(var book in record.BookIds)
+            {
+                var bookEntity = await _bookRepository.FindAsync(book.BookId);
+
+                bookInfoList.Add(new ListBorrowRecordBookInfo(book.BookId, bookEntity.Title, book.BookCopyIds));
+                numberOfBooksBorrowed += book.BookCopyIds.Count;
+            }
+
+            var recordDto = new ListBorrowRecordBookRecord(
+                record.Id, record.BorrowDate, record.DueDate,
+                 record.IsReturned, record.PatronId.Value,
+                  patron.Name, record.TotalRentalFee, bookInfoList,
+                  numberOfBooksBorrowed);
+            borrowRecordDtos.Add(recordDto);
+        }
+        return new ListBorrowRecordDto(borrowRecordDtos, totalNumberOfRecords);
+       
     }
 }

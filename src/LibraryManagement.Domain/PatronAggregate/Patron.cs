@@ -55,6 +55,11 @@ namespace LibraryManagement.Domain.PatronAggregate
 			_borrowRecordIds.Add(PatronBorrowRecordId.Create(borrowRecordId));
 		}
 
+		public void RemoveBorrowRecordId(int borrowRecordId)
+		{
+			_borrowRecordIds.Remove(PatronBorrowRecordId.Create(borrowRecordId));
+		}
+
 		public void Delete()
 		{
 			this.AddDomainEvent(new DeletedPatron(this));
